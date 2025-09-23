@@ -41,10 +41,12 @@ export function SidebarNav() {
   const renderNav = (items: typeof mainNav) =>
     items.map(({ href, label, icon }) => (
       <SidebarMenuItem key={href}>
-        <Link href={href} passHref>
+        <Link href={href} passHref legacyBehavior>
           <SidebarMenuButton asChild isActive={pathname === href} tooltip={label}>
-            {icon}
-            <span>{label}</span>
+            <div className="flex items-center gap-2">
+              {icon}
+              <span>{label}</span>
+            </div>
           </SidebarMenuButton>
         </Link>
       </SidebarMenuItem>
