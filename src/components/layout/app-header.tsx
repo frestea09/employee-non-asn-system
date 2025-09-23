@@ -10,8 +10,6 @@ import {
   FileText,
   CheckCircle,
   FileCheck,
-  BrainCircuit,
-  CircleCheckBig,
 } from 'lucide-react';
 
 const routeTitles: { [key: string]: { title: string; icon: React.ReactNode } } = {
@@ -22,7 +20,7 @@ const routeTitles: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/reports': { title: 'Laporan', icon: <FileText className="size-5" /> },
   '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
   '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <FileCheck className="size-5" /> },
-  '/admin/behavioral-assessment': { title: 'Penilaian Perilaku', icon: <BrainCircuit className="size-5" /> },
+  '/admin/behavioral-assessment': { title: 'Penilaian Perilaku', icon: <LayoutDashboard className="size-5" /> },
 };
 
 export function AppHeader() {

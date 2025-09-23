@@ -41,15 +41,22 @@ export default function AppLayout({
           <SidebarNav />
         </SidebarContent>
         <SidebarFooter>
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
-              {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt="User Avatar" />}
-              <AvatarFallback>KA</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="font-semibold">Karyawan</span>
-              <span className="text-xs text-muted-foreground">karyawan@email.com</span>
+          <div className="flex w-full items-center justify-between">
+             <div className="flex items-center gap-3">
+              <Avatar className="h-10 w-10">
+                {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt="User Avatar" />}
+                <AvatarFallback>KA</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="font-semibold">Karyawan</span>
+                <span className="text-xs text-muted-foreground">karyawan@email.com</span>
+              </div>
             </div>
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/login">
+                    <LogOut className="h-5 w-5 text-muted-foreground" />
+                </Link>
+            </Button>
           </div>
         </SidebarFooter>
       </Sidebar>

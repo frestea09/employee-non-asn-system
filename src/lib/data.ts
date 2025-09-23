@@ -41,8 +41,11 @@ export const mockValidationActivities: DailyActivity[] = [
     { id: '3', date: '2024-07-29', activity: 'Membantu dokter dalam tindakan operasi kecil.', status: 'Menunggu Validasi' },
     { id: '4', date: '2024-07-29', activity: 'Memberikan obat kepada pasien sesuai jadwal.', status: 'Menunggu Validasi' },
     { id: '5', date: '2024-07-30', activity: 'Membersihkan dan merapikan ruang perawatan.', status: 'Menunggu Validasi' },
+    { id: '6', date: '2024-07-30', activity: 'Menyiapkan peralatan medis untuk esok hari.', status: 'Menunggu Validasi' },
+    { id: '7', date: '2024-07-31', activity: 'Edukasi pasien mengenai pola hidup sehat.', status: 'Menunggu Validasi' },
 ];
 
 export const mockValidationPerformances: MonthlyPerformance[] = [
     { id: '2', month: 'Juli', year: 2024, realization: 'Mengikuti pelatihan manajemen pasien dan mulai menerapkan ilmu yang didapat.', status: 'Menunggu Validasi' },
+    { id: '3', month: 'Agustus', year: 2024, realization: 'Meningkatkan efisiensi kerja tim sebesar 10% melalui sistem baru.', status: 'Menunggu Validasi' },
 ];
