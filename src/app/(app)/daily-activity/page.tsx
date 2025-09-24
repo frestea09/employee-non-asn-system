@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { mockDailyActivities } from '@/lib/data';
-import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
+import { CalendarIcon, PlusCircle, Upload, Pencil, Trash2 } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -168,7 +168,8 @@ export default function DailyActivityPage() {
                   <TableHead>Tanggal</TableHead>
                   <TableHead>Rencana Aksi</TableHead>
                   <TableHead>Hasil</TableHead>
-                  <TableHead className="text-right">Status</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Tindakan</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -179,7 +180,7 @@ export default function DailyActivityPage() {
                     <TableCell>
                       {item.quantity} {item.unit}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell>
                       <Badge
                         variant={
                           item.status === 'Disetujui'
@@ -196,6 +197,18 @@ export default function DailyActivityPage() {
                       >
                         {item.status}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <Pencil className="h-4 w-4" />
+                                <span className="sr-only">Edit</span>
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                <Trash2 className="h-4 w-4" />
+                                <span className="sr-only">Hapus</span>
+                            </Button>
+                        </div>
                     </TableCell>
                   </TableRow>
                 ))}
