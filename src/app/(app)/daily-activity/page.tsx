@@ -20,12 +20,25 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { mockDailyActivities } from '@/lib/data';
-import { CalendarIcon, PlusCircle, Upload, Pencil, Trash2 } from 'lucide-react';
+import {
+  CalendarIcon,
+  PlusCircle,
+  Upload,
+  Pencil,
+  Trash2,
+  MoreHorizontal,
+} from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import { format } from 'date-fns';
@@ -123,7 +136,7 @@ export default function DailyActivityPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="notes">Keterangan (Opsional)</Label>
+              <Label htmlFor="notes">Keterangan</Label>
               <Textarea
                 id="notes"
                 placeholder="Contoh: Pasien mengeluh pusing ringan"
@@ -141,7 +154,7 @@ export default function DailyActivityPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="proof">Bukti</Label>
+              <Label htmlFor="proof">Bukti (Opsional)</Label>
               <Button variant="outline" className="w-full h-12 text-base">
                 <Upload className="mr-2 h-4 w-4" />
                 Unggah Foto atau Laporan
@@ -200,16 +213,24 @@ export default function DailyActivityPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <Pencil className="h-4 w-4" />
-                                <span className="sr-only">Edit</span>
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
-                                <Trash2 className="h-4 w-4" />
-                                <span className="sr-only">Hapus</span>
-                            </Button>
-                        </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Buka menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            <span>Edit</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive focus:text-destructive">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            <span>Hapus</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
