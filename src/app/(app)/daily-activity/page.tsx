@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -39,6 +37,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { TimePicker } from './components/time-picker';
 
 export default function DailyActivityPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -80,25 +80,35 @@ export default function DailyActivityPage() {
               </Popover>
             </div>
             <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="start-time">Jam Mulai</Label>
-                    <Input id="start-time" type="time" className="h-12 text-base" />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="end-time">Jam Selesai</Label>
-                    <Input id="end-time" type="time" className="h-12 text-base" />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="start-time">Jam Mulai</Label>
+                <TimePicker
+                  id="start-time"
+                  aria-label="Pilih jam mulai"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="end-time">Jam Selesai</Label>
+                <TimePicker
+                  id="end-time"
+                  aria-label="Pilih jam selesai"
+                />
+              </div>
             </div>
-             <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="action-plan">Rencana Aksi</Label>
               <Select>
                 <SelectTrigger id="action-plan" className="h-12 text-base">
                   <SelectValue placeholder="Pilih rencana aksi" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="plan-a">Melakukan pemeriksaan pasien</SelectItem>
+                  <SelectItem value="plan-a">
+                    Melakukan pemeriksaan pasien
+                  </SelectItem>
                   <SelectItem value="plan-b">Mengelola rekam medis</SelectItem>
-                  <SelectItem value="plan-c">Asistensi tindakan medis</SelectItem>
+                  <SelectItem value="plan-c">
+                    Asistensi tindakan medis
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -111,7 +121,7 @@ export default function DailyActivityPage() {
                 className="text-base"
               />
             </div>
-             <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="notes">Keterangan (Opsional)</Label>
               <Textarea
                 id="notes"
@@ -120,16 +130,21 @@ export default function DailyActivityPage() {
                 className="text-base"
               />
             </div>
-             <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="work-result">Hasil Kerja (Kuantitas)</Label>
-              <Input id="work-result" type="number" placeholder="Contoh: 5" className="h-12 text-base" />
+              <Input
+                id="work-result"
+                type="number"
+                placeholder="Contoh: 5"
+                className="h-12 text-base"
+              />
             </div>
-             <div className="space-y-2">
-                <Label htmlFor="proof">Bukti</Label>
-                <Button variant="outline" className="w-full h-12 text-base">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Unggah Foto atau Laporan
-                </Button>
+            <div className="space-y-2">
+              <Label htmlFor="proof">Bukti</Label>
+              <Button variant="outline" className="w-full h-12 text-base">
+                <Upload className="mr-2 h-4 w-4" />
+                Unggah Foto atau Laporan
+              </Button>
             </div>
             <Button className="w-full h-12 text-lg">
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -161,7 +176,9 @@ export default function DailyActivityPage() {
                   <TableRow key={item.id}>
                     <TableCell className="font-medium">{item.date}</TableCell>
                     <TableCell>{item.actionPlan}</TableCell>
-                    <TableCell>{item.quantity} {item.unit}</TableCell>
+                    <TableCell>
+                      {item.quantity} {item.unit}
+                    </TableCell>
                     <TableCell className="text-right">
                       <Badge
                         variant={
@@ -171,7 +188,11 @@ export default function DailyActivityPage() {
                             ? 'destructive'
                             : 'secondary'
                         }
-                        className={item.status === 'Disetujui' ? 'bg-accent text-accent-foreground' : ''}
+                        className={
+                          item.status === 'Disetujui'
+                            ? 'bg-accent text-accent-foreground'
+                            : ''
+                        }
                       >
                         {item.status}
                       </Badge>
@@ -180,7 +201,7 @@ export default function DailyActivityPage() {
                 ))}
               </TableBody>
             </Table>
-             {mockDailyActivities.length === 0 && (
+            {mockDailyActivities.length === 0 && (
               <div className="py-10 text-center text-sm text-muted-foreground">
                 Belum ada aktivitas yang dicatat.
               </div>
