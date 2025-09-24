@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -17,16 +18,40 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import type { DailyActivity } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 
-export function ActivityForm() {
+type ActivityFormProps = {
+  onAddActivity: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
+};
+
+export function ActivityForm({ onAddActivity }: ActivityFormProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newActivity = {
+      date: format(date || new Date(), 'yyyy-MM-dd'),
+      startTime: formData.get('start-time') as string,
+      endTime: formData.get('end-time') as string,
+      actionPlan: formData.get('action-plan') as string,
+      activity: formData.get('activity') as string,
+      notes: formData.get('notes') as string,
+      quantity: Number(formData.get('work-result')),
+      unit: 'Laporan', // Default unit, can be made dynamic later
+    };
+
+    onAddActivity(newActivity);
+    event.currentTarget.reset();
+    setDate(new Date());
+  };
+
   return (
-    <form className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="date">Tanggal</Label>
         <Popover>
@@ -55,23 +80,23 @@ export function ActivityForm() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="start-time">Jam Mulai</Label>
-          <Input id="start-time" type="time" className="h-12 text-base" />
+          <Input id="start-time" name="start-time" type="time" required className="h-12 text-base" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="end-time">Jam Selesai</Label>
-          <Input id="end-time" type="time" className="h-12 text-base" />
+          <Input id="end-time" name="end-time" type="time" required className="h-12 text-base" />
         </div>
       </div>
       <div className="space-y-2">
         <Label htmlFor="action-plan">Rencana Aksi</Label>
-        <Select>
+        <Select name="action-plan" required>
           <SelectTrigger id="action-plan" className="h-12 text-base">
             <SelectValue placeholder="Pilih rencana aksi" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="plan-a">Melakukan pemeriksaan pasien</SelectItem>
-            <SelectItem value="plan-b">Mengelola rekam medis</SelectItem>
-            <SelectItem value="plan-c">Asistensi tindakan medis</SelectItem>
+            <SelectItem value="Melakukan pemeriksaan pasien">Melakukan pemeriksaan pasien</SelectItem>
+            <SelectItem value="Mengelola rekam medis">Mengelola rekam medis</SelectItem>
+            <SelectItem value="Asistensi tindakan medis">Asistensi tindakan medis</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -79,8 +104,10 @@ export function ActivityForm() {
         <Label htmlFor="activity">Uraian Kegiatan</Label>
         <Textarea
           id="activity"
+          name="activity"
           placeholder="Contoh: Memeriksa kondisi pasien di kamar 201"
           rows={3}
+          required
           className="text-base"
         />
       </div>
@@ -88,6 +115,7 @@ export function ActivityForm() {
         <Label htmlFor="notes">Keterangan</Label>
         <Textarea
           id="notes"
+          name="notes"
           placeholder="Contoh: Pasien mengeluh pusing ringan"
           rows={2}
           className="text-base"
@@ -97,8 +125,10 @@ export function ActivityForm() {
         <Label htmlFor="work-result">Hasil Kerja (Kuantitas)</Label>
         <Input
           id="work-result"
+          name="work-result"
           type="number"
           placeholder="Contoh: 5"
+          required
           className="h-12 text-base"
         />
       </div>
