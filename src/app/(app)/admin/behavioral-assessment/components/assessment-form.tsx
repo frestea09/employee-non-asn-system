@@ -31,7 +31,7 @@ function SubmitButton() {
       ) : (
         <BrainCircuit className="mr-2 h-4 w-4" />
       )}
-      Analisis Perilaku
+      {pending ? 'Menganalisis...' : 'Analisis Perilaku'}
     </Button>
   );
 }
@@ -42,21 +42,17 @@ export function AssessmentForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.message) {
-      if (state.errors) {
+    if (state.message && !state.data) {
         toast({
-          title: 'Gagal',
+          title: state.errors ? 'Gagal' : 'Informasi',
           description: state.message,
-          variant: 'destructive',
+          variant: state.errors ? 'destructive' : 'default',
         });
-      }
     }
     if (state.data) {
         formRef.current?.reset();
     }
   }, [state, toast]);
-
-  const { pending } = useFormStatus();
 
   return (
     <div>
@@ -96,17 +92,9 @@ export function AssessmentForm() {
         <SubmitButton />
       </form>
 
-      {(pending || state.data) && (
+      {state.data && (
         <div className="mt-8 space-y-6">
             <h2 className="text-xl font-semibold tracking-tight">Hasil Penilaian</h2>
-            {pending ? (
-                <div className="space-y-4">
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-24 w-full" />
-                </div>
-            ) : state.data && (
                 <div className="grid gap-4 md:grid-cols-2">
                 <Card>
                     <CardHeader>
@@ -141,7 +129,6 @@ export function AssessmentForm() {
                     </CardContent>
                 </Card>
                 </div>
-            )}
         </div>
         )}
     </div>
