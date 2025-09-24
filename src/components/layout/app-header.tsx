@@ -38,7 +38,7 @@ export function AppHeader() {
         <AppBreadcrumb />
         <div className="flex items-center gap-2">
             {icon}
-            <h1 className="text-xl font-semibold md:text-2xl">{title}</h1>
+            <h1 className="text-xl font-semibold tracking-tight md:text-2xl">{title}</h1>
         </div>
       </div>
     </header>
