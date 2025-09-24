@@ -25,7 +25,7 @@ const initialState = {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="w-full">
+    <Button type="submit" disabled={pending} className="w-full h-12 text-lg">
       {pending ? (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
@@ -40,13 +40,14 @@ export function AssessmentForm() {
   const [state, formAction] = useFormState(generateAssessmentAction, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
+  const { pending } = useFormStatus();
 
   useEffect(() => {
-    if (state.message && !state.data) {
+    if (state.message && state.errors) {
         toast({
-          title: state.errors ? 'Gagal' : 'Informasi',
+          title: 'Gagal',
           description: state.message,
-          variant: state.errors ? 'destructive' : 'default',
+          variant: 'destructive',
         });
     }
     if (state.data) {
@@ -66,6 +67,7 @@ export function AssessmentForm() {
               placeholder="Salin dan tempel log aktivitas harian karyawan di sini..."
               rows={8}
               required
+              className="text-base"
             />
             {state.errors?.dailyActivities && (
               <p className="text-sm font-medium text-destructive">
@@ -81,6 +83,7 @@ export function AssessmentForm() {
               placeholder="Salin dan tempel catatan kehadiran karyawan di sini..."
               rows={8}
               required
+              className="text-base"
             />
             {state.errors?.attendanceRecords && (
               <p className="text-sm font-medium text-destructive">
@@ -92,45 +95,88 @@ export function AssessmentForm() {
         <SubmitButton />
       </form>
 
-      {state.data && (
+      {(pending || state.data) && (
         <div className="mt-8 space-y-6">
-            <h2 className="text-xl font-semibold tracking-tight">Hasil Penilaian</h2>
-                <div className="grid gap-4 md:grid-cols-2">
+          <h2 className="text-xl font-semibold tracking-tight">Hasil Penilaian</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {pending && !state.data ? (
+              <>
                 <Card>
-                    <CardHeader>
+                  <CardHeader>
+                    <CardTitle><Skeleton className="h-6 w-3/4" /></CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle><Skeleton className="h-6 w-3/4" /></CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle><Skeleton className="h-6 w-3/4" /></CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle><Skeleton className="h-6 w-3/4" /></CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </CardContent>
+                </Card>
+              </>
+            ) : state.data && (
+              <>
+                <Card>
+                  <CardHeader>
                     <CardTitle>Ringkasan Penilaian</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-muted-foreground">{state.data.assessmentSummary}</p>
-                    </CardContent>
+                  </CardContent>
                 </Card>
                 <Card>
-                    <CardHeader>
+                  <CardHeader>
                     <CardTitle>Area Untuk Peningkatan</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-muted-foreground">{state.data.areasForImprovement}</p>
-                    </CardContent>
+                  </CardContent>
                 </Card>
                 <Card>
-                    <CardHeader>
+                  <CardHeader>
                     <CardTitle>Area Penguatan Positif</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-muted-foreground">{state.data.positiveReinforcementAreas}</p>
-                    </CardContent>
+                  </CardContent>
                 </Card>
                 <Card>
-                    <CardHeader>
+                  <CardHeader>
                     <CardTitle>Saran Tindakan</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-muted-foreground">{state.data.suggestedActions}</p>
-                    </CardContent>
+                  </CardContent>
                 </Card>
-                </div>
+              </>
+            )}
+          </div>
         </div>
-        )}
+      )}
     </div>
   );
 }

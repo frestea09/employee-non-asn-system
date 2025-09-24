@@ -48,8 +48,8 @@ export async function generateAssessmentAction(
   } catch (error) {
     console.error('Error during behavioral assessment:', error);
     return {
-      message: 'Terjadi kesalahan pada server saat membuat penilaian. Silakan coba lagi.',
-      errors: null,
+      message: 'Terjadi kesalahan saat membuat penilaian. Silakan coba lagi nanti.',
+      errors: { dailyActivities: [], attendanceRecords: [] }, // Indicate a general error
       data: null,
     };
   }
