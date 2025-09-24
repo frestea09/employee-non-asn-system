@@ -61,7 +61,7 @@ export default function DailyActivityPage() {
                   <Button
                     variant={'outline'}
                     className={cn(
-                      'w-full justify-start text-left font-normal h-12',
+                      'w-full justify-start text-left font-normal h-12 text-base',
                       !date && 'text-muted-foreground'
                     )}
                   >
@@ -82,17 +82,17 @@ export default function DailyActivityPage() {
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="start-time">Jam Mulai</Label>
-                    <Input id="start-time" type="time" className="h-12" />
+                    <Input id="start-time" type="time" className="h-12 text-base" />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="end-time">Jam Selesai</Label>
-                    <Input id="end-time" type="time" className="h-12" />
+                    <Input id="end-time" type="time" className="h-12 text-base" />
                 </div>
             </div>
              <div className="space-y-2">
               <Label htmlFor="action-plan">Rencana Aksi</Label>
               <Select>
-                <SelectTrigger id="action-plan" className="h-12">
+                <SelectTrigger id="action-plan" className="h-12 text-base">
                   <SelectValue placeholder="Pilih rencana aksi" />
                 </SelectTrigger>
                 <SelectContent>
@@ -108,6 +108,7 @@ export default function DailyActivityPage() {
                 id="activity"
                 placeholder="Contoh: Memeriksa kondisi pasien di kamar 201"
                 rows={3}
+                className="text-base"
               />
             </div>
              <div className="space-y-2">
@@ -116,15 +117,16 @@ export default function DailyActivityPage() {
                 id="notes"
                 placeholder="Contoh: Pasien mengeluh pusing ringan"
                 rows={2}
+                className="text-base"
               />
             </div>
              <div className="space-y-2">
               <Label htmlFor="work-result">Hasil Kerja (Kuantitas)</Label>
-              <Input id="work-result" type="number" placeholder="Contoh: 5" className="h-12" />
+              <Input id="work-result" type="number" placeholder="Contoh: 5" className="h-12 text-base" />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="proof">Bukti</Label>
-                <Button variant="outline" className="w-full h-12">
+                <Button variant="outline" className="w-full h-12 text-base">
                     <Upload className="mr-2 h-4 w-4" />
                     Unggah Foto atau Laporan
                 </Button>
@@ -189,5 +191,3 @@ export default function DailyActivityPage() {
     </div>
   );
 }
-
-    

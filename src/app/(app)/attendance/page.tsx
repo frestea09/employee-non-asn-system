@@ -58,7 +58,7 @@ export default function AttendancePage() {
                   <Button
                     variant={'outline'}
                     className={cn(
-                      'w-full justify-start text-left font-normal',
+                      'w-full justify-start text-left font-normal h-12 text-base',
                       !date && 'text-muted-foreground'
                     )}
                   >
@@ -79,7 +79,7 @@ export default function AttendancePage() {
             <div className="space-y-2">
               <Label htmlFor="status">Status Kehadiran</Label>
               <Select defaultValue="hadir">
-                <SelectTrigger id="status">
+                <SelectTrigger id="status" className="h-12 text-base">
                   <SelectValue placeholder="Pilih Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -89,7 +89,7 @@ export default function AttendancePage() {
                 </SelectContent>
               </Select>
             </div>
-            <Button className="w-full">
+            <Button className="w-full h-12 text-lg">
               <PlusCircle className="mr-2 h-4 w-4" />
               Simpan Absensi
             </Button>
