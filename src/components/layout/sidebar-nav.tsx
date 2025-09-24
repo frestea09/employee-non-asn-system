@@ -15,6 +15,8 @@ import {
   ChevronDown,
   CheckCircle,
   FileCheck,
+  BrainCircuit,
+  User,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -37,6 +39,7 @@ const mainNav = [
 const adminNav = [
   { href: '/admin/validate-activities', label: 'Validasi Aktivitas', icon: <CheckCircle /> },
   { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
+  { href: '/admin/behavioral-assessment', label: 'Analisis AI', icon: <BrainCircuit /> },
 ];
 
 export function SidebarNav() {
@@ -69,7 +72,7 @@ export function SidebarNav() {
                 isActive={adminNav.some(item => pathname.startsWith(item.href))}
               >
                 <div className="flex items-center gap-2">
-                  <LayoutDashboard />
+                  <User />
                   <span>Admin</span>
                 </div>
                 <ChevronDown
