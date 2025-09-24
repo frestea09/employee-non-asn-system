@@ -45,7 +45,7 @@ export default function LoginPage() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Alamat Email</Label>
-          <Input id="email" type="email" placeholder="nama@email.com" defaultValue="karyawan@email.com" required />
+          <Input id="email" type="email" placeholder="nama@email.com" defaultValue="karyawan@email.com" required className="h-12 text-lg" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Kata Sandi</Label>
@@ -55,7 +55,7 @@ export default function LoginPage() {
               type={showPassword ? 'text' : 'password'}
               defaultValue="password123"
               required
-              className="pr-10"
+              className="h-12 pr-10 text-lg"
             />
             <Button
               type="button"
@@ -77,7 +77,7 @@ export default function LoginPage() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full" onClick={handleLogin}>
+        <Button className="h-12 w-full text-lg" onClick={handleLogin}>
           Masuk
         </Button>
       </CardFooter>
