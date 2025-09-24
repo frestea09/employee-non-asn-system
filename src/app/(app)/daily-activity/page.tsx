@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { mockDailyActivities } from '@/lib/data';
-import { CalendarIcon, PlusCircle } from 'lucide-react';
+import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -31,6 +32,13 @@ import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function DailyActivityPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -42,7 +50,7 @@ export default function DailyActivityPage() {
           <CardHeader>
             <CardTitle>Tambah Aktivitas Harian</CardTitle>
             <CardDescription>
-              Catat aktivitas yang Anda lakukan hari ini.
+              Catat aktivitas yang Anda lakukan hari ini secara terperinci.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -53,7 +61,7 @@ export default function DailyActivityPage() {
                   <Button
                     variant={'outline'}
                     className={cn(
-                      'w-full justify-start text-left font-normal',
+                      'w-full justify-start text-left font-normal h-12',
                       !date && 'text-muted-foreground'
                     )}
                   >
@@ -71,15 +79,57 @@ export default function DailyActivityPage() {
                 </PopoverContent>
               </Popover>
             </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="start-time">Jam Mulai</Label>
+                    <Input id="start-time" type="time" className="h-12" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="end-time">Jam Selesai</Label>
+                    <Input id="end-time" type="time" className="h-12" />
+                </div>
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="action-plan">Rencana Aksi</Label>
+              <Select>
+                <SelectTrigger id="action-plan" className="h-12">
+                  <SelectValue placeholder="Pilih rencana aksi" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="plan-a">Melakukan pemeriksaan pasien</SelectItem>
+                  <SelectItem value="plan-b">Mengelola rekam medis</SelectItem>
+                  <SelectItem value="plan-c">Asistensi tindakan medis</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
-              <Label htmlFor="activity">Deskripsi Aktivitas</Label>
+              <Label htmlFor="activity">Uraian Kegiatan</Label>
               <Textarea
                 id="activity"
                 placeholder="Contoh: Memeriksa kondisi pasien di kamar 201"
-                rows={4}
+                rows={3}
               />
             </div>
-            <Button className="w-full">
+             <div className="space-y-2">
+              <Label htmlFor="notes">Keterangan (Opsional)</Label>
+              <Textarea
+                id="notes"
+                placeholder="Contoh: Pasien mengeluh pusing ringan"
+                rows={2}
+              />
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="work-result">Hasil Kerja (Kuantitas)</Label>
+              <Input id="work-result" type="number" placeholder="Contoh: 5" className="h-12" />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="proof">Bukti</Label>
+                <Button variant="outline" className="w-full h-12">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Unggah Foto atau Laporan
+                </Button>
+            </div>
+            <Button className="w-full h-12 text-lg">
               <PlusCircle className="mr-2 h-4 w-4" />
               Simpan Aktivitas
             </Button>
@@ -99,7 +149,8 @@ export default function DailyActivityPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Tanggal</TableHead>
-                  <TableHead>Aktivitas</TableHead>
+                  <TableHead>Rencana Aksi</TableHead>
+                  <TableHead>Hasil</TableHead>
                   <TableHead className="text-right">Status</TableHead>
                 </TableRow>
               </TableHeader>
@@ -107,7 +158,8 @@ export default function DailyActivityPage() {
                 {mockDailyActivities.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium">{item.date}</TableCell>
-                    <TableCell>{item.activity}</TableCell>
+                    <TableCell>{item.actionPlan}</TableCell>
+                    <TableCell>{item.quantity} {item.unit}</TableCell>
                     <TableCell className="text-right">
                       <Badge
                         variant={
@@ -126,9 +178,16 @@ export default function DailyActivityPage() {
                 ))}
               </TableBody>
             </Table>
+             {mockDailyActivities.length === 0 && (
+              <div className="py-10 text-center text-sm text-muted-foreground">
+                Belum ada aktivitas yang dicatat.
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
+    
