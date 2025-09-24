@@ -38,7 +38,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { TimePicker } from './components/time-picker';
 
 export default function DailyActivityPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -82,16 +81,18 @@ export default function DailyActivityPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="start-time">Jam Mulai</Label>
-                <TimePicker
+                <Input
                   id="start-time"
-                  aria-label="Pilih jam mulai"
+                  type="time"
+                  className="h-12 text-base"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="end-time">Jam Selesai</Label>
-                <TimePicker
+                <Input
                   id="end-time"
-                  aria-label="Pilih jam selesai"
+                  type="time"
+                  className="h-12 text-base"
                 />
               </div>
             </div>
