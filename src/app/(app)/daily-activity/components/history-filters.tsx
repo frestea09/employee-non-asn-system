@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { CalendarIcon, Filter, Search } from 'lucide-react';
 
 type HistoryFiltersProps = {
@@ -48,7 +50,7 @@ export function HistoryFilters({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedDate ? format(selectedDate, 'PPP') : <span>Pilih tanggal</span>}
+            {selectedDate ? format(selectedDate, 'PPP', { locale: id }) : <span>Pilih tanggal</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -57,6 +59,7 @@ export function HistoryFilters({
             selected={selectedDate}
             onSelect={setSelectedDate}
             initialFocus
+            locale={id}
           />
         </PopoverContent>
       </Popover>

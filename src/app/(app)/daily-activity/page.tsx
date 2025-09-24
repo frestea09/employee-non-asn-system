@@ -16,6 +16,7 @@ import type { DailyActivity } from '@/lib/data';
 import { mockDailyActivities } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export default function DailyActivityPage() {
   const [activities, setActivities] =
@@ -76,12 +77,15 @@ export default function DailyActivityPage() {
 
   const filteredActivities = useMemo(() => {
     return activities.filter((activity) => {
-      const matchesSearch = activity.activity
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch =
+        activity.activity.toLowerCase().includes(searchLower) ||
+        activity.actionPlan.toLowerCase().includes(searchLower);
+
       const matchesDate = selectedDate
         ? activity.date === format(selectedDate, 'yyyy-MM-dd')
         : true;
+        
       return matchesSearch && matchesDate;
     });
   }, [activities, searchQuery, selectedDate]);

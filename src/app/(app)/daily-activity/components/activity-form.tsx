@@ -21,6 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import type { DailyActivity } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 
@@ -64,7 +65,7 @@ export function ActivityForm({ onAddActivity }: ActivityFormProps) {
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, 'PPP') : <span>Pilih tanggal</span>}
+              {date ? format(date, 'PPP', { locale: id }) : <span>Pilih tanggal</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -73,6 +74,7 @@ export function ActivityForm({ onAddActivity }: ActivityFormProps) {
               selected={date}
               onSelect={setDate}
               initialFocus
+              locale={id}
             />
           </PopoverContent>
         </Popover>
