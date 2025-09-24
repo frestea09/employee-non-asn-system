@@ -11,16 +11,21 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ActivityForm } from './components/activity-form';
 import { ActivityHistory } from './components/activity-history';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { DailyActivity } from '@/lib/data';
 import { mockDailyActivities } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
 
 export default function DailyActivityPage() {
   const [activities, setActivities] =
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('history');
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [isFilterActive, setIsFilterActive] = useState(false);
 
   const addActivity = (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
     const activityToAdd: DailyActivity = {
@@ -59,6 +64,29 @@ export default function DailyActivityPage() {
     });
   };
 
+  const handleFilter = () => {
+    // This function can be used to trigger filtering, though it's happening live.
+    // For now, we can just log or set a state to indicate filters are "applied".
+    setIsFilterActive(true);
+    toast({
+      title: 'Filter Diterapkan',
+      description: 'Menampilkan aktivitas yang sesuai dengan kriteria Anda.',
+    });
+  };
+
+  const filteredActivities = useMemo(() => {
+    return activities.filter((activity) => {
+      const matchesSearch = activity.activity
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesDate = selectedDate
+        ? activity.date === format(selectedDate, 'yyyy-MM-dd')
+        : true;
+      return matchesSearch && matchesDate;
+    });
+  }, [activities, searchQuery, selectedDate]);
+
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
       <TabsList>
@@ -76,9 +104,14 @@ export default function DailyActivityPage() {
           </CardHeader>
           <CardContent>
             <ActivityHistory
-              activities={activities}
+              activities={filteredActivities}
               onDelete={deleteActivity}
               onUpdate={updateActivity}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              onFilter={handleFilter}
             />
           </CardContent>
         </Card>

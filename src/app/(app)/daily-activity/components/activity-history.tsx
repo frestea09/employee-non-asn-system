@@ -1,7 +1,5 @@
-
 'use client';
 
-import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -39,24 +37,32 @@ type ActivityHistoryProps = {
   activities: DailyActivity[];
   onDelete: (id: string) => void;
   onUpdate: (activity: DailyActivity) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedDate: Date | undefined;
+  setSelectedDate: (date: Date | undefined) => void;
+  onFilter: () => void;
 };
 
 export function ActivityHistory({
   activities,
   onDelete,
   onUpdate,
+  searchQuery,
+  setSearchQuery,
+  selectedDate,
+  setSelectedDate,
+  onFilter,
 }: ActivityHistoryProps) {
-  const [filteredActivities, setFilteredActivities] =
-    useState<DailyActivity[]>(activities);
-
-  // This is a placeholder. In a real app, this would be handled by the filter components.
-  useState(() => {
-    setFilteredActivities(activities);
-  });
-
   return (
     <div className="space-y-4">
-      <HistoryFilters />
+      <HistoryFilters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        onFilter={onFilter}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
