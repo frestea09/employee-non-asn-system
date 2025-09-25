@@ -18,8 +18,7 @@ import {
 } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
-import { AddActivityDialog } from './components/add-activity-dialog';
-import { PerformanceProgress } from './components/performance-progress';
+import { ActivityForm } from './components/activity-form';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -97,52 +96,49 @@ export default function DailyActivityPage() {
   }, [activities, searchQuery, selectedDate]);
 
   return (
-    <div className="space-y-6">
-       <Card>
-        <CardHeader>
-          <CardTitle>Progres Kinerja Anda</CardTitle>
-          <CardDescription>
-            Ringkasan penyelesaian tugas berdasarkan target yang ditetapkan.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PerformanceProgress 
-            actionPlans={userActionPlans}
-            activities={activities}
-          />
-        </CardContent>
-      </Card>
+    <div className="grid gap-6 lg:grid-cols-5">
+      <div className="lg:col-span-2">
+        <Card>
+           <CardHeader>
+            <CardTitle>Input Aktivitas Harian</CardTitle>
+            <CardDescription>
+              Pilih rencana aksi dan catat aktivitas Anda.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ActivityForm actionPlans={userActionPlans} onSave={addActivity} />
+          </CardContent>
+        </Card>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle>Riwayat Aktivitas</CardTitle>
-              <CardDescription>
-                Daftar aktivitas yang telah Anda catat.
-              </CardDescription>
+      <div className="lg:col-span-3">
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <CardTitle>Riwayat Aktivitas</CardTitle>
+                <CardDescription>
+                  Daftar aktivitas yang telah Anda catat.
+                </CardDescription>
+              </div>
             </div>
-             <AddActivityDialog
-                actionPlans={userActionPlans}
-                onLogActivity={addActivity}
-              />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ActivityHistory
-            activities={filteredActivities}
-            onUpdate={updateActivity}
-            onDelete={deleteActivity}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            onFilter={() => {
-              toast({ description: 'Filter diterapkan.' });
-            }}
-          />
-        </CardContent>
-      </Card>
+          </CardHeader>
+          <CardContent>
+            <ActivityHistory
+              activities={filteredActivities}
+              onUpdate={updateActivity}
+              onDelete={deleteActivity}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              onFilter={() => {
+                toast({ description: 'Filter diterapkan.' });
+              }}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
