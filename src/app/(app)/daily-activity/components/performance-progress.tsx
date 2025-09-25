@@ -20,16 +20,20 @@ const ProgressCategory = ({
 }) => {
     const percentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
+    if (totalCount === 0) {
+        return null; // Don't render the category if there are no targets
+    }
+
     return (
         <div>
-            <div className="mb-2 flex items-baseline justify-between">
-                <h4 className="font-semibold">{title}</h4>
-                <p className="text-sm font-medium text-muted-foreground">
+            <div className="mb-2 flex items-baseline justify-between text-sm">
+                <h4 className="font-semibold text-foreground">{title}</h4>
+                <p className="font-medium text-muted-foreground">
                     {completedCount} dari {totalCount} target
                 </p>
             </div>
             <Progress value={percentage} />
-            <p className="mt-1 text-right text-xs text-muted-foreground">{percentage.toFixed(0)}% Selesai</p>
+            <p className="mt-1 text-right text-xs text-muted-foreground">{percentage.toFixed(0)}% Tercatat</p>
         </div>
     );
 };
@@ -59,7 +63,7 @@ export function PerformanceProgress({ actionPlans, activities }: PerformanceProg
   }, [actionPlans, activities]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
         <ProgressCategory 
             title="Target SKP Pribadi"
             completedCount={progressData.skp.completed}

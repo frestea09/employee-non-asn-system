@@ -9,7 +9,15 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useCallback, useMemo } from 'react';
-import { DailyActivity, UserActionPlans, mockDailyActivities, mockUsers, mockSkpTargets, mockWorkPlans, mockJobStations } from '@/lib/data';
+import {
+  DailyActivity,
+  UserActionPlans,
+  mockDailyActivities,
+  mockUsers,
+  mockSkpTargets,
+  mockWorkPlans,
+  mockJobStations,
+} from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
@@ -40,7 +48,6 @@ export default function DailyActivityPage() {
       jobStations: userPositionStandards,
     };
   }, [currentUser]);
-
 
   const addActivity = useCallback(
     (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
@@ -114,7 +121,7 @@ export default function DailyActivityPage() {
             <CardHeader>
               <CardTitle>Input Aktivitas Harian</CardTitle>
               <CardDescription>
-                Pilih tanggal dan rencana aksi, lalu catat aktivitas Anda.
+                Pilih tanggal, lihat progres, dan catat aktivitas Anda berdasarkan rencana kerja.
               </CardDescription>
             </CardHeader>
             <CardContent>

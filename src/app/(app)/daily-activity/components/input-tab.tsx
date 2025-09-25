@@ -21,7 +21,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { DailyProgressStatusBar } from './daily-progress-status-bar';
+import { PerformanceProgress } from './performance-progress';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type InputTabProps = {
   userActionPlans: UserActionPlans;
@@ -31,12 +32,12 @@ type InputTabProps = {
   activitiesForSelectedDate: DailyActivity[];
 };
 
-export function InputTab({ 
-    userActionPlans, 
-    onAddActivity,
-    activityDate,
-    setActivityDate,
-    activitiesForSelectedDate,
+export function InputTab({
+  userActionPlans,
+  onAddActivity,
+  activityDate,
+  setActivityDate,
+  activitiesForSelectedDate,
 }: InputTabProps) {
   const [selectedPlan, setSelectedPlan] = useState('');
   const [selectedCategory, setSelectedCategory] =
@@ -47,6 +48,10 @@ export function InputTab({
 
 
   const handleSelectChange = (value: string) => {
+    if (!value) {
+        setSelectedPlan('');
+        return;
+    }
     const [category, plan] = value.split(':');
     setSelectedPlan(plan);
     setSelectedCategory(category as DailyActivity['category']);
@@ -93,21 +98,22 @@ export function InputTab({
     if (formRef.current) {
         formRef.current.reset();
         setSelectedPlan('');
-        setSelectedCategory('SKP');
+        // This will reset the visual selection of the Select component
+        handleSelectChange(''); 
         clearFile();
     }
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="date">Tanggal Aktivitas</Label>
+        <Label htmlFor="date">Pilih Tanggal Aktivitas</Label>
         <Popover>
           <PopoverTrigger asChild>
             <Button
               variant={'outline'}
               className={cn(
-                'w-full justify-start text-left font-normal',
+                'w-full justify-start text-left font-normal h-12',
                 !activityDate && 'text-muted-foreground'
               )}
             >
@@ -127,131 +133,149 @@ export function InputTab({
               initialFocus
               locale={id}
               disabled={(date) =>
-                date > new Date() || date < new Date(new Date().setMonth(new Date().getMonth() -1))
+                date > new Date() || date < new Date(new Date().setMonth(new Date().getMonth() - 1))
               }
             />
           </PopoverContent>
         </Popover>
       </div>
 
-      <DailyProgressStatusBar activities={activitiesForSelectedDate} />
+      <Card className='bg-muted/30'>
+        <CardHeader className='pb-4'>
+          <CardTitle className='text-lg'>Kelengkapan Catatan Hari Ini</CardTitle>
+          <CardDescription>
+            Progres pencatatan aktivitas Anda berdasarkan rencana kerja yang ada.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PerformanceProgress
+            actionPlans={userActionPlans}
+            activities={activitiesForSelectedDate}
+          />
+        </CardContent>
+      </Card>
 
-      <div className="space-y-2">
-        <Label htmlFor="action-plan">Pilih Rencana Aksi</Label>
-        <Select
-          onValueChange={handleSelectChange}
-          value={selectedPlan ? `${selectedCategory}:${selectedPlan}` : ''}
-        >
-          <SelectTrigger id="action-plan">
-            <SelectValue placeholder="Pilih tugas dari rencana Anda..." />
-          </SelectTrigger>
-          <SelectContent>
-            {userActionPlans.skpTargets.length > 0 && (
-              <SelectGroup>
-                <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
-                  Target SKP Pribadi
-                </SelectLabel>
-                {userActionPlans.skpTargets.map((plan) => (
-                  <SelectItem key={plan.id} value={`SKP:${plan.target}`}>
-                    {plan.target}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            )}
-            {userActionPlans.unitPlans.length > 0 && (
-              <SelectGroup>
-                <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
-                  Rencana Kerja Unit
-                </SelectLabel>
-                {userActionPlans.unitPlans.map((plan) => (
-                  <SelectItem key={plan.id} value={`Unit:${plan.program}`}>
-                    {plan.program}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            )}
-            {userActionPlans.jobStations.length > 0 && (
-              <SelectGroup>
-                <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
-                  Standar Kinerja Jabatan
-                </SelectLabel>
-                {userActionPlans.jobStations.map((plan) => (
-                  <SelectItem key={plan.id} value={`Jabatan:${plan.standard}`}>
-                    {plan.standard}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            )}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="activity">Uraian Kegiatan / Tugas</Label>
-        <Textarea
-          id="activity"
-          name="activity"
-          placeholder="Contoh: Memeriksa kondisi pasien di kamar 201"
-          rows={3}
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 rounded-lg border p-4">
         <div className="space-y-2">
-          <Label htmlFor="start-time">Jam Mulai</Label>
-          <Input id="start-time" name="start-time" type="time" required />
+          <Label htmlFor="action-plan">Pilih Rencana Aksi</Label>
+          <Select
+            onValueChange={handleSelectChange}
+            value={selectedPlan ? `${selectedCategory}:${selectedPlan}` : ''}
+          >
+            <SelectTrigger id="action-plan" className="h-12">
+              <SelectValue placeholder="Pilih tugas dari rencana Anda..." />
+            </SelectTrigger>
+            <SelectContent>
+              {userActionPlans.skpTargets.length > 0 && (
+                <SelectGroup>
+                  <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
+                    Target SKP Pribadi
+                  </SelectLabel>
+                  {userActionPlans.skpTargets.map((plan) => (
+                    <SelectItem key={plan.id} value={`SKP:${plan.target}`}>
+                      {plan.target}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              )}
+              {userActionPlans.unitPlans.length > 0 && (
+                <SelectGroup>
+                  <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
+                    Rencana Kerja Unit
+                  </SelectLabel>
+                  {userActionPlans.unitPlans.map((plan) => (
+                    <SelectItem key={plan.id} value={`Unit:${plan.program}`}>
+                      {plan.program}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              )}
+              {userActionPlans.jobStations.length > 0 && (
+                <SelectGroup>
+                  <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
+                    Standar Kinerja Jabatan
+                  </SelectLabel>
+                  {userActionPlans.jobStations.map((plan) => (
+                    <SelectItem key={plan.id} value={`Jabatan:${plan.standard}`}>
+                      {plan.standard}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              )}
+            </SelectContent>
+          </Select>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="end-time">Jam Selesai</Label>
-          <Input id="end-time" name="end-time" type="time" required />
-        </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="quantity">Hasil (Kuantitas)</Label>
-          <Input
-            id="quantity"
-            name="quantity"
-            type="number"
-            placeholder="Contoh: 5"
+          <Label htmlFor="activity">Uraian Kegiatan / Tugas</Label>
+          <Textarea
+            id="activity"
+            name="activity"
+            placeholder="Contoh: Memeriksa kondisi pasien di kamar 201"
+            rows={3}
             required
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="unit">Satuan</Label>
-          <Input
-            id="unit"
-            name="unit"
-            placeholder="Contoh: Pasien"
-            required
-          />
-        </div>
-      </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="proof">Bukti (Opsional)</Label>
-        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-        {fileName ? (
-          <div className="flex items-center justify-between rounded-md border border-input bg-background p-2">
-            <span className="truncate text-sm text-muted-foreground">{fileName}</span>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={clearFile}>
-              <XIcon className="h-4 w-4" />
-            </Button>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="start-time">Jam Mulai</Label>
+            <Input id="start-time" name="start-time" type="time" required className="h-12"/>
           </div>
-        ) : (
-          <Button variant="outline" className="w-full" type="button" onClick={() => fileInputRef.current?.click()}>
-            <Upload className="mr-2 h-4 w-4" />
-            Unggah Foto atau Laporan
-          </Button>
-        )}
-      </div>
+          <div className="space-y-2">
+            <Label htmlFor="end-time">Jam Selesai</Label>
+            <Input id="end-time" name="end-time" type="time" required className="h-12"/>
+          </div>
+        </div>
 
-      <Button type="submit" className="w-full h-12 text-lg">
-        <PlusCircle className="mr-2 h-5 w-5" />
-        Simpan Aktivitas
-      </Button>
-    </form>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="quantity">Hasil (Kuantitas)</Label>
+            <Input
+              id="quantity"
+              name="quantity"
+              type="number"
+              placeholder="Contoh: 5"
+              required
+              className="h-12"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="unit">Satuan</Label>
+            <Input
+              id="unit"
+              name="unit"
+              placeholder="Contoh: Pasien"
+              required
+              className="h-12"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="proof">Bukti (Opsional)</Label>
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" id="proof" />
+          {fileName ? (
+            <div className="flex items-center justify-between rounded-lg border border-input bg-background p-2 h-12">
+              <span className="truncate text-sm text-muted-foreground">{fileName}</span>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={clearFile}>
+                <XIcon className="h-4 w-4" />
+                <span className="sr-only">Hapus file</span>
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" className="w-full h-12" type="button" onClick={() => fileInputRef.current?.click()}>
+              <Upload className="mr-2 h-4 w-4" />
+              Unggah Foto atau Laporan
+            </Button>
+          )}
+        </div>
+
+        <Button type="submit" className="w-full h-12 text-lg">
+          <PlusCircle className="mr-2 h-5 w-5" />
+          Simpan Aktivitas
+        </Button>
+      </form>
+    </div>
   );
 }
