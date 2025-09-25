@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import {
   DailyActivity,
   UserActionPlans,
@@ -23,31 +23,24 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import { HistoryTab } from './components/history-tab';
 import { InputTab } from './components/input-tab';
-import { SummaryTab } from './components/summary-tab';
 import { format } from 'date-fns';
 
 export default function DailyActivityPage() {
-  const [activities, setActivities] = useState<DailyActivity[]>(mockDailyActivities);
+  const [activities, setActivities] =
+    useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
   const [activityDate, setActivityDate] = useState(new Date());
 
   // In a real app, this would come from an auth context
   const currentUser = mockUsers[0];
 
-  const userActionPlans: UserActionPlans = useMemo(() => {
-    const userSkp = mockSkpTargets.filter((t) => t.userId === currentUser.id);
-    const userUnitPlans = mockWorkPlans.filter(
-      (p) => p.unitId === currentUser.unitId
-    );
-    const userPositionStandards = mockJobStations.filter(
+  const userActionPlans: UserActionPlans = {
+    skpTargets: mockSkpTargets.filter((t) => t.userId === currentUser.id),
+    unitPlans: mockWorkPlans.filter((p) => p.unitId === currentUser.unitId),
+    jobStations: mockJobStations.filter(
       (s) => s.positionId === currentUser.positionId
-    );
-    return {
-      skpTargets: userSkp,
-      unitPlans: userUnitPlans,
-      jobStations: userPositionStandards,
-    };
-  }, [currentUser]);
+    ),
+  };
 
   const addActivity = useCallback(
     (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
@@ -97,7 +90,6 @@ export default function DailyActivityPage() {
     (act) => act.date === selectedDateString
   );
 
-
   return (
     <div className="space-y-6">
       <Alert>
@@ -110,18 +102,18 @@ export default function DailyActivityPage() {
       </Alert>
 
       <Tabs defaultValue="input" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="input">Input Aktivitas</TabsTrigger>
           <TabsTrigger value="history">Riwayat Aktivitas</TabsTrigger>
-          <TabsTrigger value="summary">Ringkasan Kinerja</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="input">
           <Card>
             <CardHeader>
               <CardTitle>Input Aktivitas Harian</CardTitle>
               <CardDescription>
-                Pilih tanggal, lihat progres, dan catat aktivitas Anda berdasarkan rencana kerja.
+                Pilih tanggal, lihat progres, dan catat aktivitas Anda
+                berdasarkan rencana kerja.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -141,7 +133,8 @@ export default function DailyActivityPage() {
             <CardHeader>
               <CardTitle>Riwayat Aktivitas</CardTitle>
               <CardDescription>
-                Daftar aktivitas yang telah Anda catat. Anda dapat mencari dan memfilter riwayat.
+                Daftar aktivitas yang telah Anda catat. Anda dapat mencari dan
+                memfilter riwayat.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -150,23 +143,6 @@ export default function DailyActivityPage() {
                 userActionPlans={userActionPlans}
                 onUpdateActivity={updateActivity}
                 onDeleteActivity={deleteActivity}
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="summary">
-          <Card>
-            <CardHeader>
-              <CardTitle>Ringkasan Kinerja</CardTitle>
-              <CardDescription>
-                Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SummaryTab
-                activities={activities}
-                userActionPlans={userActionPlans}
               />
             </CardContent>
           </Card>
