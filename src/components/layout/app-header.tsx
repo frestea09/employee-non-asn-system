@@ -93,12 +93,12 @@ export function AppHeader() {
       <div className="flex items-center gap-2 md:hidden">
         <SidebarTrigger />
       </div>
-      <div className="flex flex-col gap-1">
-        <AppBreadcrumb />
+      <div className="flex flex-1 flex-col gap-0.5">
         <div className="flex items-center gap-2">
             {icon}
             <h1 className="text-xl font-semibold tracking-tight md:text-2xl">{title}</h1>
         </div>
+        <AppBreadcrumb />
       </div>
     </header>
   );

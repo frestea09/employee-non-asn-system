@@ -50,7 +50,7 @@ export function AppBreadcrumb() {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(segment => segment);
   
-  if (pathSegments.length === 0) {
+  if (pathSegments.length <= 1) {
     return null;
   }
   
@@ -72,7 +72,7 @@ export function AppBreadcrumb() {
   };
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="text-xs">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
