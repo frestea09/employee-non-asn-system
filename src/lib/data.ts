@@ -57,6 +57,8 @@ export type SkpTarget = {
   target: string;
   description: string;
   deadline: string;
+  monthly_target: number; // Target kuantitas bulanan
+  unit: string; // Satuan untuk target
   status: 'Rencana' | 'Realisasi' | 'Selesai';
 };
 
@@ -81,6 +83,8 @@ export const mockDailyActivities: DailyActivity[] = [
   { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', category: 'Jabatan', actionPlan: 'Waktu Respon Pasien Gawat Darurat', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
   { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', category: 'Unit', actionPlan: 'Pencegahan Infeksi', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
   { id: '3', date: '2024-07-29', startTime: '10:00', endTime: '12:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Membantu dokter dalam tindakan operasi kecil.', quantity: 1, unit: 'Tindakan', status: 'Menunggu Validasi' },
+  { id: 'act-101-1', date: '2024-07-15', startTime: '08:00', endTime: '09:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Merespon 3 panggilan darurat', quantity: 3, unit: 'Pasien', status: 'Disetujui' },
+  { id: 'act-101-2', date: '2024-07-20', startTime: '14:00', endTime: '15:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Merespon 5 panggilan darurat', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
 ];
 
 export const mockMonthlyPerformances: MonthlyPerformance[] = [
@@ -131,9 +135,9 @@ export const mockPositions: Position[] = [
 ];
 
 export const mockSkpTargets: SkpTarget[] = [
-    { id: '101', userId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', status: 'Rencana' },
-    { id: '102', userId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', status: 'Rencana' },
-    { id: '201', userId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', status: 'Rencana' },
+    { id: '101', userId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', monthly_target: 30, unit: 'Pasien', status: 'Rencana' },
+    { id: '102', userId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', monthly_target: 1, unit: 'Sertifikasi', status: 'Rencana' },
+    { id: '201', userId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', monthly_target: 5, unit: 'Pasien', status: 'Rencana' },
 ];
 
 export const mockWorkPlans: WorkPlan[] = [
