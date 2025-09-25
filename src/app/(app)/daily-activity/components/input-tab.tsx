@@ -103,6 +103,12 @@ export function InputTab({
         clearFile();
     }
   };
+  
+  const isToday = activityDate.toDateString() === new Date().toDateString();
+  const progressTitle = isToday
+    ? 'Kelengkapan Catatan Hari Ini'
+    : `Kelengkapan Catatan untuk ${format(activityDate, 'd MMMM yyyy', { locale: id })}`;
+
 
   return (
     <div className="space-y-4">
@@ -142,7 +148,7 @@ export function InputTab({
 
       <Card className='bg-muted/30'>
         <CardHeader className='pb-4'>
-          <CardTitle className='text-lg'>Kelengkapan Catatan Hari Ini</CardTitle>
+          <CardTitle className='text-lg'>{progressTitle}</CardTitle>
           <CardDescription>
             Progres pencatatan aktivitas Anda berdasarkan rencana kerja yang ada.
           </CardDescription>
