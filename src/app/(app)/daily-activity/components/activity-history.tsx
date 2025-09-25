@@ -42,6 +42,9 @@ type ActivityHistoryProps = {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
   onFilter: () => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 };
 
 export function ActivityHistory({
@@ -53,6 +56,9 @@ export function ActivityHistory({
   selectedDate,
   setSelectedDate,
   onFilter,
+  currentPage,
+  totalPages,
+  onPageChange,
 }: ActivityHistoryProps) {
   const getCategoryBadgeVariant = (category: DailyActivity['category']) => {
     switch(category) {
@@ -179,6 +185,29 @@ export function ActivityHistory({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-between pt-2">
+        <div className="text-sm text-muted-foreground">
+          Halaman {currentPage} dari {totalPages}
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+          >
+            Sebelumnya
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+          >
+            Berikutnya
+          </Button>
+        </div>
       </div>
     </div>
   );

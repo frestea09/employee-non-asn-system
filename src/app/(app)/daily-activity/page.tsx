@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
 import { ActivityForm } from './components/activity-form';
+import { EditActivityDialog } from './components/edit-activity-dialog';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -32,6 +33,9 @@ export default function DailyActivityPage() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
 
   // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
@@ -94,6 +98,14 @@ export default function DailyActivityPage() {
       return matchesSearch && matchesDate;
     });
   }, [activities, searchQuery, selectedDate]);
+  
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredActivities.slice(startIndex, endIndex);
+  }, [filteredActivities, currentPage]);
+
+  const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
@@ -125,7 +137,7 @@ export default function DailyActivityPage() {
           </CardHeader>
           <CardContent>
             <ActivityHistory
-              activities={filteredActivities}
+              activities={paginatedActivities}
               onUpdate={updateActivity}
               onDelete={deleteActivity}
               searchQuery={searchQuery}
@@ -133,8 +145,12 @@ export default function DailyActivityPage() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               onFilter={() => {
+                setCurrentPage(1); // Reset to first page on new filter
                 toast({ description: 'Filter diterapkan.' });
               }}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
             />
           </CardContent>
         </Card>
