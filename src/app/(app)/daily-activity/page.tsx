@@ -9,14 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useMemo, useCallback } from 'react';
-import type { DailyActivity, UserActionPlans } from '@/lib/data';
-import {
-  mockDailyActivities,
-  mockUsers,
-  mockSkpTargets,
-  mockWorkPlans,
-  mockJobStations,
-} from '@/lib/data';
+import { DailyActivity, UserActionPlans, mockDailyActivities, mockUsers, mockSkpTargets, mockWorkPlans, mockJobStations } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
@@ -26,8 +19,7 @@ import { SummaryTab } from './components/summary-tab';
 import { format } from 'date-fns';
 
 export default function DailyActivityPage() {
-  const [activities, setActivities] =
-    useState<DailyActivity[]>(mockDailyActivities);
+  const [activities, setActivities] = useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
   const [activityDate, setActivityDate] = useState(new Date());
 
@@ -92,11 +84,10 @@ export default function DailyActivityPage() {
     [toast]
   );
 
-  const activitiesForSelectedDate = useMemo(() => {
-    const selectedDateString = format(activityDate, 'yyyy-MM-dd');
-    return activities.filter((act) => act.date === selectedDateString);
-  }, [activities, activityDate]);
-
+  const selectedDateString = format(activityDate, 'yyyy-MM-dd');
+  const activitiesForSelectedDate = activities.filter(
+    (act) => act.date === selectedDateString
+  );
 
   return (
     <div className="space-y-6">
