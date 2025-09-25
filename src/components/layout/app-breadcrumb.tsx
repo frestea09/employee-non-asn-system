@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { mockUsers } from '@/lib/data'; // Import mock data
+import { mockUsers, mockUnits } from '@/lib/data';
 
 const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Admin',
@@ -19,7 +19,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
   '/admin/unit-management': 'Manajemen Unit',
-  '/admin/work-plan': 'Rencana Kerja',
+  '/admin/work-plan': 'Rencana Kerja Unit',
   '/admin/skp-management': 'Manajemen SKP',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
@@ -28,10 +28,14 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/reports': 'Laporan',
 };
 
-const DynamicBreadcrumbName: React.FC<{ segment: string }> = ({ segment }) => {
-  const user = mockUsers.find(u => u.id === segment);
-  if (user) {
-    return <>{user.name}</>;
+const DynamicBreadcrumbName: React.FC<{ segment: string, context: 'skp' | 'work-plan' }> = ({ segment, context }) => {
+  if (context === 'skp') {
+    const user = mockUsers.find(u => u.id === segment);
+    if (user) return <>{user.name}</>;
+  }
+  if (context === 'work-plan') {
+    const unit = mockUnits.find(u => u.id === segment);
+    if (unit) return <>{unit.name}</>;
   }
   return <>{segment}</>;
 };
@@ -49,7 +53,6 @@ export function AppBreadcrumb() {
       return null;
   }
 
-
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -61,13 +64,18 @@ export function AppBreadcrumb() {
         {pathSegments.map((segment, index) => {
           const href = `/${pathSegments.slice(0, index + 1).join('/')}`;
           const isLast = index === pathSegments.length - 1;
-          const isDynamicId =
-            pathSegments[index - 1] === 'skp-management' && !isNaN(Number(segment));
-
+          
           let name: React.ReactNode = breadcrumbNameMap[href] || segment;
+          let context: 'skp' | 'work-plan' | undefined = undefined;
 
-          if (isDynamicId) {
-            name = <DynamicBreadcrumbName segment={segment} />;
+          if (pathSegments[index - 1] === 'skp-management') {
+            context = 'skp';
+          } else if (pathSegments[index - 1] === 'work-plan') {
+            context = 'work-plan';
+          }
+
+          if (context && isLast) {
+            name = <DynamicBreadcrumbName segment={segment} context={context} />;
           }
 
           return (

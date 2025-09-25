@@ -51,6 +51,16 @@ export type SkpTarget = {
   status: 'Rencana' | 'Realisasi' | 'Selesai';
 };
 
+export type WorkPlan = {
+  id: string;
+  unitId: string;
+  program: string;
+  activities: string;
+  target: string;
+  budget: number;
+};
+
+
 export const mockDailyActivities: DailyActivity[] = [
   { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', actionPlan: 'Melakukan pemeriksaan pasien', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
   { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', actionPlan: 'Mengelola rekam medis', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
@@ -82,7 +92,7 @@ export const mockValidationPerformances: MonthlyPerformance[] = [
 ];
 
 export const mockUsers: User[] = [
-  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat', position: 'Perawat', role: 'Karyawan' },
+  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat (UGD)', position: 'Perawat', role: 'Karyawan' },
   { id: '2', ni: 'K.21.08.002', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan', role: 'Karyawan' },
   { id: '3', ni: 'A.20.01.001', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Kepala Bagian SDM', role: 'Admin' },
   { id: '4', ni: 'K.22.03.015', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
@@ -100,4 +110,10 @@ export const mockSkpTargets: SkpTarget[] = [
     { id: '101', userId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', status: 'Rencana' },
     { id: '102', userId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', status: 'Rencana' },
     { id: '201', userId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', status: 'Rencana' },
+];
+
+export const mockWorkPlans: WorkPlan[] = [
+  { id: 'wp1', unitId: '1', program: 'Peningkatan Kualitas Pelayanan UGD', activities: 'Pelatihan BLS/ALS untuk perawat, Pengadaan alat medis baru', target: 'Waktu respon < 5 menit', budget: 150000000 },
+  { id: 'wp2', unitId: '1', program: 'Pencegahan Infeksi', activities: 'Sosialisasi cuci tangan, Audit kepatuhan APD', target: 'Angka infeksi nosokomial turun 15%', budget: 50000000 },
+  { id: 'wp3', unitId: '2', program: 'Program Keselamatan Pasien', activities: 'Implementasi check list keselamatan pasien, Ronde keselamatan', target: 'Zero KTD (Kejadian Tidak Diharapkan)', budget: 75000000 },
 ];

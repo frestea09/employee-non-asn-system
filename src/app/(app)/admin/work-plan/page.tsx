@@ -16,6 +16,7 @@ import {
 import { mockUnits } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function WorkPlanPage() {
   return (
@@ -23,7 +24,7 @@ export default function WorkPlanPage() {
       <CardHeader>
         <CardTitle>Manajemen Rencana Kerja Unit</CardTitle>
         <CardDescription>
-          Tetapkan dan kelola rencana kerja tahunan untuk setiap unit.
+          Pilih unit untuk menetapkan dan mengelola rencana kerja tahunan.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -42,9 +43,11 @@ export default function WorkPlanPage() {
                   <TableCell className="font-medium">{unit.name}</TableCell>
                   <TableCell className='text-muted-foreground'>{unit.description}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">
-                      Kelola Rencana
-                      <ChevronRight className="ml-2 h-4 w-4" />
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href={`/admin/work-plan/${unit.id}`}>
+                        Kelola Rencana
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Link>
                     </Button>
                   </TableCell>
                 </TableRow>

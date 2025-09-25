@@ -18,7 +18,7 @@ import {
   BrainCircuit,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
-import { mockUsers } from '@/lib/data';
+import { mockUsers, mockUnits } from '@/lib/data';
 
 const routeIcons: { [key: string]: React.ReactNode } = {
   '/dashboard': <LayoutDashboard className="size-5" />,
@@ -46,7 +46,7 @@ const routeTitles: { [key: string]: string } = {
   '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
   '/admin/unit-management': 'Manajemen Unit',
-  '/admin/work-plan': 'Rencana Kerja',
+  '/admin/work-plan': 'Rencana Kerja Unit',
   '/admin/skp-management': 'Manajemen SKP',
 };
 
@@ -61,14 +61,25 @@ function getRouteInfo(pathname: string) {
 
   // Handle dynamic routes
   const segments = pathname.split('/');
-  if (segments.length === 4 && segments[1] === 'admin' && segments[2] === 'skp-management') {
-     const userId = segments[3];
-     const user = mockUsers.find(u => u.id === userId);
-     const userName = user ? user.name : "Detail Karyawan";
-    return {
-      title: `SKP: ${userName}`,
-      icon: <Target className="size-5" />,
-    };
+  if (segments.length === 4 && segments[1] === 'admin') {
+     if (segments[2] === 'skp-management') {
+         const userId = segments[3];
+         const user = mockUsers.find(u => u.id === userId);
+         const userName = user ? user.name : "Detail Karyawan";
+        return {
+          title: `SKP: ${userName}`,
+          icon: <Target className="size-5" />,
+        };
+     }
+     if (segments[2] === 'work-plan') {
+         const unitId = segments[3];
+         const unit = mockUnits.find(u => u.id === unitId);
+         const unitName = unit ? unit.name : "Detail Unit";
+        return {
+          title: `Rencana: ${unitName}`,
+          icon: <Briefcase className="size-5" />,
+        };
+     }
   }
 
   return { title: 'CatatKerja', icon: null };
