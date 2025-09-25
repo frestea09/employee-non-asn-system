@@ -19,7 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
 import { ActivityForm } from './components/activity-form';
-import { EditActivityDialog } from './components/edit-activity-dialog';
+import { DailySummary } from './components/daily-summary';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -107,53 +107,77 @@ export default function DailyActivityPage() {
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
+  const dailySummaryData = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const todayActivities = activities.filter(act => act.date === today);
+    return {
+      skp: todayActivities.filter(act => act.category === 'SKP').length,
+      unit: todayActivities.filter(act => act.category === 'Unit').length,
+      jabatan: todayActivities.filter(act => act.category === 'Jabatan').length,
+    }
+  }, [activities]);
+
   return (
-    <div className="grid gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-2">
-        <Card>
-           <CardHeader>
-            <CardTitle>Input Aktivitas Harian</CardTitle>
+    <div className="space-y-6">
+       <Card>
+          <CardHeader>
+            <CardTitle>Ringkasan Aktivitas Hari Ini</CardTitle>
             <CardDescription>
-              Pilih rencana aksi dan catat aktivitas Anda.
+              Pantau kelengkapan pencatatan aktivitas Anda untuk hari ini.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ActivityForm actionPlans={userActionPlans} onSave={addActivity} />
+            <DailySummary data={dailySummaryData} />
           </CardContent>
         </Card>
-      </div>
 
-      <div className="lg:col-span-3">
-        <Card>
-          <CardHeader>
-            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <CardTitle>Riwayat Aktivitas</CardTitle>
-                <CardDescription>
-                  Daftar aktivitas yang telah Anda catat.
-                </CardDescription>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Input Aktivitas Harian</CardTitle>
+              <CardDescription>
+                Pilih rencana aksi dan catat aktivitas Anda.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ActivityForm actionPlans={userActionPlans} onSave={addActivity} />
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-3">
+          <Card>
+            <CardHeader>
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <CardTitle>Riwayat Aktivitas</CardTitle>
+                  <CardDescription>
+                    Daftar aktivitas yang telah Anda catat.
+                  </CardDescription>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ActivityHistory
-              activities={paginatedActivities}
-              onUpdate={updateActivity}
-              onDelete={deleteActivity}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              onFilter={() => {
-                setCurrentPage(1); // Reset to first page on new filter
-                toast({ description: 'Filter diterapkan.' });
-              }}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent>
+              <ActivityHistory
+                activities={paginatedActivities}
+                onUpdate={updateActivity}
+                onDelete={deleteActivity}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                onFilter={() => {
+                  setCurrentPage(1); // Reset to first page on new filter
+                  toast({ description: 'Filter diterapkan.' });
+                }}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

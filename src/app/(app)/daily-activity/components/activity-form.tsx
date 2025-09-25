@@ -60,7 +60,7 @@ export function ActivityForm({ actionPlans, onSave }: ActivityFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="action-plan">Pilih Rencana Aksi</Label>
-        <Select onValueChange={handleSelectChange} value={`${selectedCategory}:${selectedPlan}`.toString()}>
+        <Select onValueChange={handleSelectChange} value={selectedPlan ? `${selectedCategory}:${selectedPlan}` : ''}>
           <SelectTrigger id="action-plan">
             <SelectValue placeholder="Pilih tugas dari rencana Anda..." />
           </SelectTrigger>
