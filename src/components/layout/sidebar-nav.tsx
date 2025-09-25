@@ -21,6 +21,7 @@ import {
   Network,
   Shield,
   UserCog,
+  ClipboardCheck,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -48,6 +49,7 @@ const adminNav = [
   { href: '/admin/position-management', label: 'Manajemen Jabatan', icon: <UserCog /> },
   { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
   { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
+  { href: '/admin/job-standards', label: 'Standar Kinerja', icon: <ClipboardCheck /> },
 ];
 
 export function SidebarNav() {

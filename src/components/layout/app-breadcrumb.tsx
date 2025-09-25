@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { mockUsers, mockUnits } from '@/lib/data';
+import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
 
 const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Admin',
@@ -22,6 +22,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/position-management': 'Manajemen Jabatan',
   '/admin/work-plan': 'Rencana Kerja Unit',
   '/admin/skp-management': 'Manajemen SKP',
+  '/admin/job-standards': 'Standar Kinerja Jabatan',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
   '/monthly-performance': 'Kinerja Bulanan',
@@ -29,7 +30,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/reports': 'Laporan',
 };
 
-const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' }> = ({ segment, context }) => {
+const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' | 'job-standards' }> = ({ segment, context }) => {
   if (context === 'skp') {
     const user = mockUsers.find(u => u.id === segment);
     if (user) return <>{user.name}</>;
@@ -37,6 +38,10 @@ const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-
   if (context === 'work-plan') {
     const unit = mockUnits.find(u => u.id === segment);
     if (unit) return <>{unit.name}</>;
+  }
+  if (context === 'job-standards') {
+    const position = mockPositions.find(p => p.id === segment);
+    if (position) return <>{position.name}</>;
   }
   return <>{segment}</>;
 };
@@ -67,12 +72,14 @@ export function AppBreadcrumb() {
           const isLast = index === pathSegments.length - 1;
           
           let name: React.ReactNode = breadcrumbNameMap[href] || segment;
-          let context: 'skp' | 'work-plan' | undefined = undefined;
+          let context: 'skp' | 'work-plan' | 'job-standards' | undefined = undefined;
 
           if (pathSegments[index - 1] === 'skp-management') {
             context = 'skp';
           } else if (pathSegments[index - 1] === 'work-plan') {
             context = 'work-plan';
+          } else if (pathSegments[index-1] === 'job-standards') {
+            context = 'job-standards';
           }
 
           if (context && isLast) {

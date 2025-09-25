@@ -16,9 +16,10 @@ import {
   Network,
   Shield,
   UserCog,
+  ClipboardCheck,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
-import { mockUsers, mockUnits } from '@/lib/data';
+import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
 
 const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } = {
   '/dashboard': { title: 'Dashboard', icon: <LayoutDashboard className="size-5" /> },
@@ -33,6 +34,7 @@ const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/admin/position-management': { title: 'Manajemen Jabatan', icon: <UserCog className="size-5" /> },
   '/admin/work-plan': { title: 'Rencana Kerja Unit', icon: <Briefcase className="size-5" /> },
   '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
+  '/admin/job-standards': { title: 'Standar Kinerja Jabatan', icon: <ClipboardCheck className="size-5" /> },
 };
 
 
@@ -61,6 +63,15 @@ function getRouteInfo(pathname: string) {
         return {
           title: `Rencana: ${unitName}`,
           icon: <Briefcase className="size-5" />,
+        };
+     }
+      if (segments[2] === 'job-standards') {
+         const positionId = segments[3];
+         const position = mockPositions.find(p => p.id === positionId);
+         const positionName = position ? position.name : "Detail Jabatan";
+        return {
+          title: `Standar: ${positionName}`,
+          icon: <ClipboardCheck className="size-5" />,
         };
      }
   }
