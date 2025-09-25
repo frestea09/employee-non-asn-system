@@ -36,7 +36,6 @@ export default function DailyActivityPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
 
-
   // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
 
@@ -107,29 +106,24 @@ export default function DailyActivityPage() {
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
-  const dailySummaryData = useMemo(() => {
+  const { completionPercentage, completedCategories } = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
     const todayActivities = activities.filter(act => act.date === today);
-    return {
-      skp: todayActivities.filter(act => act.category === 'SKP').length,
-      unit: todayActivities.filter(act => act.category === 'Unit').length,
-      jabatan: todayActivities.filter(act => act.category === 'Jabatan').length,
+    const completed = {
+      skp: todayActivities.some(act => act.category === 'SKP'),
+      unit: todayActivities.some(act => act.category === 'Unit'),
+      jabatan: todayActivities.some(act => act.category === 'Jabatan'),
     }
+    const completedCount = Object.values(completed).filter(Boolean).length;
+    const percentage = (completedCount / 3) * 100;
+    
+    return { completionPercentage: percentage, completedCategories: completed };
   }, [activities]);
 
   return (
     <div className="space-y-6">
-       <Card>
-          <CardHeader>
-            <CardTitle>Ringkasan Aktivitas Hari Ini</CardTitle>
-            <CardDescription>
-              Pantau kelengkapan pencatatan aktivitas Anda untuk hari ini.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <DailySummary data={dailySummaryData} />
-          </CardContent>
-        </Card>
+       
+        <DailySummary completionPercentage={completionPercentage} completedCategories={completedCategories} />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="lg:col-span-2">

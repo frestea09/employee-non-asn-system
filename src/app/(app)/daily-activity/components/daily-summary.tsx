@@ -1,49 +1,89 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Archive, ClipboardCheck, Target } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
+import { Archive, CheckCircle2, ClipboardCheck, Target } from 'lucide-react';
 
 type DailySummaryProps = {
-    data: {
-        skp: number;
-        unit: number;
-        jabatan: number;
-    }
-}
+  completionPercentage: number;
+  completedCategories: {
+    skp: boolean;
+    unit: boolean;
+    jabatan: boolean;
+  };
+};
 
-export function DailySummary({ data }: DailySummaryProps) {
-    return (
-        <div className="grid gap-4 md:grid-cols-3">
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Target SKP</CardTitle>
-                    <Target className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-2xl font-bold">{data.skp}</div>
-                    <p className="text-xs text-muted-foreground">Aktivitas tercatat hari ini</p>
-                </CardContent>
-            </Card>
-             <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Rencana Unit</CardTitle>
-                    <Archive className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-2xl font-bold">{data.unit}</div>
-                     <p className="text-xs text-muted-foreground">Aktivitas tercatat hari ini</p>
-                </CardContent>
-            </Card>
-             <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Kinerja Jabatan</CardTitle>
-                    <ClipboardCheck className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-2xl font-bold">{data.jabatan}</div>
-                     <p className="text-xs text-muted-foreground">Aktivitas tercatat hari ini</p>
-                </CardContent>
-            </Card>
+const CategoryIndicator = ({
+  icon,
+  label,
+  isComplete,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  isComplete: boolean;
+}) => (
+  <div className="flex flex-col items-center gap-2">
+    <div
+      className={cn(
+        'flex h-16 w-16 items-center justify-center rounded-full bg-muted transition-colors',
+        isComplete && 'bg-accent text-accent-foreground'
+      )}
+    >
+      {isComplete ? <CheckCircle2 className="h-8 w-8" /> : icon}
+    </div>
+    <span className="text-sm font-medium text-muted-foreground">{label}</span>
+  </div>
+);
+
+export function DailySummary({
+  completionPercentage,
+  completedCategories,
+}: DailySummaryProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Kelengkapan Harian Anda</CardTitle>
+        <CardDescription>
+          Progress pencatatan aktivitas untuk hari ini di semua kategori.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div>
+          <div className="mb-2 flex items-baseline justify-between">
+            <h4 className="text-sm font-medium text-muted-foreground">
+              Progress Hari Ini
+            </h4>
+            <p className="text-lg font-bold text-primary">
+              {completionPercentage.toFixed(0)}%
+            </p>
+          </div>
+          <Progress value={completionPercentage} />
         </div>
-    )
+        <div className="flex items-start justify-around">
+          <CategoryIndicator
+            icon={<Target className="h-8 w-8 text-muted-foreground" />}
+            label="SKP"
+            isComplete={completedCategories.skp}
+          />
+          <CategoryIndicator
+            icon={<Archive className="h-8 w-8 text-muted-foreground" />}
+            label="Unit"
+            isComplete={completedCategories.unit}
+          />
+          <CategoryIndicator
+            icon={<ClipboardCheck className="h-8 w-8 text-muted-foreground" />}
+            label="Jabatan"
+            isComplete={completedCategories.jabatan}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
