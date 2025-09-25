@@ -16,12 +16,10 @@ import { mockPositions, mockUnits } from '@/lib/data';
 const breadcrumbNameMap: { [key: string]: string } = {
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
-  '/monthly-performance': 'Kinerja Bulanan',
   '/attendance': 'Absensi',
   '/reports': 'Laporan',
   '/admin': 'Admin',
   '/admin/validate-activities': 'Validasi Aktivitas',
-  '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/skp-management': 'Manajemen Kinerja',
   '/admin/work-plan': 'Rencana Kerja',
   '/admin/user-management': 'Manajemen Pengguna',

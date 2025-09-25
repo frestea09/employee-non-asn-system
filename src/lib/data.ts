@@ -1,4 +1,3 @@
-
 export type DailyActivity = {
   id: string;
   date: string;
@@ -11,14 +10,6 @@ export type DailyActivity = {
   quantity: number;
   unit: string;
   proofUrl?: string;
-  status: 'Menunggu Validasi' | 'Disetujui' | 'Ditolak';
-};
-
-export type MonthlyPerformance = {
-  id: string;
-  month: string;
-  year: number;
-  realization: string;
   status: 'Menunggu Validasi' | 'Disetujui' | 'Ditolak';
 };
 
@@ -94,11 +85,6 @@ export const mockDailyActivities: DailyActivity[] = [
   { id: 'act-101-2', date: '2024-07-20', startTime: '14:00', endTime: '15:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Merespon 5 panggilan darurat', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
 ];
 
-export const mockMonthlyPerformances: MonthlyPerformance[] = [
-  { id: '1', month: 'Juni', year: 2024, realization: 'Menyelesaikan semua tugas bulanan dengan baik dan tepat waktu. Berhasil menangani 5 kasus darurat dengan sigap.', status: 'Disetujui' },
-  { id: '2', month: 'Juli', year: 2024, realization: 'Mengikuti pelatihan manajemen pasien dan mulai menerapkan ilmu yang didapat.', status: 'Menunggu Validasi' },
-];
-
 export const mockAttendance: Attendance[] = [
     { id: '1', date: '2024-07-28', status: 'Hadir' },
     { id: '2', date: '2024-07-29', status: 'Hadir' },
@@ -111,11 +97,6 @@ export const mockValidationActivities: Omit<DailyActivity, 'startTime' | 'endTim
     { id: '5', date: '2024-07-30', activity: 'Membersihkan dan merapikan ruang perawatan.', status: 'Menunggu Validasi' },
     { id: '6', date: '2024-07-30', activity: 'Menyiapkan peralatan medis untuk esok hari.', status: 'Menunggu Validasi' },
     { id: '7', date: '2024-07-31', activity: 'Edukasi pasien mengenai pola hidup sehat.', status: 'Menunggu Validasi' },
-];
-
-export const mockValidationPerformances: MonthlyPerformance[] = [
-    { id: '2', month: 'Juli', year: 2024, realization: 'Mengikuti pelatihan manajemen pasien dan mulai menerapkan ilmu yang didapat.', status: 'Menunggu Validasi' },
-    { id: '3', month: 'Agustus', year: 2024, realization: 'Meningkatkan efisiensi kerja tim sebesar 10% melalui sistem baru.', status: 'Menunggu Validasi' },
 ];
 
 export const mockUsers: User[] = [
@@ -158,5 +139,3 @@ export const mockJobStations: JobStandard[] = [
     { id: 'js2', positionId: '1', standard: 'Ketepatan Pemberian Obat', description: 'Zero error dalam pemberian obat sesuai resep dokter.' },
     { id: 'js3', positionId: '2', standard: 'Pendampingan Persalinan', description: 'Memberikan pendampingan penuh pada 100% proses persalinan normal.' },
 ];
-
-    

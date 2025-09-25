@@ -36,14 +36,12 @@ import { useState } from 'react';
 const mainNav = [
   { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard /> },
   { href: '/daily-activity', label: 'Aktivitas Harian', icon: <ClipboardList /> },
-  { href: '/monthly-performance', label: 'Kinerja Bulanan', icon: <AreaChart /> },
   { href: '/attendance', label: 'Absensi', icon: <CalendarCheck /> },
   { href: '/reports', label: 'Laporan', icon: <FileText /> },
 ];
 
 const validationNav = [
   { href: '/admin/validate-activities', label: 'Aktivitas', icon: <CheckCircle /> },
-  { href: '/admin/validate-performance', label: 'Kinerja', icon: <ClipboardList /> },
 ];
 
 const performanceManagementNav = [

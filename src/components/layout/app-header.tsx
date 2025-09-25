@@ -23,11 +23,9 @@ import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
 const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } = {
   '/dashboard': { title: 'Dashboard', icon: <LayoutDashboard className="size-5" /> },
   '/daily-activity': { title: 'Aktivitas Harian', icon: <ClipboardList className="size-5" /> },
-  '/monthly-performance': { title: 'Kinerja Bulanan', icon: <AreaChart className="size-5" /> },
   '/attendance': { title: 'Absensi', icon: <CalendarCheck className="size-5" /> },
   '/reports': { title: 'Laporan', icon: <FileText className="size-5" /> },
   '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
-  '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <ClipboardList className="size-5" /> },
   '/admin/user-management': { title: 'Manajemen Pengguna', icon: <Users className="size-5" /> },
   '/admin/unit-management': { title: 'Manajemen Unit', icon: <Network className="size-5" /> },
   '/admin/position-management': { title: 'Manajemen Jabatan', icon: <UserCog className="size-5" /> },
