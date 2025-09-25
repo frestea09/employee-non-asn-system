@@ -80,7 +80,7 @@ export function SidebarNav() {
       <SidebarMenu>
         {mainNav.map(({ href, label, icon }) => (
           <SidebarMenuItem key={href}>
-            <Link href={href} passHref legacyBehavior>
+            <Link href={href}>
               <SidebarMenuButton asChild isActive={pathname === href} tooltip={label} size="lg">
                 <div className="flex items-center gap-3">
                   {icon}
@@ -129,10 +129,8 @@ export function SidebarNav() {
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pl-6">
                          {validationNav.map(({ href, label, icon }) => (
-                            <Link href={href} passHref legacyBehavior key={href}>
-                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
-                                    {icon}<span>{label}</span>
-                                </a>
+                            <Link href={href} key={href} className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                {icon}<span>{label}</span>
                             </Link>
                          ))}
                     </CollapsibleContent>
@@ -152,10 +150,8 @@ export function SidebarNav() {
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pl-6">
                          {performanceManagementNav.map(({ href, label, icon }) => (
-                            <Link href={href} passHref legacyBehavior key={href}>
-                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
-                                    {icon}<span>{label}</span>
-                                </a>
+                            <Link href={href} key={href} className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                {icon}<span>{label}</span>
                             </Link>
                          ))}
                     </CollapsibleContent>
@@ -175,10 +171,8 @@ export function SidebarNav() {
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pl-6">
                          {organizationManagementNav.map(({ href, label, icon }) => (
-                            <Link href={href} passHref legacyBehavior key={href}>
-                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
-                                    {icon}<span>{label}</span>
-                                </a>
+                            <Link href={href} key={href} className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                {icon}<span>{label}</span>
                             </Link>
                          ))}
                     </CollapsibleContent>
