@@ -11,8 +11,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { LogOut, Briefcase } from 'lucide-react';
+import { LogOut, Briefcase, User } from 'lucide-react';
 import { AppBody } from '@/components/layout/app-body';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function AppLayout({
   children,
@@ -39,23 +47,38 @@ export default function AppLayout({
           <SidebarNav />
         </SidebarContent>
         <SidebarFooter>
-          <div className="flex w-full items-center justify-between">
-             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt="User Avatar" />}
-                <AvatarFallback>KA</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="font-semibold">Karyawan</span>
-                <span className="text-xs text-muted-foreground">karyawan@email.com</span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex w-full cursor-pointer items-center justify-between hover:bg-muted/50 p-2 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10">
+                    {userAvatar && <AvatarImage src={userAvatar.imageUrl} alt="User Avatar" />}
+                    <AvatarFallback>KA</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col text-left">
+                    <span className="font-semibold">Karyawan</span>
+                    <span className="text-xs text-muted-foreground">karyawan@email.com</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <Button variant="ghost" size="icon" asChild>
-                <Link href="/login">
-                    <LogOut className="h-5 w-5 text-muted-foreground" />
-                </Link>
-            </Button>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="start" className="w-[var(--sidebar-width)] mb-2 ml-2">
+                <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                    <Link href="/profile" className='cursor-pointer'>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profil Saya</span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/login" className='cursor-pointer'>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Keluar</span>
+                    </Link>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </SidebarFooter>
       </Sidebar>
       <AppBody>

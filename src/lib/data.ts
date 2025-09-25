@@ -37,6 +37,7 @@ export type User = {
   position: string;
   positionId: string;
   role: 'Karyawan' | 'Admin';
+  avatar?: string;
 };
 
 export type Unit = {
@@ -117,7 +118,7 @@ export const mockValidationPerformances: MonthlyPerformance[] = [
 ];
 
 export const mockUsers: User[] = [
-  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat (UGD)', unitId: '1', position: 'Perawat Terampil', positionId: '1', role: 'Karyawan' },
+  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat (UGD)', unitId: '1', position: 'Perawat Terampil', positionId: '1', role: 'Karyawan', avatar: 'https://images.unsplash.com/photo-1590086782792-42dd2350140d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTg1ODUxMDl8MA&ixlib=rb-4.1.0&q=80&w=200' },
   { id: '2', ni: 'K.21.08.002', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', unitId: '2', position: 'Bidan Pelaksana', positionId: '2', role: 'Karyawan' },
   { id: '3', ni: 'A.20.01.001', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', unitId: '5', position: 'Staf Administrasi', positionId: '5', role: 'Admin' },
   { id: '4', ni: 'K.22.03.015', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', unitId: '3', position: 'Analis Kesehatan', positionId: '3', role: 'Karyawan' },
@@ -153,6 +154,6 @@ export const mockWorkPlans: WorkPlan[] = [
 
 export const mockJobStations: JobStandard[] = [
     { id: 'js1', positionId: '1', standard: 'Waktu Respon Pasien Gawat Darurat', description: 'Waktu respon maksimal 5 menit setelah pasien tiba.' },
-    { id: 'js2', positionId: '1', standard: 'Ketepatan Pemberian Obat', description: 'Zero error dalam pemberian obat sesuai resep dokter.' },
+    { id:js2', positionId: '1', standard: 'Ketepatan Pemberian Obat', description: 'Zero error dalam pemberian obat sesuai resep dokter.' },
     { id: 'js3', positionId: '2', standard: 'Pendampingan Persalinan', description: 'Memberikan pendampingan penuh pada 100% proses persalinan normal.' },
 ];

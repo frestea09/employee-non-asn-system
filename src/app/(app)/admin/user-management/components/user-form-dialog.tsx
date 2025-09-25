@@ -21,7 +21,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { mockPositions, mockUnits, type User } from '@/lib/data';
-import { useState, type FormEvent, useEffect, cloneElement } from 'react';
+import { useState, type FormEvent, useEffect, cloneElement, useRef } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Camera } from 'lucide-react';
 
 type UserFormDialogProps = {
   user?: User;
@@ -31,6 +33,7 @@ type UserFormDialogProps = {
 
 export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     ni: '',
@@ -38,6 +41,7 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
     unit: '',
     position: '',
     role: 'Karyawan' as 'Karyawan' | 'Admin',
+    avatar: '',
   });
 
   useEffect(() => {
@@ -49,6 +53,7 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
         unit: user.unit,
         position: user.position,
         role: user.role,
+        avatar: user.avatar || '',
       });
     } else if (!user && isOpen) {
         // Reset form for new user
@@ -59,9 +64,26 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
             unit: '',
             position: '',
             role: 'Karyawan',
+            avatar: '',
         });
     }
   }, [user, isOpen]);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, avatar: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -81,6 +103,10 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
     }
     setIsOpen(false);
   };
+  
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -92,6 +118,20 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
           <DialogTitle>{user ? 'Edit Pengguna' : 'Tambah Pengguna Baru'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="flex flex-col items-center gap-4">
+             <div className="relative">
+                <Avatar className="h-24 w-24 cursor-pointer" onClick={handleAvatarClick}>
+                    <AvatarImage src={formData.avatar} alt={formData.name} />
+                    <AvatarFallback>{getInitials(formData.name) || '??'}</AvatarFallback>
+                </Avatar>
+                <div className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                    <Camera className="h-4 w-4" />
+                </div>
+             </div>
+             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+             <Button type="button" variant="outline" size="sm" onClick={handleAvatarClick}>Ubah Foto Profil</Button>
+          </div>
+        
           <div className="space-y-2">
             <Label htmlFor="name">Nama Lengkap</Label>
             <Input id="name" name="name" value={formData.name} onChange={handleChange} required />

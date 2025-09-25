@@ -41,35 +41,36 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>(mockUsers);
   const { toast } = useToast();
 
-  const handleAddUser = (newUser: Omit<User, 'id' | 'unitId' | 'positionId'>) => {
-    const userToAdd: User = {
-      ...newUser,
-      id: (Math.random() * 10000).toString(),
-      // In a real app, these would be derived from the selected unit/position name
-      unitId: `unit_${Math.random() * 100}`,
-      positionId: `pos_${Math.random() * 100}`,
-    };
-    setUsers((prev) => [userToAdd, ...prev]);
-    toast({
-      title: 'Pengguna Ditambahkan',
-      description: `Pengguna "${userToAdd.name}" telah berhasil ditambahkan.`,
-    });
+  const handleSaveUser = (userToSave: Omit<User, 'id' | 'unitId' | 'positionId'> & { id?: string }) => {
+    if ('id' in userToSave && userToSave.id) {
+      // Update existing user
+      setUsers(prev => prev.map(user => user.id === userToSave.id ? (userToSave as User) : user));
+      toast({
+        title: 'Pengguna Diperbarui',
+        description: `Data untuk "${userToSave.name}" telah berhasil diperbarui.`,
+      });
+    } else {
+      // Add new user
+      const userToAdd: User = {
+        ...userToSave,
+        id: (Math.random() * 10000).toString(),
+        unitId: `unit_${Math.random() * 100}`,
+        positionId: `pos_${Math.random() * 100}`,
+      };
+      setUsers(prev => [userToAdd, ...prev]);
+      toast({
+        title: 'Pengguna Ditambahkan',
+        description: `Pengguna "${userToAdd.name}" telah berhasil ditambahkan.`,
+      });
+    }
   };
 
-  const handleUpdateUser = (updatedUser: User) => {
-    setUsers((prev) =>
-      prev.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-    );
-    toast({
-      title: 'Pengguna Diperbarui',
-      description: `Data untuk "${updatedUser.name}" telah berhasil diperbarui.`,
-    });
-  };
 
   const handleDeleteUser = (userId: string) => {
     const userToDelete = users.find(user => user.id === userId);
@@ -81,6 +82,10 @@ export default function UserManagementPage() {
     });
   };
 
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -91,7 +96,7 @@ export default function UserManagementPage() {
               Kelola data pengguna, peran, dan unit kerja untuk karyawan non-ASN.
             </CardDescription>
           </div>
-          <UserFormDialog onSave={handleAddUser} triggerButton={
+          <UserFormDialog onSave={handleSaveUser} triggerButton={
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
               Tambah Pengguna
@@ -105,7 +110,6 @@ export default function UserManagementPage() {
             <TableRow>
               <TableHead>Nama</TableHead>
               <TableHead>Nomor Induk</TableHead>
-              <TableHead>Email</TableHead>
               <TableHead>Unit Kerja</TableHead>
               <TableHead>Jabatan</TableHead>
               <TableHead>Peran</TableHead>
@@ -115,9 +119,19 @@ export default function UserManagementPage() {
           <TableBody>
             {users.map((user) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
+                <TableCell>
+                  <div className='flex items-center gap-3'>
+                    <Avatar>
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                    </Avatar>
+                    <div className='flex flex-col'>
+                      <span className="font-medium">{user.name}</span>
+                      <span className='text-sm text-muted-foreground'>{user.email}</span>
+                    </div>
+                  </div>
+                </TableCell>
                 <TableCell>{user.ni}</TableCell>
-                <TableCell>{user.email}</TableCell>
                 <TableCell>{user.unit}</TableCell>
                 <TableCell>{user.position}</TableCell>
                 <TableCell>
@@ -139,7 +153,7 @@ export default function UserManagementPage() {
                       <DropdownMenuContent align="end">
                         <UserFormDialog
                           user={user}
-                          onSave={(updatedUser) => handleUpdateUser(updatedUser as User)}
+                          onSave={(updatedUser) => handleSaveUser(updatedUser as User)}
                           triggerButton={
                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                               <Pencil className="mr-2 h-4 w-4" />
