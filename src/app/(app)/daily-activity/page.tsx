@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -8,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { DailyActivity, UserActionPlans, mockDailyActivities, mockUsers, mockSkpTargets, mockWorkPlans, mockJobStations } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -23,7 +24,6 @@ export default function DailyActivityPage() {
   const { toast } = useToast();
   const [activityDate, setActivityDate] = useState(new Date());
 
-  // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
 
   const userActionPlans: UserActionPlans = useMemo(() => {
