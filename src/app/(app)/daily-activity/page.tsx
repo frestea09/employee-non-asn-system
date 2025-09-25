@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -31,14 +30,13 @@ export default function DailyActivityPage() {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [isFilterActive, setIsFilterActive] = useState(false);
 
   // --- Assume we have a logged in user ---
   // In a real app, this would come from an auth context.
   const currentUser = mockUsers[0]; 
 
   // --- Generate dynamic action plans, but keep them categorized ---
-  const categorizedActionPlans = useMemo(() => {
+  const categorizedActionPlans: CategorizedActionPlans = useMemo(() => {
     const userSkp = mockSkpTargets
       .filter(t => t.userId === currentUser.id)
       .map(t => t.target);
@@ -97,7 +95,6 @@ export default function DailyActivityPage() {
   };
 
   const handleFilter = () => {
-    setIsFilterActive(true);
     toast({
       title: 'Filter Diterapkan',
       description: 'Menampilkan aktivitas yang sesuai dengan kriteria Anda.',
