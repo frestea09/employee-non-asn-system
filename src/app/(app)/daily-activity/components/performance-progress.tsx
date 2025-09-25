@@ -5,6 +5,7 @@ import type { DailyActivity, JobStandard, SkpTarget, UserActionPlans, WorkPlan }
 import { useMemo } from 'react';
 import { CheckCircle2, Circle } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { cn } from '@/lib/utils';
 
 type PerformanceProgressProps = {
   actionPlans: UserActionPlans;
@@ -86,28 +87,23 @@ export function PerformanceProgress({ actionPlans, activities }: PerformanceProg
   const progressData = useMemo(() => {
     const loggedActionPlans = new Set(activities.map((a) => a.actionPlan));
 
-    const loggedSkpTargets = new Set(
-      activities.filter((a) => a.category === 'SKP').map((a) => a.actionPlan)
-    );
-    const loggedUnitPlans = new Set(
-      activities.filter((a) => a.category === 'Unit').map((a) => a.actionPlan)
-    );
-    const loggedJobStations = new Set(
-      activities.filter((a) => a.category === 'Jabatan').map((a) => a.actionPlan)
-    );
+    const loggedSkpTargets = actionPlans.skpTargets.filter(target => loggedActionPlans.has(getTargetName(target)));
+    const loggedUnitPlans = actionPlans.unitPlans.filter(plan => loggedActionPlans.has(getTargetName(plan)));
+    const loggedJobStations = actionPlans.jobStations.filter(standard => loggedActionPlans.has(getTargetName(standard)));
+
 
     return {
       loggedActionPlans,
       skp: {
-        completed: loggedSkpTargets.size,
+        completed: loggedSkpTargets.length,
         total: actionPlans.skpTargets.length,
       },
       unit: {
-        completed: loggedUnitPlans.size,
+        completed: loggedUnitPlans.length,
         total: actionPlans.unitPlans.length,
       },
       jabatan: {
-        completed: loggedJobStations.size,
+        completed: loggedJobStations.length,
         total: actionPlans.jobStations.length,
       },
     };
