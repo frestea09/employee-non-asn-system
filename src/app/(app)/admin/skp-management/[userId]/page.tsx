@@ -13,8 +13,8 @@ import {
   mockSkpTargets,
   mockPositions,
   type SkpTarget,
-  mockJobStandards,
-  JobStandard,
+  mockJobStations,
+  type JobStandard,
 } from '@/lib/data';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -36,7 +36,7 @@ export default function PositionPerformanceDetailPage() {
     mockSkpTargets.filter((t) => t.positionId === positionId)
   );
   const [standards, setStandards] = useState<JobStandard[]>(
-    mockJobStandards.filter((s) => s.positionId === positionId)
+    mockJobStations.filter((s) => s.positionId === positionId)
   );
 
   if (!position) {
