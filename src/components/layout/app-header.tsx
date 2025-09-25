@@ -13,7 +13,7 @@ import {
   Users,
   Briefcase,
   Target,
-  Sitemap,
+  Network,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
 
@@ -26,7 +26,7 @@ const routeTitles: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
   '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <FileCheck className="size-5" /> },
   '/admin/user-management': { title: 'Manajemen Pengguna', icon: <Users className="size-5" /> },
-  '/admin/unit-management': { title: 'Manajemen Unit', icon: <Sitemap className="size-5" /> },
+  '/admin/unit-management': { title: 'Manajemen Unit', icon: <Network className="size-5" /> },
   '/admin/work-plan': { title: 'Manajemen Rencana Kerja', icon: <Briefcase className="size-5" /> },
   '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
 };

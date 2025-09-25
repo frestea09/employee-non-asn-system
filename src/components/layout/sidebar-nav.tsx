@@ -18,7 +18,7 @@ import {
   Users,
   Briefcase,
   Target,
-  Sitemap,
+  Network,
   Shield,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -43,7 +43,7 @@ const adminNav = [
   { href: '/admin/validate-activities', label: 'Validasi Aktivitas', icon: <CheckCircle /> },
   { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
   { href: '/admin/user-management', label: 'Manajemen Pengguna', icon: <Users /> },
-  { href: '/admin/unit-management', label: 'Manajemen Unit', icon: <Sitemap /> },
+  { href: '/admin/unit-management', label: 'Manajemen Unit', icon: <Network /> },
   { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
   { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
 ];
