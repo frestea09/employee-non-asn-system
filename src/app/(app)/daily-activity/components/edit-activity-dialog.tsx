@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
@@ -15,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -22,30 +22,43 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import type { DailyActivity } from '@/lib/data';
 import { useState, type FormEvent } from 'react';
+import type { UserActionPlans } from '../page';
 
 type EditActivityDialogProps = {
   activity: DailyActivity;
   onUpdate: (activity: DailyActivity) => void;
   children: React.ReactNode;
+  actionPlans: UserActionPlans;
 };
 
 export function EditActivityDialog({
   activity,
   onUpdate,
   children,
+  actionPlans,
 }: EditActivityDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  
+  const [selectedPlanValue, setSelectedPlanValue] = useState(`${activity.category}:${activity.actionPlan}`);
+
+  const handleSelectChange = (value: string) => {
+    setSelectedPlanValue(value);
+  };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!selectedPlanValue) return;
+    const [category, plan] = selectedPlanValue.split(':');
+
     const formData = new FormData(event.currentTarget);
     const updatedActivity: DailyActivity = {
       ...activity,
       startTime: formData.get('start-time') as string,
       endTime: formData.get('end-time') as string,
-      actionPlan: formData.get('action-plan') as string,
+      actionPlan: plan,
+      category: category as DailyActivity['category'],
       activity: formData.get('activity') as string,
-      notes: formData.get('notes') as string,
       quantity: Number(formData.get('quantity')),
       unit: formData.get('unit') as string,
     };
@@ -61,6 +74,62 @@ export function EditActivityDialog({
           <DialogTitle>Edit Aktivitas Harian</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="action-plan">Pilih Rencana Aksi</Label>
+            <Select onValueChange={handleSelectChange} value={selectedPlanValue}>
+              <SelectTrigger id="action-plan">
+                <SelectValue placeholder="Pilih tugas dari rencana Anda..." />
+              </SelectTrigger>
+              <SelectContent>
+                {actionPlans.skpTargets.length > 0 && (
+                  <SelectGroup>
+                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                      Target SKP Pribadi
+                    </Label>
+                    {actionPlans.skpTargets.map((plan) => (
+                      <SelectItem key={plan.id} value={`SKP:${plan.target}`}>
+                        {plan.target}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
+                {actionPlans.unitPlans.length > 0 && (
+                  <SelectGroup>
+                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                      Rencana Kerja Unit
+                    </Label>
+                    {actionPlans.unitPlans.map((plan) => (
+                      <SelectItem key={plan.id} value={`Unit:${plan.program}`}>
+                        {plan.program}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
+                {actionPlans.jobStandards.length > 0 && (
+                  <SelectGroup>
+                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                      Standar Kinerja Jabatan
+                    </Label>
+                    {actionPlans.jobStandards.map((plan) => (
+                      <SelectItem key={plan.id} value={`Jabatan:${plan.standard}`}>
+                        {plan.standard}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="activity">Uraian Kegiatan</Label>
+            <Textarea
+              id="activity"
+              name="activity"
+              defaultValue={activity.activity}
+              rows={3}
+              required
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="start-time">Jam Mulai</Label>
@@ -83,69 +152,27 @@ export function EditActivityDialog({
               />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="action-plan">Rencana Aksi</Label>
-            <Select
-              name="action-plan"
-              defaultValue={activity.actionPlan}
-              required
-            >
-              <SelectTrigger id="action-plan">
-                <SelectValue placeholder="Pilih rencana aksi" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Meningkatkan Kecepatan Respon UGD">
-                  Meningkatkan Kecepatan Respon UGD
-                </SelectItem>
-                 <SelectItem value="Pencegahan Infeksi">
-                  Pencegahan Infeksi
-                </SelectItem>
-                <SelectItem value="Waktu Respon Pasien Gawat Darurat">
-                  Waktu Respon Pasien Gawat Darurat
-                </SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="quantity">Hasil Kerja (Kuantitas)</Label>
+              <Input
+                id="quantity"
+                name="quantity"
+                type="number"
+                defaultValue={activity.quantity}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="unit">Satuan</Label>
+              <Input
+                id="unit"
+                name="unit"
+                defaultValue={activity.unit}
+                required
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="activity">Uraian Kegiatan</Label>
-            <Textarea
-              id="activity"
-              name="activity"
-              defaultValue={activity.activity}
-              rows={3}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="notes">Keterangan</Label>
-            <Textarea
-              id="notes"
-              name="notes"
-              defaultValue={activity.notes}
-              rows={2}
-            />
-          </div>
-           <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="quantity">Hasil Kerja (Kuantitas)</Label>
-                <Input
-                  id="quantity"
-                  name="quantity"
-                  type="number"
-                  defaultValue={activity.quantity}
-                  required
-                />
-              </div>
-               <div className="space-y-2">
-                <Label htmlFor="unit">Satuan</Label>
-                <Input
-                  id="unit"
-                  name="unit"
-                  defaultValue={activity.unit}
-                  required
-                />
-              </div>
-           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="secondary">

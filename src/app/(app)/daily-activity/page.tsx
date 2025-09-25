@@ -19,7 +19,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
 import { ActivityForm } from './components/activity-form';
-import { DailySummary } from './components/daily-summary';
+import { PerformanceProgress } from './components/performance-progress';
+import { EditActivityDialog } from './components/edit-activity-dialog';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -106,24 +107,27 @@ export default function DailyActivityPage() {
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
-  const { completionPercentage, completedCategories } = useMemo(() => {
+  const todaysActivities = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
-    const todayActivities = activities.filter(act => act.date === today);
-    const completed = {
-      skp: todayActivities.some(act => act.category === 'SKP'),
-      unit: todayActivities.some(act => act.category === 'Unit'),
-      jabatan: todayActivities.some(act => act.category === 'Jabatan'),
-    }
-    const completedCount = Object.values(completed).filter(Boolean).length;
-    const percentage = (completedCount / 3) * 100;
-    
-    return { completionPercentage: percentage, completedCategories: completed };
+    return activities.filter(act => act.date === today);
   }, [activities]);
 
   return (
     <div className="space-y-6">
-       
-        <DailySummary completionPercentage={completionPercentage} completedCategories={completedCategories} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Ringkasan Aktivitas Hari Ini</CardTitle>
+          <CardDescription>
+            Pantau kelengkapan pencatatan aktivitas Anda untuk hari ini di setiap kategori.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PerformanceProgress 
+            actionPlans={userActionPlans}
+            todaysActivities={todaysActivities}
+          />
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="lg:col-span-2">
@@ -168,6 +172,7 @@ export default function DailyActivityPage() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
+                actionPlans={userActionPlans}
               />
             </CardContent>
           </Card>

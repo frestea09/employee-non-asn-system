@@ -32,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { EditActivityDialog } from './edit-activity-dialog';
+import type { UserActionPlans } from '../page';
 
 type ActivityHistoryProps = {
   activities: DailyActivity[];
@@ -45,6 +46,7 @@ type ActivityHistoryProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  actionPlans: UserActionPlans;
 };
 
 export function ActivityHistory({
@@ -59,6 +61,7 @@ export function ActivityHistory({
   currentPage,
   totalPages,
   onPageChange,
+  actionPlans,
 }: ActivityHistoryProps) {
   const getCategoryBadgeVariant = (category: DailyActivity['category']) => {
     switch(category) {
@@ -133,7 +136,7 @@ export function ActivityHistory({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                           <EditActivityDialog activity={item} onUpdate={onUpdate}>
+                           <EditActivityDialog activity={item} onUpdate={onUpdate} actionPlans={actionPlans}>
                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                <Pencil className="mr-2 h-4 w-4" />
                                <span>Edit</span>
