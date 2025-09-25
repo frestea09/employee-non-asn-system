@@ -12,8 +12,7 @@ export default function SkpManagementPage() {
       <CardHeader>
         <CardTitle>Manajemen SKP</CardTitle>
         <CardDescription>
-          Kelola Sasaran Kinerja Pegawai (SKP) dan hubungannya dengan rencana
-          aksi.
+          Kelola Sasaran Kinerja Pegawai (SKP) untuk setiap karyawan non-ASN.
         </CardDescription>
       </CardHeader>
       <CardContent>

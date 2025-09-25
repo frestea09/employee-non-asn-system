@@ -12,7 +12,7 @@ export default function WorkPlanPage() {
       <CardHeader>
         <CardTitle>Manajemen Rencana Kerja</CardTitle>
         <CardDescription>
-          Kelola rencana kerja untuk setiap bagian dan unit.
+          Kelola rencana kerja tahunan untuk setiap unit dan individu.
         </CardDescription>
       </CardHeader>
       <CardContent>

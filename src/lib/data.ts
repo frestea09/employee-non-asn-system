@@ -1,4 +1,3 @@
-
 export type DailyActivity = {
   id: string;
   date: string;
@@ -13,7 +12,6 @@ export type DailyActivity = {
   status: 'Menunggu Validasi' | 'Disetujui' | 'Ditolak';
 };
 
-
 export type MonthlyPerformance = {
   id: string;
   month: string;
@@ -26,6 +24,15 @@ export type Attendance = {
   id: string;
   date: string;
   status: 'Hadir' | 'Sakit' | 'Izin';
+};
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  unit: string;
+  position: string;
+  role: 'Karyawan' | 'Admin';
 };
 
 export const mockDailyActivities: DailyActivity[] = [
@@ -58,4 +65,9 @@ export const mockValidationPerformances: MonthlyPerformance[] = [
     { id: '3', month: 'Agustus', year: 2024, realization: 'Meningkatkan efisiensi kerja tim sebesar 10% melalui sistem baru.', status: 'Menunggu Validasi' },
 ];
 
-    
+export const mockUsers: User[] = [
+  { id: '1', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat', position: 'Perawat', role: 'Karyawan' },
+  { id: '2', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan', role: 'Karyawan' },
+  { id: '3', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Kepala Bagian SDM', role: 'Admin' },
+  { id: '4', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
+];
