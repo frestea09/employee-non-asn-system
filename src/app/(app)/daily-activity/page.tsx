@@ -19,10 +19,10 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
 import { ActivityForm } from './components/activity-form';
-import { PerformanceProgress } from './components/performance-progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import { format } from 'date-fns';
+import { PerformanceProgress } from './components/performance-progress';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -56,6 +56,11 @@ export default function DailyActivityPage() {
       jobStations: userPositionStandards,
     };
   }, [currentUser]);
+  
+  const todaysActivities = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return activities.filter(act => act.date === today);
+  }, [activities]);
 
   const addActivity = (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
     const activityToAdd: DailyActivity = {
@@ -109,11 +114,6 @@ export default function DailyActivityPage() {
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
-  const todaysActivities = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
-    return activities.filter(act => act.date === today);
-  }, [activities]);
-
   return (
     <div className="space-y-6">
        <Alert>
@@ -131,10 +131,7 @@ export default function DailyActivityPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PerformanceProgress 
-            actionPlans={userActionPlans}
-            todaysActivities={todaysActivities}
-          />
+           <PerformanceProgress actionPlans={userActionPlans} todaysActivities={todaysActivities} />
         </CardContent>
       </Card>
 

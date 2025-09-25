@@ -94,7 +94,7 @@ export function ActivityForm({ actionPlans, onSave }: ActivityFormProps) {
               initialFocus
               locale={id}
               disabled={(date) =>
-                date > new Date() || date < new Date(new Date().setDate(1))
+                date > new Date() || date < new Date(new Date().setMonth(new Date().getMonth() -1))
               }
             />
           </PopoverContent>
