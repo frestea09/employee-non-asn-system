@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
+import { CalendarIcon, PlusCircle, Upload, X as XIcon } from 'lucide-react';
 import type { UserActionPlans } from '../page';
 import { useState, type FormEvent, useEffect, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -34,6 +34,8 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
   const [selectedCategory, setSelectedCategory] =
     useState<DailyActivity['category']>('SKP');
   const [activityDate, setActivityDate] = useState<Date | undefined>(new Date());
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
 
@@ -47,6 +49,22 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
     const [category, plan] = value.split(':');
     setSelectedPlan(plan);
     setSelectedCategory(category as DailyActivity['category']);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+    } else {
+      setFileName(null);
+    }
+  };
+
+  const clearFile = () => {
+    setFileName(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -67,6 +85,7 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
       notes: formData.get('notes') as string,
       quantity: Number(formData.get('quantity')),
       unit: formData.get('unit') as string,
+      proofUrl: fileName || undefined,
     };
     onSave(newActivity);
     
@@ -74,6 +93,7 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
     if (formRef.current) {
         formRef.current.reset();
         setSelectedPlan('');
+        clearFile();
     }
   };
 
@@ -209,10 +229,20 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
 
       <div className="space-y-2">
         <Label htmlFor="proof">Bukti (Opsional)</Label>
-        <Button variant="outline" className="w-full" type="button">
-          <Upload className="mr-2 h-4 w-4" />
-          Unggah Foto atau Laporan
-        </Button>
+        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+        {fileName ? (
+          <div className="flex items-center justify-between rounded-md border border-input bg-background p-2">
+            <span className="truncate text-sm text-muted-foreground">{fileName}</span>
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={clearFile}>
+              <XIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <Button variant="outline" className="w-full" type="button" onClick={() => fileInputRef.current?.click()}>
+            <Upload className="mr-2 h-4 w-4" />
+            Unggah Foto atau Laporan
+          </Button>
+        )}
       </div>
 
       <Button type="submit" className="w-full h-12 text-lg">

@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, Paperclip } from 'lucide-react';
 import type { DailyActivity } from '@/lib/data';
 import { HistoryFilters } from './history-filters';
 import {
@@ -97,7 +97,10 @@ export function ActivityHistory({
               activities.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>
-                    <p className='font-medium'>{item.activity}</p>
+                    <div className="flex items-center gap-2">
+                      <p className='font-medium'>{item.activity}</p>
+                      {item.proofUrl && <Paperclip className="h-4 w-4 text-muted-foreground" />}
+                    </div>
                     <p className='text-sm text-muted-foreground'>{item.actionPlan}</p>
                   </TableCell>
                    <TableCell>
