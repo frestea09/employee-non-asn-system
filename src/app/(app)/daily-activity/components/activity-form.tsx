@@ -13,7 +13,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -25,9 +27,15 @@ import { id } from 'date-fns/locale';
 import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 
+export type CategorizedActionPlans = {
+  skpTargets: string[];
+  unitPlans: string[];
+  jobStandards: string[];
+};
+
 type ActivityFormProps = {
   onAddActivity: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
-  actionPlans: string[];
+  actionPlans: CategorizedActionPlans;
 };
 
 export function ActivityForm({ onAddActivity, actionPlans }: ActivityFormProps) {
@@ -97,9 +105,30 @@ export function ActivityForm({ onAddActivity, actionPlans }: ActivityFormProps) 
             <SelectValue placeholder="Pilih rencana aksi" />
           </SelectTrigger>
           <SelectContent>
-            {actionPlans.map(plan => (
-              <SelectItem key={plan} value={plan}>{plan}</SelectItem>
-            ))}
+            {actionPlans.skpTargets.length > 0 && (
+              <SelectGroup>
+                <SelectLabel>Target SKP Pribadi</SelectLabel>
+                {actionPlans.skpTargets.map(plan => (
+                  <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+                ))}
+              </SelectGroup>
+            )}
+            {actionPlans.unitPlans.length > 0 && (
+              <SelectGroup>
+                <SelectLabel>Rencana Kerja Unit</SelectLabel>
+                {actionPlans.unitPlans.map(plan => (
+                  <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+                ))}
+              </SelectGroup>
+            )}
+            {actionPlans.jobStandards.length > 0 && (
+              <SelectGroup>
+                <SelectLabel>Standar Kinerja Jabatan</SelectLabel>
+                {actionPlans.jobStandards.map(plan => (
+                  <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+                ))}
+              </SelectGroup>
+            )}
           </SelectContent>
         </Select>
       </div>

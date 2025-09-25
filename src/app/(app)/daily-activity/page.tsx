@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ActivityForm } from './components/activity-form';
+import { ActivityForm, type CategorizedActionPlans } from './components/activity-form';
 import { ActivityHistory } from './components/activity-history';
 import { useState, useMemo } from 'react';
 import type { DailyActivity } from '@/lib/data';
@@ -37,22 +37,25 @@ export default function DailyActivityPage() {
   // In a real app, this would come from an auth context.
   const currentUser = mockUsers[0]; 
 
-  // --- Generate dynamic action plans ---
-  const actionPlans = useMemo(() => {
+  // --- Generate dynamic action plans, but keep them categorized ---
+  const categorizedActionPlans = useMemo(() => {
     const userSkp = mockSkpTargets
       .filter(t => t.userId === currentUser.id)
       .map(t => t.target);
 
     const userUnitPlans = mockWorkPlans
-      .filter(p => p.unitId === currentUser.unitId) // Assuming user has a unitId
+      .filter(p => p.unitId === currentUser.unitId)
       .map(p => p.program);
       
     const userPositionStandards = mockJobStandards
-        .filter(s => s.positionId === currentUser.positionId) // Assuming user has a positionId
+        .filter(s => s.positionId === currentUser.positionId)
         .map(s => s.standard);
 
-    // Combine and remove duplicates
-    return [...new Set([...userSkp, ...userUnitPlans, ...userPositionStandards])];
+    return {
+        skpTargets: userSkp,
+        unitPlans: userUnitPlans,
+        jobStandards: userPositionStandards,
+    };
   }, [currentUser]);
 
 
@@ -156,7 +159,7 @@ export default function DailyActivityPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ActivityForm onAddActivity={addActivity} actionPlans={actionPlans} />
+            <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
           </CardContent>
         </Card>
       </TabsContent>
