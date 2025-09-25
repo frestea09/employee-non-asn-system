@@ -9,13 +9,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Table,
   TableBody,
   TableCell,
@@ -24,21 +17,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { mockUnits, type Unit } from '@/lib/data';
-import { MoreHorizontal, PlusCircle, Pencil, Trash2 } from 'lucide-react';
+import { PlusCircle, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { UnitFormDialog } from './components/unit-form-dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 export default function UnitManagementPage() {
   const [units, setUnits] = useState<Unit[]>(mockUnits);
@@ -53,7 +36,6 @@ export default function UnitManagementPage() {
     toast({
       title: 'Unit Ditambahkan',
       description: `Unit "${unitToAdd.name}" telah berhasil ditambahkan.`,
-      className: 'bg-green-500 text-white',
     });
   };
 
@@ -99,79 +81,34 @@ export default function UnitManagementPage() {
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nama Unit</TableHead>
-              <TableHead>Deskripsi</TableHead>
-              <TableHead className="text-right">Tindakan</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {units.map((unit) => (
-              <TableRow key={unit.id}>
-                <TableCell className="font-medium">{unit.name}</TableCell>
-                <TableCell>{unit.description}</TableCell>
-                <TableCell className="text-right">
-                  <AlertDialog>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Buka menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <UnitFormDialog
-                          unit={unit}
-                          onSave={(updatedUnit) =>
-                            handleUpdateUnit(updatedUnit as Unit)
-                          }
-                          triggerButton={
-                            <DropdownMenuItem
-                              onSelect={(e) => e.preventDefault()}
-                            >
-                              <Pencil className="mr-2 h-4 w-4" />
-                              <span>Edit</span>
-                            </DropdownMenuItem>
-                          }
-                        />
-                        <DropdownMenuSeparator />
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem className="text-destructive focus:text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            <span>Hapus</span>
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Anda yakin ingin menghapus unit ini?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Tindakan ini tidak dapat dibatalkan. Unit bernama{' '}
-                          <span className="font-semibold">{unit.name}</span>{' '}
-                          akan dihapus secara permanen.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDeleteUnit(unit.id)}
-                          className="bg-destructive hover:bg-destructive/90"
-                        >
-                          Ya, Hapus
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nama Unit</TableHead>
+                <TableHead>Deskripsi</TableHead>
+                <TableHead className="text-right">Tindakan</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {units.map((unit) => (
+                <TableRow key={unit.id}>
+                  <TableCell className="font-medium">{unit.name}</TableCell>
+                  <TableCell>{unit.description}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="outline" size="sm" asChild>
+                      {/* Tautan ini akan diimplementasikan selanjutnya */}
+                      <Link href={`/admin/work-plan/${unit.id}`}>
+                        Kelola Unit
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );

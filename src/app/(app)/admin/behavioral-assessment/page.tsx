@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { AssessmentForm } from './components/assessment-form';
 
 export default function BehavioralAssessmentPage() {
   return (
@@ -14,13 +13,11 @@ export default function BehavioralAssessmentPage() {
         <CardHeader>
           <CardTitle>Penilaian Perilaku Berbasis AI</CardTitle>
           <CardDescription>
-            Alat ini menganalisis aktivitas harian dan catatan kehadiran untuk
-            memberikan penilaian perilaku awal. Gunakan sebagai panduan, bukan
-            sebagai keputusan akhir.
+            Fitur ini sedang dalam pengembangan dan akan segera tersedia.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <AssessmentForm />
+            <p>Di sini Anda akan dapat menganalisis data aktivitas dan kehadiran untuk mendapatkan wawasan perilaku.</p>
         </CardContent>
       </Card>
     </div>

@@ -17,6 +17,7 @@ import {
   Shield,
   UserCog,
   ClipboardCheck,
+  BrainCircuit,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
 import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
@@ -35,6 +36,7 @@ const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/admin/work-plan': { title: 'Rencana Kerja Unit', icon: <Briefcase className="size-5" /> },
   '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
   '/admin/job-standards': { title: 'Standar Kinerja Jabatan', icon: <ClipboardCheck className="size-5" /> },
+  '/admin/behavioral-assessment': { title: 'Analisis Perilaku', icon: <BrainCircuit className="size-5" /> },
 };
 
 
