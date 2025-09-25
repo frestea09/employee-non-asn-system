@@ -15,48 +15,31 @@ import {
   Target,
   Network,
   Shield,
-  BrainCircuit,
+  UserCog,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
 import { mockUsers, mockUnits } from '@/lib/data';
 
-const routeIcons: { [key: string]: React.ReactNode } = {
-  '/dashboard': <LayoutDashboard className="size-5" />,
-  '/daily-activity': <ClipboardList className="size-5" />,
-  '/monthly-performance': <AreaChart className="size-5" />,
-  '/attendance': <CalendarCheck className="size-5" />,
-  '/reports': <FileText className="size-5" />,
-  '/admin': <Shield className="size-5" />,
-  '/admin/validate-activities': <CheckCircle className="size-5" />,
-  '/admin/validate-performance': <FileCheck className="size-5" />,
-  '/admin/user-management': <Users className="size-5" />,
-  '/admin/unit-management': <Network className="size-5" />,
-  '/admin/work-plan': <Briefcase className="size-5" />,
-  '/admin/skp-management': <Target className="size-5" />,
+const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } = {
+  '/dashboard': { title: 'Dashboard', icon: <LayoutDashboard className="size-5" /> },
+  '/daily-activity': { title: 'Aktivitas Harian', icon: <ClipboardList className="size-5" /> },
+  '/monthly-performance': { title: 'Kinerja Bulanan', icon: <AreaChart className="size-5" /> },
+  '/attendance': { title: 'Absensi', icon: <CalendarCheck className="size-5" /> },
+  '/reports': { title: 'Laporan', icon: <FileText className="size-5" /> },
+  '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
+  '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <FileCheck className="size-5" /> },
+  '/admin/user-management': { title: 'Manajemen Pengguna', icon: <Users className="size-5" /> },
+  '/admin/unit-management': { title: 'Manajemen Unit', icon: <Network className="size-5" /> },
+  '/admin/position-management': { title: 'Manajemen Jabatan', icon: <UserCog className="size-5" /> },
+  '/admin/work-plan': { title: 'Rencana Kerja Unit', icon: <Briefcase className="size-5" /> },
+  '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
 };
 
-const routeTitles: { [key: string]: string } = {
-  '/dashboard': 'Dashboard',
-  '/daily-activity': 'Aktivitas Harian',
-  '/monthly-performance': 'Kinerja Bulanan',
-  '/attendance': 'Absensi',
-  '/reports': 'Laporan',
-  '/admin': 'Admin',
-  '/admin/validate-activities': 'Validasi Aktivitas',
-  '/admin/validate-performance': 'Validasi Kinerja',
-  '/admin/user-management': 'Manajemen Pengguna',
-  '/admin/unit-management': 'Manajemen Unit',
-  '/admin/work-plan': 'Rencana Kerja Unit',
-  '/admin/skp-management': 'Manajemen SKP',
-};
 
 function getRouteInfo(pathname: string) {
   // Exact match first
-  if (routeTitles[pathname]) {
-    return {
-      title: routeTitles[pathname],
-      icon: routeIcons[pathname],
-    };
+  if (routeConfig[pathname]) {
+    return routeConfig[pathname];
   }
 
   // Handle dynamic routes
@@ -81,6 +64,12 @@ function getRouteInfo(pathname: string) {
         };
      }
   }
+
+  // Fallback for admin root or other pages
+  if(pathname.startsWith('/admin')) {
+      return { title: 'Admin', icon: <Shield className="size-5" /> };
+  }
+
 
   return { title: 'CatatKerja', icon: null };
 }

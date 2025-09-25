@@ -42,6 +42,12 @@ export type Unit = {
   description: string;
 };
 
+export type Position = {
+  id: string;
+  name: string;
+  description: string;
+};
+
 export type SkpTarget = {
   id: string;
   userId: string;
@@ -104,6 +110,14 @@ export const mockUnits: Unit[] = [
   { id: '3', name: 'Laboratorium', description: 'Melakukan pemeriksaan penunjang diagnostik.' },
   { id: '4', name: 'Farmasi', description: 'Menyediakan dan mengelola obat-obatan untuk pasien.' },
   { id: '5', name: 'Manajemen', description: 'Mengelola operasional dan administrasi rumah sakit.' },
+];
+
+export const mockPositions: Position[] = [
+  { id: '1', name: 'Perawat Terampil', description: 'Memberikan asuhan keperawatan dasar kepada pasien.' },
+  { id: '2', name: 'Bidan Pelaksana', description: 'Memberikan asuhan kebidanan pada ibu hamil, bersalin, dan nifas.' },
+  { id: '3', name: 'Analis Kesehatan', description: 'Melaksanakan pelayanan laboratorium kesehatan.' },
+  { id: '4', name: 'Asisten Apoteker', description: 'Membantu Apoteker dalam pelayanan kefarmasian.' },
+  { id: '5', name: 'Staf Administrasi', description: 'Melaksanakan tugas-tugas administrasi dan kearsipan.' },
 ];
 
 export const mockSkpTargets: SkpTarget[] = [

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockUnits, type User } from '@/lib/data';
+import { mockPositions, mockUnits, type User } from '@/lib/data';
 import { useState, type FormEvent, useEffect, cloneElement } from 'react';
 
 type UserFormDialogProps = {
@@ -116,7 +116,14 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
           </div>
           <div className="space-y-2">
             <Label htmlFor="position">Jabatan</Label>
-            <Input id="position" name="position" value={formData.position} onChange={handleChange} required placeholder="Contoh: Perawat, Bidan, Analis" />
+             <Select name="position" value={formData.position} onValueChange={(value) => handleSelectChange('position', value)} required>
+              <SelectTrigger id="position">
+                <SelectValue placeholder="Pilih jabatan" />
+              </SelectTrigger>
+              <SelectContent>
+                {mockPositions.map(pos => <SelectItem key={pos.id} value={pos.name}>{pos.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="role">Peran Sistem</Label>

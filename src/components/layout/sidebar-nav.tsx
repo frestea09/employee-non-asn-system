@@ -20,6 +20,7 @@ import {
   Target,
   Network,
   Shield,
+  UserCog,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -44,6 +45,7 @@ const adminNav = [
   { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
   { href: '/admin/user-management', label: 'Manajemen Pengguna', icon: <Users /> },
   { href: '/admin/unit-management', label: 'Manajemen Unit', icon: <Network /> },
+  { href: '/admin/position-management', label: 'Manajemen Jabatan', icon: <UserCog /> },
   { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
   { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
 ];
@@ -98,7 +100,7 @@ export function SidebarNav() {
                   <a
                     className={cn(
                       'flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                      pathname === href &&
+                      pathname.startsWith(href) &&
                         'bg-sidebar-accent text-sidebar-accent-foreground'
                     )}
                   >

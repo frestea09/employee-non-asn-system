@@ -19,6 +19,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
   '/admin/unit-management': 'Manajemen Unit',
+  '/admin/position-management': 'Manajemen Jabatan',
   '/admin/work-plan': 'Rencana Kerja Unit',
   '/admin/skp-management': 'Manajemen SKP',
   '/dashboard': 'Dashboard',
@@ -28,7 +29,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/reports': 'Laporan',
 };
 
-const DynamicBreadcrumbName: React.FC<{ segment: string, context: 'skp' | 'work-plan' }> = ({ segment, context }) => {
+const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' }> = ({ segment, context }) => {
   if (context === 'skp') {
     const user = mockUsers.find(u => u.id === segment);
     if (user) return <>{user.name}</>;
