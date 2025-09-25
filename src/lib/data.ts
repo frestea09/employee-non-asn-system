@@ -42,6 +42,15 @@ export type Unit = {
   description: string;
 };
 
+export type SkpTarget = {
+  id: string;
+  userId: string;
+  target: string;
+  description: string;
+  deadline: string;
+  status: 'Rencana' | 'Realisasi' | 'Selesai';
+};
+
 export const mockDailyActivities: DailyActivity[] = [
   { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', actionPlan: 'Melakukan pemeriksaan pasien', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
   { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', actionPlan: 'Mengelola rekam medis', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
@@ -85,4 +94,10 @@ export const mockUnits: Unit[] = [
   { id: '3', name: 'Laboratorium', description: 'Melakukan pemeriksaan penunjang diagnostik.' },
   { id: '4', name: 'Farmasi', description: 'Menyediakan dan mengelola obat-obatan untuk pasien.' },
   { id: '5', name: 'Manajemen', description: 'Mengelola operasional dan administrasi rumah sakit.' },
+];
+
+export const mockSkpTargets: SkpTarget[] = [
+    { id: '101', userId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', status: 'Rencana' },
+    { id: '102', userId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', status: 'Rencana' },
+    { id: '201', userId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', status: 'Rencana' },
 ];

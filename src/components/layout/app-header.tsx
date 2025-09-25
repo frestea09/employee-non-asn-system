@@ -14,26 +14,69 @@ import {
   Briefcase,
   Target,
   Network,
+  Shield,
+  BrainCircuit,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
+import { mockUsers } from '@/lib/data';
 
-const routeTitles: { [key: string]: { title: string; icon: React.ReactNode } } = {
-  '/dashboard': { title: 'Dashboard', icon: <LayoutDashboard className="size-5" /> },
-  '/daily-activity': { title: 'Aktivitas Harian', icon: <ClipboardList className="size-5" /> },
-  '/monthly-performance': { title: 'Kinerja Bulanan', icon: <AreaChart className="size-5" /> },
-  '/attendance': { title: 'Absensi', icon: <CalendarCheck className="size-5" /> },
-  '/reports': { title: 'Laporan', icon: <FileText className="size-5" /> },
-  '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
-  '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <FileCheck className="size-5" /> },
-  '/admin/user-management': { title: 'Manajemen Pengguna', icon: <Users className="size-5" /> },
-  '/admin/unit-management': { title: 'Manajemen Unit', icon: <Network className="size-5" /> },
-  '/admin/work-plan': { title: 'Manajemen Rencana Kerja', icon: <Briefcase className="size-5" /> },
-  '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
+const routeIcons: { [key: string]: React.ReactNode } = {
+  '/dashboard': <LayoutDashboard className="size-5" />,
+  '/daily-activity': <ClipboardList className="size-5" />,
+  '/monthly-performance': <AreaChart className="size-5" />,
+  '/attendance': <CalendarCheck className="size-5" />,
+  '/reports': <FileText className="size-5" />,
+  '/admin': <Shield className="size-5" />,
+  '/admin/validate-activities': <CheckCircle className="size-5" />,
+  '/admin/validate-performance': <FileCheck className="size-5" />,
+  '/admin/user-management': <Users className="size-5" />,
+  '/admin/unit-management': <Network className="size-5" />,
+  '/admin/work-plan': <Briefcase className="size-5" />,
+  '/admin/skp-management': <Target className="size-5" />,
 };
+
+const routeTitles: { [key: string]: string } = {
+  '/dashboard': 'Dashboard',
+  '/daily-activity': 'Aktivitas Harian',
+  '/monthly-performance': 'Kinerja Bulanan',
+  '/attendance': 'Absensi',
+  '/reports': 'Laporan',
+  '/admin': 'Admin',
+  '/admin/validate-activities': 'Validasi Aktivitas',
+  '/admin/validate-performance': 'Validasi Kinerja',
+  '/admin/user-management': 'Manajemen Pengguna',
+  '/admin/unit-management': 'Manajemen Unit',
+  '/admin/work-plan': 'Rencana Kerja',
+  '/admin/skp-management': 'Manajemen SKP',
+};
+
+function getRouteInfo(pathname: string) {
+  // Exact match first
+  if (routeTitles[pathname]) {
+    return {
+      title: routeTitles[pathname],
+      icon: routeIcons[pathname],
+    };
+  }
+
+  // Handle dynamic routes
+  const segments = pathname.split('/');
+  if (segments.length === 4 && segments[1] === 'admin' && segments[2] === 'skp-management') {
+     const userId = segments[3];
+     const user = mockUsers.find(u => u.id === userId);
+     const userName = user ? user.name : "Detail Karyawan";
+    return {
+      title: `SKP: ${userName}`,
+      icon: <Target className="size-5" />,
+    };
+  }
+
+  return { title: 'CatatKerja', icon: null };
+}
 
 export function AppHeader() {
   const pathname = usePathname();
-  const { title, icon } = routeTitles[pathname] ?? { title: 'CatatKerja', icon: null };
+  const { title, icon } = getRouteInfo(pathname);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">

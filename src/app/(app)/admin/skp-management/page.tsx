@@ -16,6 +16,7 @@ import {
 import { mockUsers } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function SkpManagementPage() {
   return (
@@ -45,9 +46,11 @@ export default function SkpManagementPage() {
                   <TableCell>{user.ni}</TableCell>
                   <TableCell>{user.unit}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">
-                      Kelola SKP
-                      <ChevronRight className="ml-2 h-4 w-4" />
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href={`/admin/skp-management/${user.id}`}>
+                        Kelola SKP
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Link>
                     </Button>
                   </TableCell>
                 </TableRow>

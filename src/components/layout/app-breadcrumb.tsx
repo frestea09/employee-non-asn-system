@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { mockUsers } from '@/lib/data'; // Import mock data
 
 const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Admin',
@@ -18,7 +19,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
   '/admin/unit-management': 'Manajemen Unit',
-  '/admin/work-plan': 'Manajemen Rencana Kerja',
+  '/admin/work-plan': 'Rencana Kerja',
   '/admin/skp-management': 'Manajemen SKP',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
@@ -27,15 +28,27 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/reports': 'Laporan',
 };
 
+const DynamicBreadcrumbName: React.FC<{ segment: string }> = ({ segment }) => {
+  const user = mockUsers.find(u => u.id === segment);
+  if (user) {
+    return <>{user.name}</>;
+  }
+  return <>{segment}</>;
+};
 
 export function AppBreadcrumb() {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(segment => segment);
   
-  // Do not show breadcrumb for root dashboard page
-  if (pathSegments.length <= 1) {
+  if (pathSegments.length === 0) {
     return null;
   }
+  
+  const isDashboard = pathSegments.length === 1 && pathSegments[0] === 'dashboard';
+  if(isDashboard) {
+      return null;
+  }
+
 
   return (
     <Breadcrumb>
@@ -48,7 +61,14 @@ export function AppBreadcrumb() {
         {pathSegments.map((segment, index) => {
           const href = `/${pathSegments.slice(0, index + 1).join('/')}`;
           const isLast = index === pathSegments.length - 1;
-          const name = breadcrumbNameMap[href] || segment;
+          const isDynamicId =
+            pathSegments[index - 1] === 'skp-management' && !isNaN(Number(segment));
+
+          let name: React.ReactNode = breadcrumbNameMap[href] || segment;
+
+          if (isDynamicId) {
+            name = <DynamicBreadcrumbName segment={segment} />;
+          }
 
           return (
             <React.Fragment key={href}>
