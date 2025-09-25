@@ -149,11 +149,11 @@ export default function DailyActivityPage() {
         <TabsContent value="summary">
           <Card>
             <CardHeader>
-                <CardTitle>Ringkasan Kinerja</CardTitle>
-                <CardDescription>
-                    Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
-                </CardDescription>
-            </Header>
+              <CardTitle>Ringkasan Kinerja</CardTitle>
+              <CardDescription>
+                Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
+              </CardDescription>
+            </CardHeader>
             <CardContent>
               <SummaryTab
                 activities={activities}
