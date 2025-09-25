@@ -18,7 +18,7 @@ import { CalendarIcon, PlusCircle } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 
 type AddTargetFormProps = {
-  onAddTarget: (target: Omit<SkpTarget, 'id' | 'userId' | 'status'>) => void;
+  onAddTarget: (target: Omit<SkpTarget, 'id' | 'positionId'>) => void;
 };
 
 export function AddTargetForm({ onAddTarget }: AddTargetFormProps) {
@@ -31,6 +31,9 @@ export function AddTargetForm({ onAddTarget }: AddTargetFormProps) {
       target: formData.get('target') as string,
       description: formData.get('description') as string,
       deadline: deadline ? format(deadline, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
+      monthly_target: Number(formData.get('monthly_target')),
+      unit: formData.get('unit') as string,
+      status: 'Rencana' as const,
     };
     onAddTarget(newTarget);
     event.currentTarget.reset();
@@ -57,6 +60,16 @@ export function AddTargetForm({ onAddTarget }: AddTargetFormProps) {
           rows={3}
           placeholder="Jelaskan secara rinci apa yang harus dicapai."
         />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="monthly_target">Target Kuantitas Bulanan</Label>
+          <Input id="monthly_target" name="monthly_target" type="number" required placeholder="Contoh: 30"/>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="unit">Satuan</Label>
+          <Input id="unit" name="unit" required placeholder="Contoh: Pasien"/>
+        </div>
       </div>
       <div className="space-y-2">
         <Label htmlFor="deadline">Tenggat Waktu</Label>

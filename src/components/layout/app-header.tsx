@@ -32,8 +32,7 @@ const routeConfig: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/admin/unit-management': { title: 'Manajemen Unit', icon: <Network className="size-5" /> },
   '/admin/position-management': { title: 'Manajemen Jabatan', icon: <UserCog className="size-5" /> },
   '/admin/work-plan': { title: 'Rencana Kerja', icon: <Briefcase className="size-5" /> },
-  '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
-  '/admin/job-standards': { title: 'Standar Kinerja', icon: <ClipboardCheck className="size-5" /> },
+  '/admin/skp-management': { title: 'Manajemen Kinerja', icon: <Target className="size-5" /> },
 };
 
 
@@ -47,11 +46,11 @@ function getRouteInfo(pathname: string) {
   const segments = pathname.split('/');
   if (segments.length === 4 && segments[1] === 'admin') {
      if (segments[2] === 'skp-management') {
-         const userId = segments[3];
-         const user = mockUsers.find(u => u.id === userId);
-         const userName = user ? user.name : "Detail";
+         const positionId = segments[3];
+         const position = mockPositions.find(p => p.id === positionId);
+         const positionName = position ? position.name : "Detail";
         return {
-          title: `SKP: ${userName}`,
+          title: `Atur: ${positionName}`,
           icon: <Target className="size-5" />,
         };
      }
@@ -62,15 +61,6 @@ function getRouteInfo(pathname: string) {
         return {
           title: `Rencana: ${unitName}`,
           icon: <Briefcase className="size-5" />,
-        };
-     }
-      if (segments[2] === 'job-standards') {
-         const positionId = segments[3];
-         const position = mockPositions.find(p => p.id === positionId);
-         const positionName = position ? position.name : "Detail";
-        return {
-          title: `Standar: ${positionName}`,
-          icon: <ClipboardCheck className="size-5" />,
         };
      }
   }

@@ -62,6 +62,8 @@ export function EditTargetDialog({
       description: formData.get('description') as string,
       deadline: deadline ? format(deadline, 'yyyy-MM-dd') : target.deadline,
       status: formData.get('status') as SkpTarget['status'],
+      monthly_target: Number(formData.get('monthly_target')),
+      unit: formData.get('unit') as string,
     };
     onUpdate(updatedTarget);
     setIsOpen(false);
@@ -93,6 +95,16 @@ export function EditTargetDialog({
               required
               rows={3}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+             <div className="space-y-2">
+              <Label htmlFor="monthly_target">Target Kuantitas Bulanan</Label>
+              <Input id="monthly_target" name="monthly_target" type="number" defaultValue={target.monthly_target} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="unit">Satuan</Label>
+              <Input id="unit" name="unit" defaultValue={target.unit} required />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="deadline">Tenggat Waktu</Label>

@@ -53,7 +53,7 @@ export type Position = {
 
 export type SkpTarget = {
   id: string;
-  userId: string;
+  positionId: string; // Changed from userId to positionId
   target: string;
   description: string;
   deadline: string;
@@ -140,9 +140,9 @@ export const mockPositions: Position[] = [
 ];
 
 export const mockSkpTargets: SkpTarget[] = [
-    { id: '101', userId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', monthly_target: 30, unit: 'Pasien', status: 'Rencana' },
-    { id: '102', userId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', monthly_target: 1, unit: 'Sertifikasi', status: 'Rencana' },
-    { id: '201', userId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', monthly_target: 5, unit: 'Pasien', status: 'Rencana' },
+    { id: '101', positionId: '1', target: 'Meningkatkan Kecepatan Respon UGD', description: 'Mengurangi waktu tunggu pasien UGD dari 15 menit menjadi 10 menit.', deadline: '2024-12-31', monthly_target: 30, unit: 'Pasien', status: 'Rencana' },
+    { id: '102', positionId: '1', target: 'Mengikuti Pelatihan Advanced Cardiac Life Support (ACLS)', description: 'Mendapatkan sertifikasi ACLS untuk meningkatkan kompetensi penanganan pasien jantung.', deadline: '2024-10-30', monthly_target: 1, unit: 'Sertifikasi', status: 'Rencana' },
+    { id: '201', positionId: '2', target: 'Meningkatkan Kualitas Asuhan Kebidanan', description: 'Menerapkan metode persalinan gentle birth pada minimal 5 pasien.', deadline: '2024-11-30', monthly_target: 5, unit: 'Pasien', status: 'Rencana' },
 ];
 
 export const mockWorkPlans: WorkPlan[] = [

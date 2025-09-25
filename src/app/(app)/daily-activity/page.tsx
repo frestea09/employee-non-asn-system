@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   DailyActivity,
   UserActionPlans,
@@ -17,6 +17,7 @@ import {
   mockSkpTargets,
   mockWorkPlans,
   mockJobStations,
+  mockPositions,
 } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -34,13 +35,21 @@ export default function DailyActivityPage() {
   // In a real app, this would come from an auth context
   const currentUser = mockUsers[0];
 
-  const userActionPlans: UserActionPlans = {
-    skpTargets: mockSkpTargets.filter((t) => t.userId === currentUser.id),
-    unitPlans: mockWorkPlans.filter((p) => p.unitId === currentUser.unitId),
-    jobStations: mockJobStations.filter(
-      (s) => s.positionId === currentUser.positionId
-    ),
-  };
+  const userActionPlans: UserActionPlans = useMemo(() => {
+    // In a real app, you would fetch this data based on the logged-in user.
+    // The logic is based on the user's positionId and unitId.
+    const userPosition = mockPositions.find(p => p.id === currentUser.positionId);
+    if (!userPosition) {
+        return { skpTargets: [], unitPlans: [], jobStations: [] };
+    }
+
+    return {
+        skpTargets: mockSkpTargets.filter((t) => t.positionId === userPosition.id),
+        unitPlans: mockWorkPlans.filter((p) => p.unitId === currentUser.unitId),
+        jobStations: mockJobStations.filter((s) => s.positionId === userPosition.id),
+    };
+  }, [currentUser.positionId, currentUser.unitId]);
+
 
   const addActivity = useCallback(
     (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {

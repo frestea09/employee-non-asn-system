@@ -47,9 +47,8 @@ const validationNav = [
 ];
 
 const performanceManagementNav = [
-  { href: '/admin/skp-management', label: 'SKP', icon: <Target /> },
-  { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
-  { href: '/admin/job-standards', label: 'Standar Kinerja', icon: <ClipboardCheck /> },
+  { href: '/admin/skp-management', label: 'Target Kinerja', icon: <Target /> },
+  { href: '/admin/work-plan', label: 'Rencana Kerja Unit', icon: <Briefcase /> },
 ];
 
 const organizationManagementNav = [

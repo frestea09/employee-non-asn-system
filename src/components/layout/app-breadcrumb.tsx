@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
+import { mockPositions, mockUnits } from '@/lib/data';
 
 const breadcrumbNameMap: { [key: string]: string } = {
   '/dashboard': 'Dashboard',
@@ -22,26 +22,21 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Admin',
   '/admin/validate-activities': 'Validasi Aktivitas',
   '/admin/validate-performance': 'Validasi Kinerja',
-  '/admin/skp-management': 'Manajemen SKP',
+  '/admin/skp-management': 'Manajemen Kinerja',
   '/admin/work-plan': 'Rencana Kerja',
-  '/admin/job-standards': 'Standar Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
   '/admin/unit-management': 'Manajemen Unit',
   '/admin/position-management': 'Manajemen Jabatan',
 };
 
-const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' | 'job-standards' }> = ({ segment, context }) => {
+const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' }> = ({ segment, context }) => {
   if (context === 'skp') {
-    const user = mockUsers.find(u => u.id === segment);
-    if (user) return <>{user.name}</>;
+    const position = mockPositions.find(p => p.id === segment);
+    if (position) return <>{position.name}</>;
   }
   if (context === 'work-plan') {
     const unit = mockUnits.find(u => u.id === segment);
     if (unit) return <>{unit.name}</>;
-  }
-  if (context === 'job-standards') {
-    const position = mockPositions.find(p => p.id === segment);
-    if (position) return <>{position.name}</>;
   }
   return <>{segment}</>;
 };
@@ -64,9 +59,8 @@ export function AppBreadcrumb() {
       return breadcrumbNameMap[href];
     }
     
-    if (href.startsWith('/admin/skp-management/')) return 'Detail SKP';
+    if (href.startsWith('/admin/skp-management/')) return 'Detail Pengaturan';
     if (href.startsWith('/admin/work-plan/')) return 'Detail Rencana Kerja';
-    if (href.startsWith('/admin/job-standards/')) return 'Detail Standar Kinerja';
     
     return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
   };
@@ -84,14 +78,12 @@ export function AppBreadcrumb() {
           const isLast = index === pathSegments.length - 1;
           
           let name: React.ReactNode = getBreadcrumbName(href, segment);
-          let context: 'skp' | 'work-plan' | 'job-standards' | undefined = undefined;
+          let context: 'skp' | 'work-plan' | undefined = undefined;
 
           if (pathSegments[index - 1] === 'skp-management') {
             context = 'skp';
           } else if (pathSegments[index - 1] === 'work-plan') {
             context = 'work-plan';
-          } else if (pathSegments[index-1] === 'job-standards') {
-            context = 'job-standards';
           }
 
           if (context && isLast) {

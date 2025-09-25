@@ -29,8 +29,8 @@ export default function MonthlyPerformancePage() {
   // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
   const userSkpTargets = useMemo(
-    () => mockSkpTargets.filter((t) => t.userId === currentUser.id),
-    [currentUser.id]
+    () => mockSkpTargets.filter((t) => t.positionId === currentUser.positionId),
+    [currentUser.positionId]
   );
 
   // In a real app, you'd filter activities for the current month.
