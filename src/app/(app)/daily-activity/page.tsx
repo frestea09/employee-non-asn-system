@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -24,6 +23,7 @@ export default function DailyActivityPage() {
   const { toast } = useToast();
   const [activityDate, setActivityDate] = useState(new Date());
 
+  // In a real app, this would come from an auth context
   const currentUser = mockUsers[0];
 
   const userActionPlans: UserActionPlans = useMemo(() => {
@@ -41,11 +41,12 @@ export default function DailyActivityPage() {
     };
   }, [currentUser]);
 
+
   const addActivity = useCallback(
     (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
       const activityToAdd: DailyActivity = {
         ...newActivity,
-        id: (Math.random() * 10000).toString(),
+        id: `act_${(Math.random() * 10000).toString()}`,
         status: 'Menunggu Validasi',
       };
       setActivities((prev) => [activityToAdd, ...prev]);
@@ -88,6 +89,7 @@ export default function DailyActivityPage() {
   const activitiesForSelectedDate = activities.filter(
     (act) => act.date === selectedDateString
   );
+
 
   return (
     <div className="space-y-6">
