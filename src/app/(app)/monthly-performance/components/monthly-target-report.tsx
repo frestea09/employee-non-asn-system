@@ -1,8 +1,7 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
 import {
   Table,
   TableBody,
@@ -11,24 +10,51 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { SkpTarget } from '@/lib/data';
-import { Save } from 'lucide-react';
+import type { DailyActivity, SkpTarget } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
+import { useMemo } from 'react';
+import { Send } from 'lucide-react';
 
 type MonthlyTargetReportProps = {
   targets: SkpTarget[];
+  activities: DailyActivity[];
 };
 
-export function MonthlyTargetReport({ targets }: MonthlyTargetReportProps) {
+export function MonthlyTargetReport({
+  targets,
+  activities,
+}: MonthlyTargetReportProps) {
   const { toast } = useToast();
+
+  const accumulatedData = useMemo(() => {
+    return targets.map((target) => {
+      const relevantActivities = activities.filter(
+        (act) => act.actionPlan === target.target && act.category === 'SKP'
+      );
+      const accumulatedQuantity = relevantActivities.reduce(
+        (sum, act) => sum + act.quantity,
+        0
+      );
+      const progress =
+        target.monthly_target > 0
+          ? (accumulatedQuantity / target.monthly_target) * 100
+          : 0;
+      return {
+        ...target,
+        accumulatedQuantity,
+        progress,
+      };
+    });
+  }, [targets, activities]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Logic to save the reported values would go here.
-    // For this mock, we'll just show a success toast.
+    // The data to save is in `accumulatedData`.
     toast({
-      title: 'Laporan Disimpan',
-      description: 'Realisasi target bulanan Anda telah berhasil disimpan.',
+      title: 'Laporan Diajukan',
+      description:
+        'Laporan realisasi kinerja bulanan Anda telah berhasil diajukan untuk validasi.',
     });
   };
 
@@ -38,35 +64,32 @@ export function MonthlyTargetReport({ targets }: MonthlyTargetReportProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Target Kinerja</TableHead>
-              <TableHead className="w-[180px]">Target Bulanan</TableHead>
-              <TableHead className="w-[200px]">Realisasi Tercapai</TableHead>
+              <TableHead>Target Kinerja SKP</TableHead>
+              <TableHead className="w-[200px]">Target Bulanan</TableHead>
+              <TableHead className="w-[250px]">Realisasi (Otomatis)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {targets.length > 0 ? (
-              targets.map((target) => (
-                <TableRow key={target.id}>
+            {accumulatedData.length > 0 ? (
+              accumulatedData.map((data) => (
+                <TableRow key={data.id}>
                   <TableCell className="font-medium">
-                    <p>{target.target}</p>
+                    <p>{data.target}</p>
                     <p className="text-sm text-muted-foreground">
-                      {target.description}
+                      {data.description}
                     </p>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {target.monthly_target} {target.unit}
+                    {data.monthly_target} {data.unit}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="number"
-                        name={`target-${target.id}`}
-                        className="max-w-[100px]"
-                        placeholder="0"
-                        required
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        {target.unit}
+                    <div className="flex flex-col gap-2">
+                       <span className="font-semibold text-lg">
+                        {data.accumulatedQuantity} {data.unit}
+                      </span>
+                      <Progress value={data.progress} />
+                      <span className="text-xs text-muted-foreground">
+                        {data.progress.toFixed(0)}% dari target tercapai
                       </span>
                     </div>
                   </TableCell>
@@ -88,8 +111,8 @@ export function MonthlyTargetReport({ targets }: MonthlyTargetReportProps) {
       {targets.length > 0 && (
         <div className="flex justify-end">
           <Button type="submit">
-            <Save className="mr-2 h-4 w-4" />
-            Simpan Laporan Realisasi
+            <Send className="mr-2 h-4 w-4" />
+            Ajukan Laporan Realisasi
           </Button>
         </div>
       )}

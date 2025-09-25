@@ -1,7 +1,5 @@
-
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -19,11 +17,11 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import {
+  mockDailyActivities,
   mockMonthlyPerformances,
   mockSkpTargets,
   mockUsers,
 } from '@/lib/data';
-import { PlusCircle } from 'lucide-react';
 import { useMemo } from 'react';
 import { MonthlyTargetReport } from './components/monthly-target-report';
 
@@ -35,19 +33,24 @@ export default function MonthlyPerformancePage() {
     [currentUser.id]
   );
 
+  // In a real app, you'd filter activities for the current month.
+  // For this mock, we'll pass all of them.
+  const userActivities = useMemo(
+    () => mockDailyActivities.filter(act => act.category === 'SKP'),
+    []
+  );
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Laporan Realisasi Target Bulanan</CardTitle>
           <CardDescription>
-            Isi total pencapaian kuantitatif Anda untuk setiap target dalam
-            periode bulan ini. Data ini akan digunakan untuk laporan kinerja
-            Anda.
+            Realisasi target dihitung secara otomatis berdasarkan total kuantitas dari aktivitas harian yang Anda catat. Periksa dan ajukan laporan Anda.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <MonthlyTargetReport targets={userSkpTargets} />
+          <MonthlyTargetReport targets={userSkpTargets} activities={userActivities} />
         </CardContent>
       </Card>
 
