@@ -65,7 +65,6 @@ export default function DailyActivityPage() {
     toast({
       title: 'Berhasil!',
       description: 'Aktivitas harian berhasil disimpan.',
-      className: 'bg-green-500 text-white',
     });
   };
 
@@ -87,7 +86,6 @@ export default function DailyActivityPage() {
      toast({
       title: 'Diperbarui!',
       description: 'Aktivitas telah berhasil diperbarui.',
-      className: 'bg-primary text-primary-foreground',
     });
   };
 
@@ -115,42 +113,39 @@ export default function DailyActivityPage() {
 
 
   return (
-     <div className="grid gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-2">
-         <Card>
-          <CardHeader>
-            <CardTitle>Tambah Aktivitas Harian</CardTitle>
-            <CardDescription>
-              Catat aktivitas yang Anda lakukan hari ini secara terperinci.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
-          </CardContent>
-        </Card>
-      </div>
-      <div className="lg:col-span-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Riwayat Aktivitas</CardTitle>
-            <CardDescription>
-              Daftar aktivitas harian yang telah Anda catat.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ActivityHistory
-              activities={filteredActivities}
-              onDelete={deleteActivity}
-              onUpdate={updateActivity}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              onFilter={handleFilter}
-            />
-          </CardContent>
-        </Card>
-      </div>
+     <div className="space-y-6">
+       <Card>
+        <CardHeader>
+          <CardTitle>Tambah Aktivitas Harian</CardTitle>
+          <CardDescription>
+            Pilih jenis tugas dan catat aktivitas yang Anda lakukan hari ini.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Riwayat Aktivitas</CardTitle>
+          <CardDescription>
+            Daftar aktivitas harian yang telah Anda catat.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ActivityHistory
+            activities={filteredActivities}
+            onDelete={deleteActivity}
+            onUpdate={updateActivity}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            onFilter={handleFilter}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

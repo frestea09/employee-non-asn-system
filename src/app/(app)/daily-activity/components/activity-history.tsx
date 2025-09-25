@@ -54,6 +54,15 @@ export function ActivityHistory({
   setSelectedDate,
   onFilter,
 }: ActivityHistoryProps) {
+  const getCategoryBadgeVariant = (category: DailyActivity['category']) => {
+    switch(category) {
+      case 'SKP': return 'default';
+      case 'Unit': return 'secondary';
+      case 'Jabatan': return 'outline';
+      default: return 'secondary';
+    }
+  }
+
   return (
     <div className="space-y-4">
       <HistoryFilters
@@ -67,8 +76,8 @@ export function ActivityHistory({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tanggal</TableHead>
-              <TableHead>Rencana Aksi</TableHead>
+              <TableHead>Aktivitas</TableHead>
+              <TableHead>Kategori</TableHead>
               <TableHead>Hasil</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Tindakan</TableHead>
@@ -78,8 +87,15 @@ export function ActivityHistory({
             {activities.length > 0 ? (
               activities.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.date}</TableCell>
-                  <TableCell>{item.actionPlan}</TableCell>
+                  <TableCell>
+                    <p className='font-medium'>{item.activity}</p>
+                    <p className='text-sm text-muted-foreground'>{item.actionPlan}</p>
+                  </TableCell>
+                   <TableCell>
+                    <Badge variant={getCategoryBadgeVariant(item.category)}>
+                      {item.category}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                     {item.quantity} {item.unit}
                   </TableCell>
@@ -103,34 +119,29 @@ export function ActivityHistory({
                   </TableCell>
                   <TableCell className="text-right">
                     <AlertDialog>
-                      <EditActivityDialog activity={item} onUpdate={onUpdate}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <span className="sr-only">Buka menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                             <DropdownMenuItem
-                              onSelect={(e) => e.preventDefault()}
-                              asChild
-                            >
-                               <div className='w-full'> {/* Wrapper div for the dialog trigger */}
-                                <Pencil className="mr-2 h-4 w-4" />
-                                <span>Edit</span>
-                               </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Buka menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                           <EditActivityDialog activity={item} onUpdate={onUpdate}>
+                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                               <Pencil className="mr-2 h-4 w-4" />
+                               <span>Edit</span>
+                             </DropdownMenuItem>
+                           </EditActivityDialog>
+                          <DropdownMenuSeparator />
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem className="text-destructive focus:text-destructive">
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              <span>Hapus</span>
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem className="text-destructive focus:text-destructive">
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                <span>Hapus</span>
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </EditActivityDialog>
+                          </AlertDialogTrigger>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>

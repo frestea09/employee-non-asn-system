@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -47,7 +46,8 @@ export function EditActivityDialog({
       actionPlan: formData.get('action-plan') as string,
       activity: formData.get('activity') as string,
       notes: formData.get('notes') as string,
-      quantity: Number(formData.get('work-result')),
+      quantity: Number(formData.get('quantity')),
+      unit: formData.get('unit') as string,
     };
     onUpdate(updatedActivity);
     setIsOpen(false);
@@ -94,14 +94,14 @@ export function EditActivityDialog({
                 <SelectValue placeholder="Pilih rencana aksi" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Melakukan pemeriksaan pasien">
-                  Melakukan pemeriksaan pasien
+                <SelectItem value="Meningkatkan Kecepatan Respon UGD">
+                  Meningkatkan Kecepatan Respon UGD
                 </SelectItem>
-                <SelectItem value="Mengelola rekam medis">
-                  Mengelola rekam medis
+                 <SelectItem value="Pencegahan Infeksi">
+                  Pencegahan Infeksi
                 </SelectItem>
-                <SelectItem value="Asistensi tindakan medis">
-                  Asistensi tindakan medis
+                <SelectItem value="Waktu Respon Pasien Gawat Darurat">
+                  Waktu Respon Pasien Gawat Darurat
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -125,16 +125,27 @@ export function EditActivityDialog({
               rows={2}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="work-result">Hasil Kerja (Kuantitas)</Label>
-            <Input
-              id="work-result"
-              name="work-result"
-              type="number"
-              defaultValue={activity.quantity}
-              required
-            />
-          </div>
+           <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="quantity">Hasil Kerja (Kuantitas)</Label>
+                <Input
+                  id="quantity"
+                  name="quantity"
+                  type="number"
+                  defaultValue={activity.quantity}
+                  required
+                />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="unit">Satuan</Label>
+                <Input
+                  id="unit"
+                  name="unit"
+                  defaultValue={activity.unit}
+                  required
+                />
+              </div>
+           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
@@ -148,4 +159,3 @@ export function EditActivityDialog({
     </Dialog>
   );
 }
-

@@ -3,6 +3,7 @@ export type DailyActivity = {
   date: string;
   startTime: string;
   endTime: string;
+  category: 'SKP' | 'Unit' | 'Jabatan';
   actionPlan: string;
   activity: string;
   notes?: string;
@@ -77,9 +78,9 @@ export type JobStandard = {
 
 
 export const mockDailyActivities: DailyActivity[] = [
-  { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', actionPlan: 'Melakukan pemeriksaan pasien', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
-  { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', actionPlan: 'Mengelola rekam medis', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
-  { id: '3', date: '2024-07-29', startTime: '10:00', endTime: '12:00', actionPlan: 'Asistensi tindakan medis', activity: 'Membantu dokter dalam tindakan operasi kecil.', quantity: 1, unit: 'Tindakan', status: 'Menunggu Validasi' },
+  { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', category: 'Jabatan', actionPlan: 'Waktu Respon Pasien Gawat Darurat', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
+  { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', category: 'Unit', actionPlan: 'Pencegahan Infeksi', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
+  { id: '3', date: '2024-07-29', startTime: '10:00', endTime: '12:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Membantu dokter dalam tindakan operasi kecil.', quantity: 1, unit: 'Tindakan', status: 'Menunggu Validasi' },
 ];
 
 export const mockMonthlyPerformances: MonthlyPerformance[] = [
@@ -93,7 +94,7 @@ export const mockAttendance: Attendance[] = [
     { id: '3', date: '2024-07-27', status: 'Sakit' },
 ];
 
-export const mockValidationActivities: Omit<DailyActivity, 'startTime' | 'endTime' | 'actionPlan' | 'notes' | 'quantity' | 'unit' | 'proofUrl'>[] = [
+export const mockValidationActivities: Omit<DailyActivity, 'startTime' | 'endTime' | 'actionPlan' | 'notes' | 'quantity' | 'unit' | 'proofUrl' | 'category'>[] = [
     { id: '3', date: '2024-07-29', activity: 'Membantu dokter dalam tindakan operasi kecil.', status: 'Menunggu Validasi' },
     { id: '4', date: '2024-07-29', activity: 'Memberikan obat kepada pasien sesuai jadwal.', status: 'Menunggu Validasi' },
     { id: '5', date: '2024-07-30', activity: 'Membersihkan dan merapikan ruang perawatan.', status: 'Menunggu Validasi' },
