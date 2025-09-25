@@ -28,6 +28,7 @@ export type Attendance = {
 
 export type User = {
   id: string;
+  ni: string;
   name: string;
   email: string;
   unit: string;
@@ -72,10 +73,10 @@ export const mockValidationPerformances: MonthlyPerformance[] = [
 ];
 
 export const mockUsers: User[] = [
-  { id: '1', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat', position: 'Perawat', role: 'Karyawan' },
-  { id: '2', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan', role: 'Karyawan' },
-  { id: '3', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Kepala Bagian SDM', role: 'Admin' },
-  { id: '4', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
+  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat', position: 'Perawat', role: 'Karyawan' },
+  { id: '2', ni: 'K.21.08.002', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan', role: 'Karyawan' },
+  { id: '3', ni: 'A.20.01.001', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Kepala Bagian SDM', role: 'Admin' },
+  { id: '4', ni: 'K.22.03.015', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
 ];
 
 export const mockUnits: Unit[] = [

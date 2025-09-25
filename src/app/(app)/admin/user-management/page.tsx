@@ -101,6 +101,7 @@ export default function UserManagementPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Nama</TableHead>
+              <TableHead>Nomor Induk</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Unit Kerja</TableHead>
               <TableHead>Jabatan</TableHead>
@@ -112,6 +113,7 @@ export default function UserManagementPage() {
             {users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.name}</TableCell>
+                <TableCell>{user.ni}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.unit}</TableCell>
                 <TableCell>{user.position}</TableCell>

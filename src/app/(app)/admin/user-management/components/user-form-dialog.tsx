@@ -32,6 +32,7 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    ni: '',
     email: '',
     unit: '',
     position: '',
@@ -42,6 +43,7 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
     if (user && isOpen) {
       setFormData({
         name: user.name,
+        ni: user.ni,
         email: user.email,
         unit: user.unit,
         position: user.position,
@@ -51,6 +53,7 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
         // Reset form for new user
         setFormData({
             name: '',
+            ni: '',
             email: '',
             unit: '',
             position: '',
@@ -91,6 +94,10 @@ export function UserFormDialog({ user, onSave, triggerButton }: UserFormDialogPr
           <div className="space-y-2">
             <Label htmlFor="name">Nama Lengkap</Label>
             <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ni">Nomor Induk Karyawan Non-ASN</Label>
+            <Input id="ni" name="ni" value={formData.ni} onChange={handleChange} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Alamat Email</Label>
