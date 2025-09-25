@@ -9,12 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useMemo, useCallback } from 'react';
-import type {
-  DailyActivity,
-  JobStandard,
-  SkpTarget,
-  WorkPlan,
-} from '@/lib/data';
+import type { DailyActivity, UserActionPlans } from '@/lib/data';
 import {
   mockDailyActivities,
   mockUsers,
@@ -29,12 +24,6 @@ import { HistoryTab } from './components/history-tab';
 import { InputTab } from './components/input-tab';
 import { SummaryTab } from './components/summary-tab';
 import { format } from 'date-fns';
-
-export type UserActionPlans = {
-  skpTargets: SkpTarget[];
-  unitPlans: WorkPlan[];
-  jobStations: JobStandard[];
-};
 
 export default function DailyActivityPage() {
   const [activities, setActivities] =

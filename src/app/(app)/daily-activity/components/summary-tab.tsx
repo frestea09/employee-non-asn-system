@@ -9,8 +9,7 @@ import { id } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { PerformanceProgress } from './performance-progress';
-import type { UserActionPlans } from '../page';
-import type { DailyActivity } from '@/lib/data';
+import type { UserActionPlans, DailyActivity } from '@/lib/data';
 
 type SummaryTabProps = {
   activities: DailyActivity[];

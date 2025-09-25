@@ -1,9 +1,8 @@
 'use client';
 
 import { Progress } from '@/components/ui/progress';
-import type { DailyActivity } from '@/lib/data';
+import type { DailyActivity, UserActionPlans } from '@/lib/data';
 import { useMemo } from 'react';
-import type { UserActionPlans } from '../page';
 
 type PerformanceProgressProps = {
   actionPlans: UserActionPlans;

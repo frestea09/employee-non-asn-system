@@ -21,9 +21,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import type { DailyActivity } from '@/lib/data';
+import type { DailyActivity, UserActionPlans } from '@/lib/data';
 import { useState, type FormEvent } from 'react';
-import type { UserActionPlans } from '../page';
 
 type EditActivityDialogProps = {
   activity: DailyActivity;

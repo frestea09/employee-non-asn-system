@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash2, Paperclip } from 'lucide-react';
-import type { DailyActivity } from '@/lib/data';
+import type { DailyActivity, UserActionPlans } from '@/lib/data';
 import { HistoryFilters } from './history-filters';
 import {
   AlertDialog,
@@ -32,7 +32,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { EditActivityDialog } from './edit-activity-dialog';
-import type { UserActionPlans } from '../page';
 import { useState, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 

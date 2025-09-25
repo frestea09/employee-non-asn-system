@@ -78,6 +78,11 @@ export type JobStandard = {
   description: string;
 };
 
+export type UserActionPlans = {
+  skpTargets: SkpTarget[];
+  unitPlans: WorkPlan[];
+  jobStations: JobStandard[];
+};
 
 export const mockDailyActivities: DailyActivity[] = [
   { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', category: 'Jabatan', actionPlan: 'Waktu Respon Pasien Gawat Darurat', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
