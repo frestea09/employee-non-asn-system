@@ -123,8 +123,8 @@ export default function AttendancePage() {
                       <Badge
                          className={cn({
                           'bg-accent text-accent-foreground': item.status === 'Hadir',
-                          'bg-yellow-200 text-yellow-800': item.status === 'Izin',
-                          'bg-red-200 text-red-800': item.status === 'Sakit',
+                          'border-yellow-400/50 bg-yellow-50 text-yellow-700': item.status === 'Izin',
+                          'border-red-400/50 bg-red-50 text-red-700': item.status === 'Sakit',
                         })}
                       >
                         {item.status}

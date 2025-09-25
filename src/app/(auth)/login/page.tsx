@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Briefcase } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -20,32 +20,25 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    // Untuk demo, langsung arahkan ke dashboard
+    // For demo purposes, directly navigate to the dashboard
     router.push('/dashboard');
   };
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm shadow-xl">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="h-8 w-8"
-              fill="currentColor"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-            </svg>
+            <Briefcase className="h-8 w-8" />
         </div>
-        <CardTitle className="text-2xl">Selamat Datang!</CardTitle>
+        <CardTitle className="text-2xl tracking-tighter">e-Kinerja</CardTitle>
         <CardDescription>
-          Masuk ke akun Anda untuk melanjutkan.
+          Masuk untuk mengelola aktivitas kerja Anda.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Alamat Email</Label>
-          <Input id="email" type="email" placeholder="nama@email.com" defaultValue="karyawan@email.com" required className="h-12 text-lg" />
+          <Input id="email" type="email" placeholder="nama@email.com" defaultValue="karyawan@email.com" required className="h-12 text-base" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Kata Sandi</Label>
@@ -55,7 +48,7 @@ export default function LoginPage() {
               type={showPassword ? 'text' : 'password'}
               defaultValue="password123"
               required
-              className="h-12 pr-10 text-lg"
+              className="h-12 pr-10 text-base"
             />
             <Button
               type="button"

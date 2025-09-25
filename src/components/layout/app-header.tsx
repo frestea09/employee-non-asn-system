@@ -89,12 +89,12 @@ export function AppHeader() {
   const { title, icon } = getRouteInfo(pathname);
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
       <div className="flex items-center gap-2 md:hidden">
         <SidebarTrigger />
       </div>
       <div className="flex flex-1 flex-col gap-0.5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
             {icon}
             <h1 className="text-xl font-semibold tracking-tight md:text-2xl">{title}</h1>
         </div>

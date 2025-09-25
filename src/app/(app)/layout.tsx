@@ -3,7 +3,6 @@ import {
   Sidebar,
   SidebarHeader,
   SidebarContent,
-  SidebarInset,
   SidebarFooter,
 } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
@@ -12,7 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { LogOut, Briefcase } from 'lucide-react';
+import { AppBody } from '@/components/layout/app-body';
 
 export default function AppLayout({
   children,
@@ -26,17 +26,12 @@ export default function AppLayout({
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="h-8 w-8 text-primary"
-              fill="currentColor"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-            </svg>
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Briefcase className="h-6 w-6" />
+            </div>
             <div className='flex flex-col'>
-              <span className="text-lg font-semibold leading-tight">CatatKerja</span>
-              <span className="text-xs text-muted-foreground">RSUD Otista</span>
+              <span className="text-lg font-semibold leading-tight tracking-tighter">e-Kinerja</span>
+              <span className="text-xs text-muted-foreground">RSUD Soreang</span>
             </div>
           </div>
         </SidebarHeader>
@@ -63,10 +58,10 @@ export default function AppLayout({
           </div>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>
+      <AppBody>
         <AppHeader />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
-      </SidebarInset>
+      </AppBody>
     </SidebarProvider>
   );
 }
