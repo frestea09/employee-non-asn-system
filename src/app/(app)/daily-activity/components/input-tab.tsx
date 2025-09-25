@@ -16,20 +16,19 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CalendarIcon, PlusCircle, Upload, X as XIcon } from 'lucide-react';
 import type { UserActionPlans } from '../page';
-import { useState, type FormEvent, useEffect, useRef } from 'react';
+import { useState, type FormEvent, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
-type ActivityFormProps = {
-  actionPlans: UserActionPlans;
-  onSave: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
-  onDateChange: (date: Date) => void;
+type InputTabProps = {
+  userActionPlans: UserActionPlans;
+  onAddActivity: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
 };
 
-export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityFormProps) {
+export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
   const [selectedPlan, setSelectedPlan] = useState('');
   const [selectedCategory, setSelectedCategory] =
     useState<DailyActivity['category']>('SKP');
@@ -38,12 +37,6 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-
-  useEffect(() => {
-    if (activityDate) {
-      onDateChange(activityDate);
-    }
-  }, [activityDate, onDateChange]);
 
   const handleSelectChange = (value: string) => {
     const [category, plan] = value.split(':');
@@ -87,12 +80,13 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
       unit: formData.get('unit') as string,
       proofUrl: fileName || undefined,
     };
-    onSave(newActivity);
+    onAddActivity(newActivity);
     
     // Reset form fields but keep the date
     if (formRef.current) {
         formRef.current.reset();
         setSelectedPlan('');
+        setSelectedCategory('SKP');
         clearFile();
     }
   };
@@ -143,36 +137,36 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
             <SelectValue placeholder="Pilih tugas dari rencana Anda..." />
           </SelectTrigger>
           <SelectContent>
-            {actionPlans.skpTargets.length > 0 && (
+            {userActionPlans.skpTargets.length > 0 && (
               <SelectGroup>
                 <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                   Target SKP Pribadi
                 </SelectLabel>
-                {actionPlans.skpTargets.map((plan) => (
+                {userActionPlans.skpTargets.map((plan) => (
                   <SelectItem key={plan.id} value={`SKP:${plan.target}`}>
                     {plan.target}
                   </SelectItem>
                 ))}
               </SelectGroup>
             )}
-            {actionPlans.unitPlans.length > 0 && (
+            {userActionPlans.unitPlans.length > 0 && (
               <SelectGroup>
                 <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                   Rencana Kerja Unit
                 </SelectLabel>
-                {actionPlans.unitPlans.map((plan) => (
+                {userActionPlans.unitPlans.map((plan) => (
                   <SelectItem key={plan.id} value={`Unit:${plan.program}`}>
                     {plan.program}
                   </SelectItem>
                 ))}
               </SelectGroup>
             )}
-            {actionPlans.jobStations.length > 0 && (
+            {userActionPlans.jobStations.length > 0 && (
               <SelectGroup>
                 <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                   Standar Kinerja Jabatan
                 </SelectLabel>
-                {actionPlans.jobStations.map((plan) => (
+                {userActionPlans.jobStations.map((plan) => (
                   <SelectItem key={plan.id} value={`Jabatan:${plan.standard}`}>
                     {plan.standard}
                   </SelectItem>

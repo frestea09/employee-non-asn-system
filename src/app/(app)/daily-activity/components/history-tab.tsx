@@ -33,53 +33,72 @@ import {
 } from '@/components/ui/alert-dialog';
 import { EditActivityDialog } from './edit-activity-dialog';
 import type { UserActionPlans } from '../page';
+import { useState, useMemo } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
-type ActivityHistoryProps = {
+type HistoryTabProps = {
   activities: DailyActivity[];
-  onDelete: (id: string) => void;
-  onUpdate: (activity: DailyActivity) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  selectedDate: Date | undefined;
-  setSelectedDate: (date: Date | undefined) => void;
-  onFilter: () => void;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  actionPlans: UserActionPlans;
+  userActionPlans: UserActionPlans;
+  onUpdateActivity: (activity: DailyActivity) => void;
+  onDeleteActivity: (id: string) => void;
 };
 
-export function ActivityHistory({
+export function HistoryTab({
   activities,
-  onDelete,
-  onUpdate,
-  searchQuery,
-  setSearchQuery,
-  selectedDate,
-  setSelectedDate,
-  onFilter,
-  currentPage,
-  totalPages,
-  onPageChange,
-  actionPlans,
-}: ActivityHistoryProps) {
+  userActionPlans,
+  onUpdateActivity,
+  onDeleteActivity,
+}: HistoryTabProps) {
+  const { toast } = useToast();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterDate, setFilterDate] = useState<Date | undefined>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+  
   const getCategoryBadgeVariant = (category: DailyActivity['category']) => {
-    switch(category) {
-      case 'SKP': return 'default';
-      case 'Unit': return 'secondary';
-      case 'Jabatan': return 'outline';
-      default: return 'secondary';
+    switch (category) {
+      case 'SKP':
+        return 'default';
+      case 'Unit':
+        return 'secondary';
+      case 'Jabatan':
+        return 'outline';
+      default:
+        return 'secondary';
     }
-  }
+  };
+
+  const filteredActivities = useMemo(() => {
+    return activities.filter((activity) => {
+      const matchesSearch = activity.activity
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesDate =
+        !filterDate ||
+        new Date(activity.date).toDateString() === filterDate.toDateString();
+      return matchesSearch && matchesDate;
+    });
+  }, [activities, searchQuery, filterDate]);
+
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredActivities.slice(startIndex, endIndex);
+  }, [filteredActivities, currentPage]);
+
+  const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
 
   return (
     <div className="space-y-4">
       <HistoryFilters
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        onFilter={onFilter}
+        selectedDate={filterDate}
+        setSelectedDate={setFilterDate}
+        onFilter={() => {
+          setCurrentPage(1); // Reset to first page on new filter
+          toast({ description: 'Filter diterapkan.' });
+        }}
       />
       <div className="rounded-md border">
         <Table>
@@ -93,17 +112,21 @@ export function ActivityHistory({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {activities.length > 0 ? (
-              activities.map((item) => (
+            {paginatedActivities.length > 0 ? (
+              paginatedActivities.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <p className='font-medium'>{item.activity}</p>
-                      {item.proofUrl && <Paperclip className="h-4 w-4 text-muted-foreground" />}
+                      <p className="font-medium">{item.activity}</p>
+                      {item.proofUrl && (
+                        <Paperclip className="h-4 w-4 text-muted-foreground" />
+                      )}
                     </div>
-                    <p className='text-sm text-muted-foreground'>{item.actionPlan}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.actionPlan}
+                    </p>
                   </TableCell>
-                   <TableCell>
+                  <TableCell>
                     <Badge variant={getCategoryBadgeVariant(item.category)}>
                       {item.category}
                     </Badge>
@@ -139,12 +162,18 @@ export function ActivityHistory({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                           <EditActivityDialog activity={item} onUpdate={onUpdate} actionPlans={actionPlans}>
-                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                               <Pencil className="mr-2 h-4 w-4" />
-                               <span>Edit</span>
-                             </DropdownMenuItem>
-                           </EditActivityDialog>
+                          <EditActivityDialog
+                            activity={item}
+                            onUpdate={onUpdateActivity}
+                            actionPlans={userActionPlans}
+                          >
+                            <DropdownMenuItem
+                              onSelect={(e) => e.preventDefault()}
+                            >
+                              <Pencil className="mr-2 h-4 w-4" />
+                              <span>Edit</span>
+                            </DropdownMenuItem>
+                          </EditActivityDialog>
                           <DropdownMenuSeparator />
                           <AlertDialogTrigger asChild>
                             <DropdownMenuItem className="text-destructive focus:text-destructive">
@@ -168,7 +197,7 @@ export function ActivityHistory({
                         <AlertDialogFooter>
                           <AlertDialogCancel>Batal</AlertDialogCancel>
                           <AlertDialogAction
-                            onClick={() => onDelete(item.id)}
+                            onClick={() => onDeleteActivity(item.id)}
                             className="bg-destructive hover:bg-destructive/90"
                           >
                             Ya, Hapus
@@ -192,29 +221,31 @@ export function ActivityHistory({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between pt-2">
-        <div className="text-sm text-muted-foreground">
-          Halaman {currentPage} dari {totalPages}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <div className="text-sm text-muted-foreground">
+            Halaman {currentPage} dari {totalPages}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+            >
+              Sebelumnya
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+            >
+              Berikutnya
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage <= 1}
-          >
-            Sebelumnya
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage >= totalPages}
-          >
-            Berikutnya
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

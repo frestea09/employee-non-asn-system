@@ -7,8 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useState, useMemo } from 'react';
-import type { DailyActivity, JobStandard, SkpTarget, WorkPlan } from '@/lib/data';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useMemo, useCallback } from 'react';
+import type {
+  DailyActivity,
+  JobStandard,
+  SkpTarget,
+  WorkPlan,
+} from '@/lib/data';
 import {
   mockDailyActivities,
   mockUsers,
@@ -17,13 +23,11 @@ import {
   mockJobStations,
 } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
-import { ActivityHistory } from './components/activity-history';
-import { ActivityForm } from './components/activity-form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-import { PerformanceProgress } from './components/performance-progress';
+import { HistoryTab } from './components/history-tab';
+import { InputTab } from './components/input-tab';
+import { SummaryTab } from './components/summary-tab';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -35,10 +39,6 @@ export default function DailyActivityPage() {
   const [activities, setActivities] =
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterDate, setFilterDate] = useState<Date | undefined>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 5;
 
   // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
@@ -58,94 +58,68 @@ export default function DailyActivityPage() {
     };
   }, [currentUser]);
 
-  const [summaryDate, setSummaryDate] = useState<Date>(new Date());
-  
-  const activitiesForSummary = useMemo(() => {
-    // Format the summaryDate to 'yyyy-MM-dd' string for reliable comparison
-    const dateString = format(summaryDate, 'yyyy-MM-dd');
-    return activities.filter(act => act.date === dateString);
-  }, [activities, summaryDate]);
+  const addActivity = useCallback(
+    (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
+      const activityToAdd: DailyActivity = {
+        ...newActivity,
+        id: (Math.random() * 10000).toString(),
+        status: 'Menunggu Validasi',
+      };
+      setActivities((prev) => [activityToAdd, ...prev]);
+      toast({
+        title: 'Berhasil!',
+        description: 'Aktivitas harian berhasil disimpan.',
+      });
+    },
+    [toast]
+  );
 
-  const addActivity = (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
-    const activityToAdd: DailyActivity = {
-      ...newActivity,
-      id: (Math.random() * 10000).toString(),
-      status: 'Menunggu Validasi',
-    };
-    setActivities((prev) => [activityToAdd, ...prev]);
-    toast({
-      title: 'Berhasil!',
-      description: 'Aktivitas harian berhasil disimpan.',
-    });
-  };
+  const updateActivity = useCallback(
+    (updatedActivity: DailyActivity) => {
+      setActivities((prev) =>
+        prev.map((act) =>
+          act.id === updatedActivity.id ? updatedActivity : act
+        )
+      );
+      toast({
+        title: 'Berhasil!',
+        description: 'Aktivitas berhasil diperbarui.',
+      });
+    },
+    [toast]
+  );
 
-  const updateActivity = (updatedActivity: DailyActivity) => {
-    setActivities((prev) =>
-      prev.map((act) => (act.id === updatedActivity.id ? updatedActivity : act))
-    );
-    toast({
-      title: 'Berhasil!',
-      description: 'Aktivitas berhasil diperbarui.',
-    });
-  };
-
-  const deleteActivity = (id: string) => {
-    setActivities((prev) => prev.filter((act) => act.id !== id));
-    toast({
-      title: 'Aktivitas Dihapus',
-      description: 'Aktivitas telah berhasil dihapus dari riwayat.',
-      variant: 'destructive',
-    });
-  };
-
-  const filteredActivities = useMemo(() => {
-    return activities.filter((activity) => {
-      const matchesSearch = activity.activity
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesDate =
-        !filterDate ||
-        new Date(activity.date).toDateString() === filterDate.toDateString();
-      return matchesSearch && matchesDate;
-    });
-  }, [activities, searchQuery, filterDate]);
-  
-  const paginatedActivities = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    return filteredActivities.slice(startIndex, endIndex);
-  }, [filteredActivities, currentPage]);
-
-  const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
-
-  const isToday = summaryDate.toDateString() === new Date().toDateString();
-  const summaryTitle = isToday
-    ? "Ringkasan Aktivitas Hari Ini"
-    : `Ringkasan untuk ${format(summaryDate, 'PPP', { locale: id })}`;
+  const deleteActivity = useCallback(
+    (id: string) => {
+      setActivities((prev) => prev.filter((act) => act.id !== id));
+      toast({
+        title: 'Aktivitas Dihapus',
+        description: 'Aktivitas telah berhasil dihapus dari riwayat.',
+        variant: 'destructive',
+      });
+    },
+    [toast]
+  );
 
   return (
     <div className="space-y-6">
-       <Alert>
+      <Alert>
         <Info className="h-4 w-4" />
         <AlertTitle>Pengingat Penting</AlertTitle>
         <AlertDescription>
-          Batas waktu pencatatan aktivitas adalah tanggal 5 setiap bulannya. Pastikan semua aktivitas Anda tercatat sebelum batas waktu.
+          Batas waktu pencatatan aktivitas adalah tanggal 5 setiap bulannya.
+          Pastikan semua aktivitas Anda tercatat sebelum batas waktu.
         </AlertDescription>
       </Alert>
-      <Card>
-        <CardHeader>
-          <CardTitle>{summaryTitle}</CardTitle>
-          <CardDescription>
-            Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-           <PerformanceProgress actionPlans={userActionPlans} activities={activitiesForSummary} />
-        </CardContent>
-      </Card>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <div className="lg:col-span-2">
+      <Tabs defaultValue="input" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="input">Input Aktivitas</TabsTrigger>
+          <TabsTrigger value="history">Riwayat Aktivitas</TabsTrigger>
+          <TabsTrigger value="summary">Ringkasan Kinerja</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="input">
           <Card>
             <CardHeader>
               <CardTitle>Input Aktivitas Harian</CardTitle>
@@ -154,45 +128,50 @@ export default function DailyActivityPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ActivityForm actionPlans={userActionPlans} onSave={addActivity} onDateChange={setSummaryDate} />
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="lg:col-span-3">
-          <Card>
-            <CardHeader>
-              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <CardTitle>Riwayat Aktivitas</CardTitle>
-                  <CardDescription>
-                    Daftar aktivitas yang telah Anda catat.
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ActivityHistory
-                activities={paginatedActivities}
-                onUpdate={updateActivity}
-                onDelete={deleteActivity}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                selectedDate={filterDate}
-                setSelectedDate={setFilterDate}
-                onFilter={() => {
-                  setCurrentPage(1); // Reset to first page on new filter
-                  toast({ description: 'Filter diterapkan.' });
-                }}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-                actionPlans={userActionPlans}
+              <InputTab
+                userActionPlans={userActionPlans}
+                onAddActivity={addActivity}
               />
             </CardContent>
           </Card>
-        </div>
-      </div>
+        </TabsContent>
+
+        <TabsContent value="history">
+          <Card>
+            <CardHeader>
+              <CardTitle>Riwayat Aktivitas</CardTitle>
+              <CardDescription>
+                Daftar aktivitas yang telah Anda catat. Anda dapat mencari dan memfilter riwayat.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HistoryTab
+                activities={activities}
+                userActionPlans={userActionPlans}
+                onUpdateActivity={updateActivity}
+                onDeleteActivity={deleteActivity}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="summary">
+          <Card>
+            <CardHeader>
+                <CardTitle>Ringkasan Kinerja</CardTitle>
+                <CardDescription>
+                    Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SummaryTab
+                activities={activities}
+                userActionPlans={userActionPlans}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
