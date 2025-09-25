@@ -21,8 +21,8 @@ export function SummaryTab({ activities, userActionPlans }: SummaryTabProps) {
   const [summaryDate, setSummaryDate] = useState<Date>(new Date());
 
   const activitiesForSummary = useMemo(() => {
-    const dateString = format(summaryDate, 'yyyy-MM-dd');
-    return activities.filter((act) => act.date === dateString);
+     const selectedDateString = format(summaryDate, 'yyyy-MM-dd');
+    return activities.filter((act) => act.date === selectedDateString);
   }, [activities, summaryDate]);
   
   const isToday = summaryDate.toDateString() === new Date().toDateString();

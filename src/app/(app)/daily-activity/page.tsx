@@ -28,6 +28,7 @@ import { Info } from 'lucide-react';
 import { HistoryTab } from './components/history-tab';
 import { InputTab } from './components/input-tab';
 import { SummaryTab } from './components/summary-tab';
+import { format } from 'date-fns';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
@@ -39,6 +40,7 @@ export default function DailyActivityPage() {
   const [activities, setActivities] =
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
+  const [activityDate, setActivityDate] = useState(new Date());
 
   // --- Assume we have a logged in user ---
   const currentUser = mockUsers[0];
@@ -101,6 +103,12 @@ export default function DailyActivityPage() {
     [toast]
   );
 
+  const activitiesForSelectedDate = useMemo(() => {
+    const selectedDateString = format(activityDate, 'yyyy-MM-dd');
+    return activities.filter((act) => act.date === selectedDateString);
+  }, [activities, activityDate]);
+
+
   return (
     <div className="space-y-6">
       <Alert>
@@ -131,6 +139,9 @@ export default function DailyActivityPage() {
               <InputTab
                 userActionPlans={userActionPlans}
                 onAddActivity={addActivity}
+                activityDate={activityDate}
+                setActivityDate={setActivityDate}
+                activitiesForSelectedDate={activitiesForSelectedDate}
               />
             </CardContent>
           </Card>
@@ -162,7 +173,7 @@ export default function DailyActivityPage() {
                 <CardDescription>
                     Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
                 </CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
               <SummaryTab
                 activities={activities}

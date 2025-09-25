@@ -22,17 +22,26 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { DailyProgressStatusBar } from './daily-progress-status-bar';
 
 type InputTabProps = {
   userActionPlans: UserActionPlans;
   onAddActivity: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
+  activityDate: Date;
+  setActivityDate: (date: Date) => void;
+  activitiesForSelectedDate: DailyActivity[];
 };
 
-export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
+export function InputTab({ 
+    userActionPlans, 
+    onAddActivity,
+    activityDate,
+    setActivityDate,
+    activitiesForSelectedDate,
+}: InputTabProps) {
   const [selectedPlan, setSelectedPlan] = useState('');
   const [selectedCategory, setSelectedCategory] =
     useState<DailyActivity['category']>('SKP');
-  const [activityDate, setActivityDate] = useState<Date | undefined>(new Date());
   const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -69,7 +78,7 @@ export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
 
     const formData = new FormData(event.currentTarget);
     const newActivity = {
-      date: activityDate ? format(activityDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
+      date: format(activityDate, 'yyyy-MM-dd'),
       startTime: formData.get('start-time') as string,
       endTime: formData.get('end-time') as string,
       actionPlan: selectedPlan,
@@ -82,7 +91,6 @@ export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
     };
     onAddActivity(newActivity);
     
-    // Reset form fields but keep the date
     if (formRef.current) {
         formRef.current.reset();
         setSelectedPlan('');
@@ -116,7 +124,7 @@ export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
             <Calendar
               mode="single"
               selected={activityDate}
-              onSelect={setActivityDate}
+              onSelect={(d) => setActivityDate(d || new Date())}
               initialFocus
               locale={id}
               disabled={(date) =>
@@ -126,6 +134,8 @@ export function InputTab({ userActionPlans, onAddActivity }: InputTabProps) {
           </PopoverContent>
         </Popover>
       </div>
+
+      <DailyProgressStatusBar activities={activitiesForSelectedDate} />
 
       <div className="space-y-2">
         <Label htmlFor="action-plan">Pilih Rencana Aksi</Label>
