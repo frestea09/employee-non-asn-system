@@ -1,3 +1,4 @@
+
 'use client';
 
 import { notFound, useParams } from 'next/navigation';
@@ -21,13 +22,13 @@ import { useToast } from '@/hooks/use-toast';
 import { UserCog, Sparkles, AlertTriangle } from 'lucide-react';
 import { AddTargetForm } from './components/add-target-form';
 import { TargetTable } from './components/target-table';
-import { AddStandardForm } from './components/add-standard-form';
-import { StandardTable } from './components/standard-table';
+import { AddStandardForm } from '../../job-standards/[positionId]/components/add-standard-form';
+import { StandardTable } from '../../job-standards/[positionId]/components/standard-table';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function PositionPerformanceDetailPage() {
   const params = useParams();
-  const positionId = params.userId as string;
+  const positionId = params.positionId as string;
   const { toast } = useToast();
 
   const position = mockPositions.find((p) => p.id === positionId);
@@ -179,7 +180,7 @@ export default function PositionPerformanceDetailPage() {
             <CardDescription>
               Standar kinerja dan indikator keberhasilan jabatan ini.
             </CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent>
             <div className="space-y-4">
               <AddStandardForm onAddStandard={handleAddStandard} />

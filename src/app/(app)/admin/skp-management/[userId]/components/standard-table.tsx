@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -9,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import type { SkpTarget } from '@/lib/data';
+import type { JobStandard } from '@/lib/data';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,42 +29,37 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { EditTargetDialog } from './edit-target-dialog';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { EditStandardDialog } from './edit-standard-dialog';
 
-type TargetTableProps = {
-  targets: SkpTarget[];
+type StandardTableProps = {
+  standards: JobStandard[];
   onDelete: (id: string) => void;
-  onUpdate: (target: SkpTarget) => void;
+  onUpdate: (standard: JobStandard) => void;
 };
 
-export function TargetTable({
-  targets,
+export function StandardTable({
+  standards,
   onDelete,
   onUpdate,
-}: TargetTableProps) {
+}: StandardTableProps) {
   return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Target Kinerja</TableHead>
-            <TableHead>Target Bulanan</TableHead>
-            <TableHead>Tenggat</TableHead>
+            <TableHead>Standar Kinerja</TableHead>
+            <TableHead>Deskripsi/Indikator</TableHead>
             <TableHead className="text-right">Tindakan</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {targets.length > 0 ? (
-            targets.map((item) => (
+          {standards.length > 0 ? (
+            standards.map((item) => (
               <TableRow key={item.id}>
-                <TableCell>
-                    <p className="font-medium">{item.target}</p>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                <TableCell className="font-medium">{item.standard}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {item.description}
                 </TableCell>
-                <TableCell>{item.monthly_target} {item.unit}</TableCell>
-                <TableCell>{format(new Date(item.deadline), "d MMM yyyy", { locale: id })}</TableCell>
                 <TableCell className="text-right">
                   <AlertDialog>
                     <DropdownMenu>
@@ -77,12 +70,17 @@ export function TargetTable({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                         <EditTargetDialog target={item} onUpdate={onUpdate}>
-                           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                              <Pencil className="mr-2 h-4 w-4" />
-                              <span>Edit</span>
-                           </DropdownMenuItem>
-                         </EditTargetDialog>
+                        <EditStandardDialog
+                          standard={item}
+                          onUpdate={onUpdate}
+                        >
+                          <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            <span>Edit</span>
+                          </DropdownMenuItem>
+                        </EditStandardDialog>
                         <DropdownMenuSeparator />
                         <AlertDialogTrigger asChild>
                           <DropdownMenuItem className="text-destructive focus:text-destructive">
@@ -99,7 +97,7 @@ export function TargetTable({
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           Tindakan ini tidak dapat dibatalkan. Ini akan
-                          menghapus target kinerja secara permanen.
+                          menghapus standar kinerja secara permanen.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -119,10 +117,10 @@ export function TargetTable({
           ) : (
             <TableRow>
               <TableCell
-                colSpan={4}
+                colSpan={3}
                 className="py-10 text-center text-sm text-muted-foreground"
               >
-                Belum ada target SKP yang ditetapkan untuk jabatan ini.
+                Belum ada standar kinerja yang ditetapkan untuk jabatan ini.
               </TableCell>
             </TableRow>
           )}
