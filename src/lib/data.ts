@@ -35,6 +35,12 @@ export type User = {
   role: 'Karyawan' | 'Admin';
 };
 
+export type Unit = {
+  id: string;
+  name: string;
+  description: string;
+};
+
 export const mockDailyActivities: DailyActivity[] = [
   { id: '1', date: '2024-07-28', startTime: '08:00', endTime: '09:00', actionPlan: 'Melakukan pemeriksaan pasien', activity: 'Melakukan pemeriksaan rutin pada 5 pasien di bangsal A.', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
   { id: '2', date: '2024-07-28', startTime: '09:00', endTime: '10:30', actionPlan: 'Mengelola rekam medis', activity: 'Mengupdate 10 rekam medis pasien.', quantity: 10, unit: 'Laporan', status: 'Disetujui' },
@@ -70,4 +76,12 @@ export const mockUsers: User[] = [
   { id: '2', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan', role: 'Karyawan' },
   { id: '3', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Kepala Bagian SDM', role: 'Admin' },
   { id: '4', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
+];
+
+export const mockUnits: Unit[] = [
+  { id: '1', name: 'Unit Gawat Darurat (UGD)', description: 'Memberikan pelayanan gawat darurat 24 jam.' },
+  { id: '2', name: 'Instalasi Rawat Inap', description: 'Menyediakan pelayanan perawatan bagi pasien yang memerlukan observasi lanjutan.' },
+  { id: '3', name: 'Laboratorium', description: 'Melakukan pemeriksaan penunjang diagnostik.' },
+  { id: '4', name: 'Farmasi', description: 'Menyediakan dan mengelola obat-obatan untuk pasien.' },
+  { id: '5', name: 'Manajemen', description: 'Mengelola operasional dan administrasi rumah sakit.' },
 ];

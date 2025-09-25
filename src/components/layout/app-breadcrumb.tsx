@@ -17,6 +17,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/validate-activities': 'Validasi Aktivitas',
   '/admin/validate-performance': 'Validasi Kinerja',
   '/admin/user-management': 'Manajemen Pengguna',
+  '/admin/unit-management': 'Manajemen Unit',
   '/admin/work-plan': 'Manajemen Rencana Kerja',
   '/admin/skp-management': 'Manajemen SKP',
   '/dashboard': 'Dashboard',

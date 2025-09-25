@@ -18,6 +18,8 @@ import {
   Users,
   Briefcase,
   Target,
+  Sitemap,
+  Shield,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -41,6 +43,7 @@ const adminNav = [
   { href: '/admin/validate-activities', label: 'Validasi Aktivitas', icon: <CheckCircle /> },
   { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
   { href: '/admin/user-management', label: 'Manajemen Pengguna', icon: <Users /> },
+  { href: '/admin/unit-management', label: 'Manajemen Unit', icon: <Sitemap /> },
   { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
   { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
 ];
@@ -76,7 +79,7 @@ export function SidebarNav() {
                 size="lg"
               >
                 <div className="flex items-center gap-3">
-                  <Users />
+                  <Shield />
                   <span>Admin</span>
                 </div>
                 <ChevronDown
