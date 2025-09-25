@@ -7,10 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ActivityForm, type CategorizedActionPlans } from './components/activity-form';
-import { ActivityHistory } from './components/activity-history';
 import { useState, useMemo } from 'react';
-import type { DailyActivity } from '@/lib/data';
+import type { DailyActivity, JobStandard, SkpTarget, WorkPlan } from '@/lib/data';
 import {
   mockDailyActivities,
   mockUsers,
@@ -19,13 +17,19 @@ import {
   mockJobStandards,
 } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
+import { ActivityAccordion } from './components/activity-accordion';
+import { ActivityHistory } from './components/activity-history';
+
+export type UserActionPlans = {
+  skpTargets: SkpTarget[];
+  unitPlans: WorkPlan[];
+  jobStandards: JobStandard[];
+}
 
 export default function DailyActivityPage() {
   const [activities, setActivities] =
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
-  
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
@@ -34,18 +38,15 @@ export default function DailyActivityPage() {
   const currentUser = mockUsers[0]; 
 
   // --- Generate dynamic action plans, but keep them categorized ---
-  const categorizedActionPlans: CategorizedActionPlans = useMemo(() => {
+  const userActionPlans: UserActionPlans = useMemo(() => {
     const userSkp = mockSkpTargets
-      .filter(t => t.userId === currentUser.id)
-      .map(t => t.target);
+      .filter(t => t.userId === currentUser.id);
 
     const userUnitPlans = mockWorkPlans
-      .filter(p => p.unitId === currentUser.unitId)
-      .map(p => p.program);
+      .filter(p => p.unitId === currentUser.unitId);
       
     const userPositionStandards = mockJobStandards
-        .filter(s => s.positionId === currentUser.positionId)
-        .map(s => s.standard);
+        .filter(s => s.positionId === currentUser.positionId);
 
     return {
         skpTargets: userSkp,
@@ -68,82 +69,68 @@ export default function DailyActivityPage() {
     });
   };
 
-  const deleteActivity = (id: string) => {
-    setActivities((prev) => prev.filter((activity) => activity.id !== id));
-    toast({
-      title: 'Dihapus',
-      description: 'Aktivitas telah berhasil dihapus.',
-      variant: 'destructive',
-    });
-  };
-
   const updateActivity = (updatedActivity: DailyActivity) => {
-    setActivities((prev) =>
-      prev.map((activity) =>
-        activity.id === updatedActivity.id ? updatedActivity : activity
-      )
-    );
-     toast({
-      title: 'Diperbarui!',
-      description: 'Aktivitas telah berhasil diperbarui.',
+    setActivities(prev => prev.map(act => act.id === updatedActivity.id ? updatedActivity : act));
+    toast({
+        title: 'Berhasil!',
+        description: 'Aktivitas berhasil diperbarui.',
     });
   };
 
-  const handleFilter = () => {
+  const deleteActivity = (id: string) => {
+    setActivities(prev => prev.filter(act => act.id !== id));
     toast({
-      title: 'Filter Diterapkan',
-      description: 'Menampilkan aktivitas yang sesuai dengan kriteria Anda.',
+        title: 'Aktivitas Dihapus',
+        description: 'Aktivitas telah berhasil dihapus dari riwayat.',
+        variant: 'destructive'
     });
   };
 
   const filteredActivities = useMemo(() => {
-    return activities.filter((activity) => {
-      const searchLower = searchQuery.toLowerCase();
-      const matchesSearch =
-        activity.activity.toLowerCase().includes(searchLower) ||
-        activity.actionPlan.toLowerCase().includes(searchLower);
-
-      const matchesDate = selectedDate
-        ? activity.date === format(selectedDate, 'yyyy-MM-dd')
-        : true;
-        
-      return matchesSearch && matchesDate;
+    return activities.filter(activity => {
+        const matchesSearch = activity.activity.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesDate = !selectedDate || new Date(activity.date).toDateString() === selectedDate.toDateString();
+        return matchesSearch && matchesDate;
     });
   }, [activities, searchQuery, selectedDate]);
-
-
+  
   return (
      <div className="space-y-6">
        <Card>
         <CardHeader>
-          <CardTitle>Tambah Aktivitas Harian</CardTitle>
+          <CardTitle>Catat Aktivitas Harian</CardTitle>
           <CardDescription>
-            Pilih jenis tugas dan catat aktivitas yang Anda lakukan hari ini.
+            Pilih salah satu tugas dari daftar di bawah, lalu catat detail aktivitas yang Anda lakukan.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
+            <ActivityAccordion 
+                actionPlans={userActionPlans} 
+                onLogActivity={addActivity} 
+            />
         </CardContent>
       </Card>
       
       <Card>
         <CardHeader>
-          <CardTitle>Riwayat Aktivitas</CardTitle>
-          <CardDescription>
-            Daftar aktivitas harian yang telah Anda catat.
-          </CardDescription>
+            <CardTitle>Riwayat Aktivitas</CardTitle>
+            <CardDescription>Daftar aktivitas yang telah Anda catat.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ActivityHistory
-            activities={filteredActivities}
-            onDelete={deleteActivity}
-            onUpdate={updateActivity}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            onFilter={handleFilter}
-          />
+            <ActivityHistory 
+                activities={filteredActivities}
+                onUpdate={updateActivity}
+                onDelete={deleteActivity}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                onFilter={() => {
+                    // The filtering is already reactive via useMemo, 
+                    // but we can keep the button for user clarity.
+                    toast({ description: 'Filter diterapkan.' });
+                }}
+            />
         </CardContent>
       </Card>
     </div>
