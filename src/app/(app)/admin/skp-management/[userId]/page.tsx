@@ -41,7 +41,6 @@ export default function UserSkpDetailPage() {
     toast({
       title: 'Target Ditambahkan',
       description: `Target kinerja baru telah ditetapkan untuk ${user.name}.`,
-      className: 'bg-green-500 text-white',
     });
   };
 

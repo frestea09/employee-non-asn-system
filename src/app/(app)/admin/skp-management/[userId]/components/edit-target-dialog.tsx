@@ -45,9 +45,7 @@ export function EditTargetDialog({
   children,
 }: EditTargetDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [deadline, setDeadline] = useState<Date | undefined>(
-    parseISO(target.deadline)
-  );
+  const [deadline, setDeadline] = useState<Date | undefined>();
 
   useEffect(() => {
     if (isOpen) {
@@ -62,7 +60,7 @@ export function EditTargetDialog({
       ...target,
       target: formData.get('target') as string,
       description: formData.get('description') as string,
-      deadline: format(deadline || new Date(), 'yyyy-MM-dd'),
+      deadline: deadline ? format(deadline, 'yyyy-MM-dd') : target.deadline,
       status: formData.get('status') as SkpTarget['status'],
     };
     onUpdate(updatedTarget);

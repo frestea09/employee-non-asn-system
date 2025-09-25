@@ -30,7 +30,7 @@ export function AddTargetForm({ onAddTarget }: AddTargetFormProps) {
     const newTarget = {
       target: formData.get('target') as string,
       description: formData.get('description') as string,
-      deadline: format(deadline || new Date(), 'yyyy-MM-dd'),
+      deadline: deadline ? format(deadline, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
     };
     onAddTarget(newTarget);
     event.currentTarget.reset();
