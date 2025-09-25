@@ -23,7 +23,6 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/work-plan': 'Rencana Kerja Unit',
   '/admin/skp-management': 'Manajemen SKP',
   '/admin/job-standards': 'Standar Kinerja Jabatan',
-  '/admin/behavioral-assessment': 'Analisis Perilaku',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
   '/monthly-performance': 'Kinerja Bulanan',

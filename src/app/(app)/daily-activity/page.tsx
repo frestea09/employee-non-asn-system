@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ActivityForm, type CategorizedActionPlans } from './components/activity-form';
 import { ActivityHistory } from './components/activity-history';
 import { useState, useMemo } from 'react';
@@ -26,7 +25,6 @@ export default function DailyActivityPage() {
   const [activities, setActivities] =
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('history');
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -69,7 +67,6 @@ export default function DailyActivityPage() {
       description: 'Aktivitas harian berhasil disimpan.',
       className: 'bg-green-500 text-white',
     });
-    setActiveTab('history'); // Switch to history tab after adding
   };
 
   const deleteActivity = (id: string) => {
@@ -118,13 +115,21 @@ export default function DailyActivityPage() {
 
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-      <TabsList>
-        <TabsTrigger value="history">Riwayat Aktivitas</TabsTrigger>
-        <TabsTrigger value="add">Tambah Aktivitas</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="history">
+     <div className="grid gap-6 lg:grid-cols-5">
+      <div className="lg:col-span-2">
+         <Card>
+          <CardHeader>
+            <CardTitle>Tambah Aktivitas Harian</CardTitle>
+            <CardDescription>
+              Catat aktivitas yang Anda lakukan hari ini secara terperinci.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
+          </CardContent>
+        </Card>
+      </div>
+      <div className="lg:col-span-3">
         <Card>
           <CardHeader>
             <CardTitle>Riwayat Aktivitas</CardTitle>
@@ -145,21 +150,7 @@ export default function DailyActivityPage() {
             />
           </CardContent>
         </Card>
-      </TabsContent>
-
-      <TabsContent value="add">
-        <Card>
-          <CardHeader>
-            <CardTitle>Tambah Aktivitas Harian</CardTitle>
-            <CardDescription>
-              Catat aktivitas yang Anda lakukan hari ini secara terperinci.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ActivityForm onAddActivity={addActivity} actionPlans={categorizedActionPlans} />
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
+      </div>
+    </div>
   );
 }

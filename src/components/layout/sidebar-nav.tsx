@@ -22,7 +22,6 @@ import {
   Shield,
   UserCog,
   ClipboardCheck,
-  BrainCircuit,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -51,7 +50,6 @@ const adminNav = [
   { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
   { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
   { href: '/admin/job-standards', label: 'Standar Kinerja', icon: <ClipboardCheck /> },
-  { href: '/admin/behavioral-assessment', label: 'Analisis Perilaku', icon: <BrainCircuit /> },
 ];
 
 export function SidebarNav() {
