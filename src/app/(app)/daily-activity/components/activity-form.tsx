@@ -27,9 +27,10 @@ import { useState, type FormEvent } from 'react';
 
 type ActivityFormProps = {
   onAddActivity: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
+  actionPlans: string[];
 };
 
-export function ActivityForm({ onAddActivity }: ActivityFormProps) {
+export function ActivityForm({ onAddActivity, actionPlans }: ActivityFormProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -96,9 +97,9 @@ export function ActivityForm({ onAddActivity }: ActivityFormProps) {
             <SelectValue placeholder="Pilih rencana aksi" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Melakukan pemeriksaan pasien">Melakukan pemeriksaan pasien</SelectItem>
-            <SelectItem value="Mengelola rekam medis">Mengelola rekam medis</SelectItem>
-            <SelectItem value="Asistensi tindakan medis">Asistensi tindakan medis</SelectItem>
+            {actionPlans.map(plan => (
+              <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

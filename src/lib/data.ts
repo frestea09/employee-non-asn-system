@@ -32,7 +32,9 @@ export type User = {
   name: string;
   email: string;
   unit: string;
+  unitId: string;
   position: string;
+  positionId: string;
   role: 'Karyawan' | 'Admin';
 };
 
@@ -105,10 +107,10 @@ export const mockValidationPerformances: MonthlyPerformance[] = [
 ];
 
 export const mockUsers: User[] = [
-  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat (UGD)', position: 'Perawat Terampil', role: 'Karyawan' },
-  { id: '2', ni: 'K.21.08.002', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', position: 'Bidan Pelaksana', role: 'Karyawan' },
-  { id: '3', ni: 'A.20.01.001', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', position: 'Staf Administrasi', role: 'Admin' },
-  { id: '4', ni: 'K.22.03.015', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', position: 'Analis Kesehatan', role: 'Karyawan' },
+  { id: '1', ni: 'K.21.08.001', name: 'Ahmad Budi', email: 'ahmad.budi@rumahsakit.com', unit: 'Unit Gawat Darurat (UGD)', unitId: '1', position: 'Perawat Terampil', positionId: '1', role: 'Karyawan' },
+  { id: '2', ni: 'K.21.08.002', name: 'Siti Aminah', email: 'siti.aminah@rumahsakit.com', unit: 'Instalasi Rawat Inap', unitId: '2', position: 'Bidan Pelaksana', positionId: '2', role: 'Karyawan' },
+  { id: '3', ni: 'A.20.01.001', name: 'Dr. Candra', email: 'candra.dr@rumahsakit.com', unit: 'Manajemen', unitId: '5', position: 'Staf Administrasi', positionId: '5', role: 'Admin' },
+  { id: '4', ni: 'K.22.03.015', name: 'Dewi Lestari', email: 'dewi.lestari@rumahsakit.com', unit: 'Laboratorium', unitId: '3', position: 'Analis Kesehatan', positionId: '3', role: 'Karyawan' },
 ];
 
 export const mockUnits: Unit[] = [

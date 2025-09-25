@@ -13,10 +13,15 @@ import { ActivityForm } from './components/activity-form';
 import { ActivityHistory } from './components/activity-history';
 import { useState, useMemo } from 'react';
 import type { DailyActivity } from '@/lib/data';
-import { mockDailyActivities } from '@/lib/data';
+import {
+  mockDailyActivities,
+  mockUsers,
+  mockSkpTargets,
+  mockWorkPlans,
+  mockJobStandards,
+} from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 
 export default function DailyActivityPage() {
   const [activities, setActivities] =
@@ -27,6 +32,29 @@ export default function DailyActivityPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [isFilterActive, setIsFilterActive] = useState(false);
+
+  // --- Assume we have a logged in user ---
+  // In a real app, this would come from an auth context.
+  const currentUser = mockUsers[0]; 
+
+  // --- Generate dynamic action plans ---
+  const actionPlans = useMemo(() => {
+    const userSkp = mockSkpTargets
+      .filter(t => t.userId === currentUser.id)
+      .map(t => t.target);
+
+    const userUnitPlans = mockWorkPlans
+      .filter(p => p.unitId === currentUser.unitId) // Assuming user has a unitId
+      .map(p => p.program);
+      
+    const userPositionStandards = mockJobStandards
+        .filter(s => s.positionId === currentUser.positionId) // Assuming user has a positionId
+        .map(s => s.standard);
+
+    // Combine and remove duplicates
+    return [...new Set([...userSkp, ...userUnitPlans, ...userPositionStandards])];
+  }, [currentUser]);
+
 
   const addActivity = (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
     const activityToAdd: DailyActivity = {
@@ -66,8 +94,6 @@ export default function DailyActivityPage() {
   };
 
   const handleFilter = () => {
-    // This function can be used to trigger filtering, though it's happening live.
-    // For now, we can just log or set a state to indicate filters are "applied".
     setIsFilterActive(true);
     toast({
       title: 'Filter Diterapkan',
@@ -130,7 +156,7 @@ export default function DailyActivityPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ActivityForm onAddActivity={addActivity} />
+            <ActivityForm onAddActivity={addActivity} actionPlans={actionPlans} />
           </CardContent>
         </Card>
       </TabsContent>

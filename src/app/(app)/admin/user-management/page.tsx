@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -45,16 +46,18 @@ export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>(mockUsers);
   const { toast } = useToast();
 
-  const handleAddUser = (newUser: Omit<User, 'id'>) => {
+  const handleAddUser = (newUser: Omit<User, 'id' | 'unitId' | 'positionId'>) => {
     const userToAdd: User = {
       ...newUser,
       id: (Math.random() * 10000).toString(),
+      // In a real app, these would be derived from the selected unit/position name
+      unitId: `unit_${Math.random() * 100}`,
+      positionId: `pos_${Math.random() * 100}`,
     };
     setUsers((prev) => [userToAdd, ...prev]);
     toast({
       title: 'Pengguna Ditambahkan',
       description: `Pengguna "${userToAdd.name}" telah berhasil ditambahkan.`,
-      className: 'bg-green-500 text-white',
     });
   };
 

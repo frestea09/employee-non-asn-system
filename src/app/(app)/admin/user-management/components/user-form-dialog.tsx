@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ import { useState, type FormEvent, useEffect, cloneElement } from 'react';
 
 type UserFormDialogProps = {
   user?: User;
-  onSave: (user: User | Omit<User, 'id'>) => void;
+  onSave: (user: Omit<User, 'id' | 'unitId' | 'positionId'>) => void;
   triggerButton: React.ReactElement;
 };
 
