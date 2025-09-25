@@ -61,7 +61,8 @@ export default function DailyActivityPage() {
   const [summaryDate, setSummaryDate] = useState<Date>(new Date());
   
   const activitiesForSummary = useMemo(() => {
-    const dateString = summaryDate.toISOString().split('T')[0];
+    // Format the summaryDate to 'yyyy-MM-dd' string for reliable comparison
+    const dateString = format(summaryDate, 'yyyy-MM-dd');
     return activities.filter(act => act.date === dateString);
   }, [activities, summaryDate]);
 
