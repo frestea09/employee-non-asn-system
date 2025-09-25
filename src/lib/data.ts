@@ -13,12 +13,6 @@ export type DailyActivity = {
   status: 'Menunggu Validasi' | 'Disetujui' | 'Ditolak';
 };
 
-export type Attendance = {
-  id: string;
-  date: string;
-  status: 'Hadir' | 'Sakit' | 'Izin';
-};
-
 export type User = {
   id: string;
   ni: string;
@@ -83,12 +77,6 @@ export const mockDailyActivities: DailyActivity[] = [
   { id: '3', date: '2024-07-29', startTime: '10:00', endTime: '12:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Membantu dokter dalam tindakan operasi kecil.', quantity: 1, unit: 'Tindakan', status: 'Menunggu Validasi' },
   { id: 'act-101-1', date: '2024-07-15', startTime: '08:00', endTime: '09:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Merespon 3 panggilan darurat', quantity: 3, unit: 'Pasien', status: 'Disetujui' },
   { id: 'act-101-2', date: '2024-07-20', startTime: '14:00', endTime: '15:00', category: 'SKP', actionPlan: 'Meningkatkan Kecepatan Respon UGD', activity: 'Merespon 5 panggilan darurat', quantity: 5, unit: 'Pasien', status: 'Disetujui' },
-];
-
-export const mockAttendance: Attendance[] = [
-    { id: '1', date: '2024-07-28', status: 'Hadir' },
-    { id: '2', date: '2024-07-29', status: 'Hadir' },
-    { id: '3', date: '2024-07-27', status: 'Sakit' },
 ];
 
 export const mockValidationActivities: Omit<DailyActivity, 'startTime' | 'endTime' | 'actionPlan' | 'notes' | 'quantity' | 'unit' | 'proofUrl' | 'category'>[] = [

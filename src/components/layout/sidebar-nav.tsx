@@ -36,7 +36,6 @@ import { useState } from 'react';
 const mainNav = [
   { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard /> },
   { href: '/daily-activity', label: 'Aktivitas Harian', icon: <ClipboardList /> },
-  { href: '/attendance', label: 'Absensi', icon: <CalendarCheck /> },
   { href: '/reports', label: 'Laporan', icon: <FileText /> },
 ];
 
