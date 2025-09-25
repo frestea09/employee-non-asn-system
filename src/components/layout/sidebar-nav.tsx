@@ -14,7 +14,6 @@ import {
   FileText,
   ChevronDown,
   CheckCircle,
-  FileCheck,
   Users,
   Briefcase,
   Target,
@@ -22,6 +21,8 @@ import {
   Shield,
   UserCog,
   ClipboardCheck,
+  Building,
+  Archive,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -41,22 +42,38 @@ const mainNav = [
   { href: '/reports', label: 'Laporan', icon: <FileText /> },
 ];
 
-const adminNav = [
+const validationNav = [
   { href: '/admin/validate-activities', label: 'Validasi Aktivitas', icon: <CheckCircle /> },
-  { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
+  { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <ClipboardList /> },
+];
+
+const performanceManagementNav = [
+  { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
+  { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
+  { href: '/admin/job-standards', label: 'Standar Kinerja', icon: <ClipboardCheck /> },
+];
+
+const organizationManagementNav = [
   { href: '/admin/user-management', label: 'Manajemen Pengguna', icon: <Users /> },
   { href: '/admin/unit-management', label: 'Manajemen Unit', icon: <Network /> },
   { href: '/admin/position-management', label: 'Manajemen Jabatan', icon: <UserCog /> },
-  { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
-  { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
-  { href: '/admin/job-standards', label: 'Standar Kinerja', icon: <ClipboardCheck /> },
+];
+
+const allAdminHrefs = [
+  ...validationNav.map(item => item.href),
+  ...performanceManagementNav.map(item => item.href),
+  ...organizationManagementNav.map(item => item.href),
 ];
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const [isAdminOpen, setIsAdminOpen] = useState(
-    adminNav.some(item => pathname.startsWith(item.href))
-  );
+  
+  const isParentActive = (navItems: {href: string}[]) => navItems.some(item => pathname.startsWith(item.href));
+
+  const [isAdminOpen, setIsAdminOpen] = useState(isParentActive(allAdminHrefs));
+  const [isValidationOpen, setIsValidationOpen] = useState(isParentActive(validationNav));
+  const [isPerfMgmtOpen, setIsPerfMgmtOpen] = useState(isParentActive(performanceManagementNav));
+  const [isOrgMgmtOpen, setIsOrgMgmtOpen] = useState(isParentActive(organizationManagementNav));
 
   return (
     <SidebarGroup>
@@ -79,7 +96,7 @@ export function SidebarNav() {
             <CollapsibleTrigger asChild>
               <SidebarMenuButton
                 className="justify-between"
-                isActive={adminNav.some(item => pathname.startsWith(item.href))}
+                isActive={isParentActive(allAdminHrefs)}
                 size="lg"
               >
                 <div className="flex items-center gap-3">
@@ -96,21 +113,77 @@ export function SidebarNav() {
             </CollapsibleTrigger>
           </SidebarMenuItem>
           <CollapsibleContent>
-            <div className="flex flex-col gap-1 py-1 pl-8 pr-2">
-              {adminNav.map(({ href, label, icon }) => (
-                <Link href={href} passHref legacyBehavior key={href}>
-                  <a
-                    className={cn(
-                      'flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                      pathname.startsWith(href) &&
-                        'bg-sidebar-accent text-sidebar-accent-foreground'
-                    )}
-                  >
-                    {icon}
-                    <span>{label}</span>
-                  </a>
-                </Link>
-              ))}
+            <div className="flex flex-col gap-1 py-1 pl-6 pr-2">
+                
+                {/* Validation Group */}
+                <Collapsible open={isValidationOpen} onOpenChange={setIsValidationOpen}>
+                    <CollapsibleTrigger className='w-full'>
+                        <div className={cn(
+                            'flex items-center gap-3 rounded-md px-2 py-2 text-base font-semibold hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                             isParentActive(validationNav) && 'bg-sidebar-accent text-sidebar-accent-foreground'
+                        )}>
+                            <ClipboardList />
+                            <span>Validasi</span>
+                            <ChevronDown className={cn('ml-auto h-4 w-4 transition-transform', isValidationOpen && 'rotate-180')} />
+                        </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-6">
+                         {validationNav.map(({ href, label, icon }) => (
+                            <Link href={href} passHref legacyBehavior key={href}>
+                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                    {icon}<span>{label}</span>
+                                </a>
+                            </Link>
+                         ))}
+                    </CollapsibleContent>
+                </Collapsible>
+                
+                {/* Performance Management Group */}
+                <Collapsible open={isPerfMgmtOpen} onOpenChange={setIsPerfMgmtOpen}>
+                    <CollapsibleTrigger className='w-full'>
+                        <div className={cn(
+                            'flex items-center gap-3 rounded-md px-2 py-2 text-base font-semibold hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                             isParentActive(performanceManagementNav) && 'bg-sidebar-accent text-sidebar-accent-foreground'
+                        )}>
+                            <Archive />
+                            <span>Manajemen Kinerja</span>
+                            <ChevronDown className={cn('ml-auto h-4 w-4 transition-transform', isPerfMgmtOpen && 'rotate-180')} />
+                        </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-6">
+                         {performanceManagementNav.map(({ href, label, icon }) => (
+                            <Link href={href} passHref legacyBehavior key={href}>
+                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                    {icon}<span>{label}</span>
+                                </a>
+                            </Link>
+                         ))}
+                    </CollapsibleContent>
+                </Collapsible>
+                
+                {/* Organization Management Group */}
+                <Collapsible open={isOrgMgmtOpen} onOpenChange={setIsOrgMgmtOpen}>
+                    <CollapsibleTrigger className='w-full'>
+                        <div className={cn(
+                            'flex items-center gap-3 rounded-md px-2 py-2 text-base font-semibold hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                             isParentActive(organizationManagementNav) && 'bg-sidebar-accent text-sidebar-accent-foreground'
+                        )}>
+                            <Building />
+                            <span>Manajemen Organisasi</span>
+                            <ChevronDown className={cn('ml-auto h-4 w-4 transition-transform', isOrgMgmtOpen && 'rotate-180')} />
+                        </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-6">
+                         {organizationManagementNav.map(({ href, label, icon }) => (
+                            <Link href={href} passHref legacyBehavior key={href}>
+                                <a className={cn('flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground', pathname.startsWith(href) && 'bg-sidebar-accent text-sidebar-accent-foreground')}>
+                                    {icon}<span>{label}</span>
+                                </a>
+                            </Link>
+                         ))}
+                    </CollapsibleContent>
+                </Collapsible>
+
             </div>
           </CollapsibleContent>
         </Collapsible>

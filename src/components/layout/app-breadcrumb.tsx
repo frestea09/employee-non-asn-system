@@ -14,20 +14,20 @@ import {
 import { mockUsers, mockUnits, mockPositions } from '@/lib/data';
 
 const breadcrumbNameMap: { [key: string]: string } = {
-  '/admin': 'Admin',
-  '/admin/validate-activities': 'Validasi Aktivitas',
-  '/admin/validate-performance': 'Validasi Kinerja',
-  '/admin/user-management': 'Manajemen Pengguna',
-  '/admin/unit-management': 'Manajemen Unit',
-  '/admin/position-management': 'Manajemen Jabatan',
-  '/admin/work-plan': 'Rencana Kerja Unit',
-  '/admin/skp-management': 'Manajemen SKP',
-  '/admin/job-standards': 'Standar Kinerja Jabatan',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
   '/monthly-performance': 'Kinerja Bulanan',
   '/attendance': 'Absensi',
   '/reports': 'Laporan',
+  '/admin': 'Admin',
+  '/admin/validate-activities': 'Validasi Aktivitas',
+  '/admin/validate-performance': 'Validasi Kinerja',
+  '/admin/skp-management': 'Manajemen SKP',
+  '/admin/work-plan': 'Rencana Kerja',
+  '/admin/job-standards': 'Standar Kinerja',
+  '/admin/user-management': 'Manajemen Pengguna',
+  '/admin/unit-management': 'Manajemen Unit',
+  '/admin/position-management': 'Manajemen Jabatan',
 };
 
 const DynamicBreadcrumbName: React.FC<{ segment: string; context: 'skp' | 'work-plan' | 'job-standards' }> = ({ segment, context }) => {
@@ -59,6 +59,18 @@ export function AppBreadcrumb() {
       return null;
   }
 
+  const getBreadcrumbName = (href: string, segment: string) => {
+    if (breadcrumbNameMap[href]) {
+      return breadcrumbNameMap[href];
+    }
+    
+    if (href.startsWith('/admin/skp-management/')) return 'Detail SKP';
+    if (href.startsWith('/admin/work-plan/')) return 'Detail Rencana Kerja';
+    if (href.startsWith('/admin/job-standards/')) return 'Detail Standar Kinerja';
+    
+    return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+  };
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -71,7 +83,7 @@ export function AppBreadcrumb() {
           const href = `/${pathSegments.slice(0, index + 1).join('/')}`;
           const isLast = index === pathSegments.length - 1;
           
-          let name: React.ReactNode = breadcrumbNameMap[href] || segment;
+          let name: React.ReactNode = getBreadcrumbName(href, segment);
           let context: 'skp' | 'work-plan' | 'job-standards' | undefined = undefined;
 
           if (pathSegments[index - 1] === 'skp-management') {
