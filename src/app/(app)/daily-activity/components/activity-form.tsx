@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
 import type { UserActionPlans } from '../page';
-import { useState, type FormEvent, useEffect } from 'react';
+import { useState, type FormEvent, useEffect, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -34,6 +34,8 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
   const [selectedCategory, setSelectedCategory] =
     useState<DailyActivity['category']>('SKP');
   const [activityDate, setActivityDate] = useState<Date | undefined>(new Date());
+  const formRef = useRef<HTMLFormElement>(null);
+
 
   useEffect(() => {
     if (activityDate) {
@@ -67,13 +69,16 @@ export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityForm
       unit: formData.get('unit') as string,
     };
     onSave(newActivity);
-    event.currentTarget.reset();
-    setSelectedPlan('');
-    setActivityDate(new Date());
+    
+    // Reset form fields but keep the date
+    if (formRef.current) {
+        formRef.current.reset();
+        setSelectedPlan('');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="date">Tanggal Aktivitas</Label>
         <Popover>
