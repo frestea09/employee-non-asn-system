@@ -179,7 +179,7 @@ export default function PositionPerformanceDetailPage() {
             <CardDescription>
               Standar kinerja dan indikator keberhasilan jabatan ini.
             </CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent>
             <div className="space-y-4">
               <AddStandardForm onAddStandard={handleAddStandard} />
