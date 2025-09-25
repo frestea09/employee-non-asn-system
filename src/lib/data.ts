@@ -146,7 +146,7 @@ export const mockWorkPlans: WorkPlan[] = [
   { id: 'wp3', unitId: '2', program: 'Program Keselamatan Pasien', activities: 'Implementasi check list keselamatan pasien, Ronde keselamatan', target: 'Zero KTD (Kejadian Tidak Diharapkan)', budget: 75000000 },
 ];
 
-export const mockJobStandards: JobStandard[] = [
+export const mockJobStations: JobStandard[] = [
     { id: 'js1', positionId: '1', standard: 'Waktu Respon Pasien Gawat Darurat', description: 'Waktu respon maksimal 5 menit setelah pasien tiba.' },
     { id: 'js2', positionId: '1', standard: 'Ketepatan Pemberian Obat', description: 'Zero error dalam pemberian obat sesuai resep dokter.' },
     { id: 'js3', positionId: '2', standard: 'Pendampingan Persalinan', description: 'Memberikan pendampingan penuh pada 100% proses persalinan normal.' },

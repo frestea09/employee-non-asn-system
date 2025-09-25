@@ -41,7 +41,7 @@ export function PerformanceProgress({ actionPlans, todaysActivities }: Performan
   const progressData = useMemo(() => {
     const loggedSkpTargets = new Set(todaysActivities.filter(a => a.category === 'SKP').map(a => a.actionPlan));
     const loggedUnitPlans = new Set(todaysActivities.filter(a => a.category === 'Unit').map(a => a.actionPlan));
-    const loggedJobStandards = new Set(todaysActivities.filter(a => a.category === 'Jabatan').map(a => a.actionPlan));
+    const loggedJobStations = new Set(todaysActivities.filter(a => a.category === 'Jabatan').map(a => a.actionPlan));
 
     return {
         skp: {
@@ -53,8 +53,8 @@ export function PerformanceProgress({ actionPlans, todaysActivities }: Performan
             total: actionPlans.unitPlans.length
         },
         jabatan: {
-            completed: loggedJobStandards.size,
-            total: actionPlans.jobStandards.length
+            completed: loggedJobStations.size,
+            total: actionPlans.jobStations.length
         }
     }
   }, [actionPlans, todaysActivities]);

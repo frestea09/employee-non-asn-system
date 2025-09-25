@@ -14,18 +14,20 @@ import {
   mockUsers,
   mockSkpTargets,
   mockWorkPlans,
-  mockJobStandards,
+  mockJobStations,
 } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { ActivityHistory } from './components/activity-history';
 import { ActivityForm } from './components/activity-form';
 import { PerformanceProgress } from './components/performance-progress';
-import { EditActivityDialog } from './components/edit-activity-dialog';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Info } from 'lucide-react';
+import { format } from 'date-fns';
 
 export type UserActionPlans = {
   skpTargets: SkpTarget[];
   unitPlans: WorkPlan[];
-  jobStandards: JobStandard[];
+  jobStations: JobStandard[];
 };
 
 export default function DailyActivityPage() {
@@ -45,13 +47,13 @@ export default function DailyActivityPage() {
     const userUnitPlans = mockWorkPlans.filter(
       (p) => p.unitId === currentUser.unitId
     );
-    const userPositionStandards = mockJobStandards.filter(
+    const userPositionStandards = mockJobStations.filter(
       (s) => s.positionId === currentUser.positionId
     );
     return {
       skpTargets: userSkp,
       unitPlans: userUnitPlans,
-      jobStandards: userPositionStandards,
+      jobStations: userPositionStandards,
     };
   }, [currentUser]);
 
@@ -114,6 +116,13 @@ export default function DailyActivityPage() {
 
   return (
     <div className="space-y-6">
+       <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle>Pengingat Penting</AlertTitle>
+        <AlertDescription>
+          Batas waktu pencatatan aktivitas adalah tanggal 5 setiap bulannya. Pastikan semua aktivitas Anda tercatat sebelum batas waktu.
+        </AlertDescription>
+      </Alert>
       <Card>
         <CardHeader>
           <CardTitle>Ringkasan Aktivitas Hari Ini</CardTitle>
@@ -135,7 +144,7 @@ export default function DailyActivityPage() {
             <CardHeader>
               <CardTitle>Input Aktivitas Harian</CardTitle>
               <CardDescription>
-                Pilih rencana aksi dan catat aktivitas Anda.
+                Pilih tanggal dan rencana aksi, lalu catat aktivitas Anda.
               </CardDescription>
             </CardHeader>
             <CardContent>

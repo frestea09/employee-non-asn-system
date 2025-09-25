@@ -15,6 +15,7 @@ import {
   Select,
   SelectContent,
   SelectGroup,
+  SelectLabel,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -83,9 +84,9 @@ export function EditActivityDialog({
               <SelectContent>
                 {actionPlans.skpTargets.length > 0 && (
                   <SelectGroup>
-                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                    <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                       Target SKP Pribadi
-                    </Label>
+                    </SelectLabel>
                     {actionPlans.skpTargets.map((plan) => (
                       <SelectItem key={plan.id} value={`SKP:${plan.target}`}>
                         {plan.target}
@@ -95,9 +96,9 @@ export function EditActivityDialog({
                 )}
                 {actionPlans.unitPlans.length > 0 && (
                   <SelectGroup>
-                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                    <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                       Rencana Kerja Unit
-                    </Label>
+                    </SelectLabel>
                     {actionPlans.unitPlans.map((plan) => (
                       <SelectItem key={plan.id} value={`Unit:${plan.program}`}>
                         {plan.program}
@@ -105,12 +106,12 @@ export function EditActivityDialog({
                     ))}
                   </SelectGroup>
                 )}
-                {actionPlans.jobStandards.length > 0 && (
+                {actionPlans.jobStations.length > 0 && (
                   <SelectGroup>
-                    <Label className="px-2 py-1.5 text-sm font-semibold">
+                    <SelectLabel className="px-2 py-1.5 text-sm font-semibold">
                       Standar Kinerja Jabatan
-                    </Label>
-                    {actionPlans.jobStandards.map((plan) => (
+                    </SelectLabel>
+                    {actionPlans.jobStations.map((plan) => (
                       <SelectItem key={plan.id} value={`Jabatan:${plan.standard}`}>
                         {plan.standard}
                       </SelectItem>
