@@ -7,7 +7,7 @@ import type { UserActionPlans } from '../page';
 
 type PerformanceProgressProps = {
   actionPlans: UserActionPlans;
-  todaysActivities: DailyActivity[];
+  activities: DailyActivity[];
 };
 
 const ProgressCategory = ({
@@ -36,12 +36,12 @@ const ProgressCategory = ({
 };
 
 
-export function PerformanceProgress({ actionPlans, todaysActivities }: PerformanceProgressProps) {
+export function PerformanceProgress({ actionPlans, activities }: PerformanceProgressProps) {
   
   const progressData = useMemo(() => {
-    const loggedSkpTargets = new Set(todaysActivities.filter(a => a.category === 'SKP').map(a => a.actionPlan));
-    const loggedUnitPlans = new Set(todaysActivities.filter(a => a.category === 'Unit').map(a => a.actionPlan));
-    const loggedJobStations = new Set(todaysActivities.filter(a => a.category === 'Jabatan').map(a => a.actionPlan));
+    const loggedSkpTargets = new Set(activities.filter(a => a.category === 'SKP').map(a => a.actionPlan));
+    const loggedUnitPlans = new Set(activities.filter(a => a.category === 'Unit').map(a => a.actionPlan));
+    const loggedJobStations = new Set(activities.filter(a => a.category === 'Jabatan').map(a => a.actionPlan));
 
     return {
         skp: {
@@ -57,7 +57,7 @@ export function PerformanceProgress({ actionPlans, todaysActivities }: Performan
             total: actionPlans.jobStations.length
         }
     }
-  }, [actionPlans, todaysActivities]);
+  }, [actionPlans, activities]);
 
   return (
     <div className="space-y-6">

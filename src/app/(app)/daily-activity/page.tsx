@@ -22,6 +22,7 @@ import { ActivityForm } from './components/activity-form';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { PerformanceProgress } from './components/performance-progress';
 
 export type UserActionPlans = {
@@ -35,7 +36,7 @@ export default function DailyActivityPage() {
     useState<DailyActivity[]>(mockDailyActivities);
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [filterDate, setFilterDate] = useState<Date | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
 
@@ -56,11 +57,13 @@ export default function DailyActivityPage() {
       jobStations: userPositionStandards,
     };
   }, [currentUser]);
+
+  const [summaryDate, setSummaryDate] = useState<Date>(new Date());
   
-  const todaysActivities = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
-    return activities.filter(act => act.date === today);
-  }, [activities]);
+  const activitiesForSummary = useMemo(() => {
+    const dateString = summaryDate.toISOString().split('T')[0];
+    return activities.filter(act => act.date === dateString);
+  }, [activities, summaryDate]);
 
   const addActivity = (newActivity: Omit<DailyActivity, 'id' | 'status'>) => {
     const activityToAdd: DailyActivity = {
@@ -100,11 +103,11 @@ export default function DailyActivityPage() {
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
       const matchesDate =
-        !selectedDate ||
-        new Date(activity.date).toDateString() === selectedDate.toDateString();
+        !filterDate ||
+        new Date(activity.date).toDateString() === filterDate.toDateString();
       return matchesSearch && matchesDate;
     });
-  }, [activities, searchQuery, selectedDate]);
+  }, [activities, searchQuery, filterDate]);
   
   const paginatedActivities = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -113,6 +116,11 @@ export default function DailyActivityPage() {
   }, [filteredActivities, currentPage]);
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
+
+  const isToday = summaryDate.toDateString() === new Date().toDateString();
+  const summaryTitle = isToday
+    ? "Ringkasan Aktivitas Hari Ini"
+    : `Ringkasan untuk ${format(summaryDate, 'PPP', { locale: id })}`;
 
   return (
     <div className="space-y-6">
@@ -125,13 +133,13 @@ export default function DailyActivityPage() {
       </Alert>
       <Card>
         <CardHeader>
-          <CardTitle>Ringkasan Aktivitas Hari Ini</CardTitle>
+          <CardTitle>{summaryTitle}</CardTitle>
           <CardDescription>
-            Pantau kelengkapan pencatatan aktivitas Anda untuk hari ini di setiap kategori.
+            Pantau kelengkapan pencatatan aktivitas Anda untuk tanggal yang dipilih di setiap kategori.
           </CardDescription>
         </CardHeader>
         <CardContent>
-           <PerformanceProgress actionPlans={userActionPlans} todaysActivities={todaysActivities} />
+           <PerformanceProgress actionPlans={userActionPlans} activities={activitiesForSummary} />
         </CardContent>
       </Card>
 
@@ -145,7 +153,7 @@ export default function DailyActivityPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ActivityForm actionPlans={userActionPlans} onSave={addActivity} />
+              <ActivityForm actionPlans={userActionPlans} onSave={addActivity} onDateChange={setSummaryDate} />
             </CardContent>
           </Card>
         </div>
@@ -169,8 +177,8 @@ export default function DailyActivityPage() {
                 onDelete={deleteActivity}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
+                selectedDate={filterDate}
+                setSelectedDate={setFilterDate}
                 onFilter={() => {
                   setCurrentPage(1); // Reset to first page on new filter
                   toast({ description: 'Filter diterapkan.' });

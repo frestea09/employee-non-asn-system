@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CalendarIcon, PlusCircle, Upload } from 'lucide-react';
 import type { UserActionPlans } from '../page';
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -26,13 +26,20 @@ import { cn } from '@/lib/utils';
 type ActivityFormProps = {
   actionPlans: UserActionPlans;
   onSave: (activity: Omit<DailyActivity, 'id' | 'status'>) => void;
+  onDateChange: (date: Date) => void;
 };
 
-export function ActivityForm({ actionPlans, onSave }: ActivityFormProps) {
+export function ActivityForm({ actionPlans, onSave, onDateChange }: ActivityFormProps) {
   const [selectedPlan, setSelectedPlan] = useState('');
   const [selectedCategory, setSelectedCategory] =
     useState<DailyActivity['category']>('SKP');
   const [activityDate, setActivityDate] = useState<Date | undefined>(new Date());
+
+  useEffect(() => {
+    if (activityDate) {
+      onDateChange(activityDate);
+    }
+  }, [activityDate, onDateChange]);
 
   const handleSelectChange = (value: string) => {
     const [category, plan] = value.split(':');
