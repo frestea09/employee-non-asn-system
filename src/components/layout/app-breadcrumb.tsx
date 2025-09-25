@@ -16,7 +16,9 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Admin',
   '/admin/validate-activities': 'Validasi Aktivitas',
   '/admin/validate-performance': 'Validasi Kinerja',
-  '/admin/behavioral-assessment': 'Penilaian Perilaku',
+  '/admin/user-management': 'Manajemen Pengguna',
+  '/admin/work-plan': 'Manajemen Rencana Kerja',
+  '/admin/skp-management': 'Manajemen SKP',
   '/dashboard': 'Dashboard',
   '/daily-activity': 'Aktivitas Harian',
   '/monthly-performance': 'Kinerja Bulanan',
@@ -30,7 +32,7 @@ export function AppBreadcrumb() {
   const pathSegments = pathname.split('/').filter(segment => segment);
   
   // Do not show breadcrumb for root dashboard page
-  if (pathSegments.length <= 1 || pathname === '/dashboard') {
+  if (pathSegments.length <= 1) {
     return null;
   }
 

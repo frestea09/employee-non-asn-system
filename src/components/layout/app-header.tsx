@@ -10,7 +10,9 @@ import {
   FileText,
   CheckCircle,
   FileCheck,
-  BrainCircuit,
+  Users,
+  Briefcase,
+  Target,
 } from 'lucide-react';
 import { AppBreadcrumb } from './app-breadcrumb';
 
@@ -22,7 +24,9 @@ const routeTitles: { [key: string]: { title: string; icon: React.ReactNode } } =
   '/reports': { title: 'Laporan', icon: <FileText className="size-5" /> },
   '/admin/validate-activities': { title: 'Validasi Aktivitas', icon: <CheckCircle className="size-5" /> },
   '/admin/validate-performance': { title: 'Validasi Kinerja', icon: <FileCheck className="size-5" /> },
-  '/admin/behavioral-assessment': { title: 'Penilaian Perilaku', icon: <BrainCircuit className="size-5" /> },
+  '/admin/user-management': { title: 'Manajemen Pengguna', icon: <Users className="size-5" /> },
+  '/admin/work-plan': { title: 'Manajemen Rencana Kerja', icon: <Briefcase className="size-5" /> },
+  '/admin/skp-management': { title: 'Manajemen SKP', icon: <Target className="size-5" /> },
 };
 
 export function AppHeader() {

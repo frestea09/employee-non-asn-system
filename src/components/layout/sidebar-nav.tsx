@@ -15,8 +15,9 @@ import {
   ChevronDown,
   CheckCircle,
   FileCheck,
-  BrainCircuit,
-  User,
+  Users,
+  Briefcase,
+  Target,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -39,7 +40,9 @@ const mainNav = [
 const adminNav = [
   { href: '/admin/validate-activities', label: 'Validasi Aktivitas', icon: <CheckCircle /> },
   { href: '/admin/validate-performance', label: 'Validasi Kinerja', icon: <FileCheck /> },
-  { href: '/admin/behavioral-assessment', label: 'Analisis AI', icon: <BrainCircuit /> },
+  { href: '/admin/user-management', label: 'Manajemen Pengguna', icon: <Users /> },
+  { href: '/admin/work-plan', label: 'Rencana Kerja', icon: <Briefcase /> },
+  { href: '/admin/skp-management', label: 'Manajemen SKP', icon: <Target /> },
 ];
 
 export function SidebarNav() {
@@ -54,8 +57,8 @@ export function SidebarNav() {
         {mainNav.map(({ href, label, icon }) => (
           <SidebarMenuItem key={href}>
             <Link href={href} passHref legacyBehavior>
-              <SidebarMenuButton asChild isActive={pathname === href} tooltip={label}>
-                <div className="flex items-center gap-2">
+              <SidebarMenuButton asChild isActive={pathname === href} tooltip={label} size="lg">
+                <div className="flex items-center gap-3">
                   {icon}
                   <span>{label}</span>
                 </div>
@@ -70,9 +73,10 @@ export function SidebarNav() {
               <SidebarMenuButton
                 className="justify-between"
                 isActive={adminNav.some(item => pathname.startsWith(item.href))}
+                size="lg"
               >
-                <div className="flex items-center gap-2">
-                  <User />
+                <div className="flex items-center gap-3">
+                  <Users />
                   <span>Admin</span>
                 </div>
                 <ChevronDown
@@ -90,7 +94,7 @@ export function SidebarNav() {
                 <Link href={href} passHref legacyBehavior key={href}>
                   <a
                     className={cn(
-                      'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                      'flex items-center gap-3 rounded-md px-2 py-2 text-base hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                       pathname === href &&
                         'bg-sidebar-accent text-sidebar-accent-foreground'
                     )}
